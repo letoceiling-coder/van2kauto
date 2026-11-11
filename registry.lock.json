@@ -1,3 +1,200 @@
 {
-  "items": {}
+  "items": {
+    "navbar-scroll-solid": {
+      "version": "1.0.0",
+      "checksum": "78faa8f525a9c78c0a019472b89efc2a848cd6bfd918c33c22440d48def952d5",
+      "files": {
+        "components/layout/NavbarScrollSolid.tsx": "0e82aa078df51a0bc62c7000334e67b556ef0af8754e77191aa48a7d889802ba"
+      }
+    },
+    "media": {
+      "version": "1.0.0",
+      "checksum": "ece6e4571a9ff15b3a886c2e6ac919bf15a0af5fbe27129af16aaaa0bcaaaae0",
+      "files": {
+        "components/ui/Media.tsx": "95a4adde5ffdd06b62878d04d2a501e2dfc0b4c816c3d6f78f2a4506df10b3cd"
+      }
+    },
+    "footer-closing-photo": {
+      "version": "1.0.0",
+      "checksum": "4ea045569391b186f8b588637f1789f7ed93621cc5b92b9f25beaac39c742f0d",
+      "files": {
+        "components/layout/FooterClosingPhoto.tsx": "2dd933c7d024c385619d32539777c43f2096bd36b4fe964b3a172336956a3af7"
+      }
+    },
+    "reveal": {
+      "version": "1.0.0",
+      "checksum": "c39fa5a49f91ec196737b9199e12357a28db310b7d563bd33a5d52de4ecdc055",
+      "files": {
+        "components/motion/Reveal.tsx": "0d3d55651315c062fd865f9552ae44ae4b4cdeb7f3608171ed790910ed7d456d"
+      }
+    },
+    "text-reveal": {
+      "version": "1.0.0",
+      "checksum": "8dca95435c26744f9992b4a022cc1b200ca89c1e4080bf446da79d9253b1c4e3",
+      "files": {
+        "components/motion/TextReveal.tsx": "eb1df0dd632884841ee98cb3d72e321c5bed4a7a26df4f4de24655c893e2bf7a"
+      }
+    },
+    "hero-cinematic": {
+      "version": "2.0.0",
+      "checksum": "e11c0930ab230e4fb1e3962c5e5ee12b007e0a8144a615f1f884a290da84ce35",
+      "files": {
+        "components/sections/HeroCinematic.tsx": "9ecdef05f0b07243af64b54b05e7ddd7eaae2a46cf541933df72c3e836ced7a1"
+      }
+    },
+    "features-list-preview": {
+      "version": "1.0.0",
+      "checksum": "9709771d1d75fc151cb4b3700050a20e94fb1f019296338558ed5834dfa239bc",
+      "files": {
+        "components/sections/FeaturesListPreview.tsx": "3ad0c90818b7680be303adcf52c693089cf6d59d899e7ec3516294863594252c"
+      }
+    },
+    "shop": {
+      "version": "1.0.0",
+      "checksum": "108a528226176cffb9a8134cb470cd43217b1f76cecaf0ac0d8bbb38696f771b",
+      "files": {
+        "components/ui/Shop.tsx": "a3ed5486b4fa009590b9ecb5e75a59f7d169d264b12cac52e076e147a5c18f6a"
+      }
+    },
+    "products-showcase": {
+      "version": "1.2.0",
+      "checksum": "77d7ec07faa98f8e672b86f7198781a0676d14d8bb915b21d394d95c13027890",
+      "files": {
+        "components/sections/ProductsShowcase.tsx": "c2ac487faac454fc85b4d93238139a164a59eb8cfd36a86a3688ccf13388580c"
+      }
+    },
+    "services-compare-cards": {
+      "version": "1.0.0",
+      "checksum": "3bf954a10d17127e29490544d65cadab78dcf760341043f51d25848a6460ba64",
+      "files": {
+        "components/sections/ServicesCompareCards.tsx": "d0b746bc0720ba5d18f9f37d8c2375d8677d2f33af20509a36b5f3846b5d3000"
+      }
+    },
+    "scroll-story": {
+      "version": "2.0.0",
+      "checksum": "120d1f3d8146ad9e9f654bfdb45823a6dc9a4310918a19c123eefce00299b038",
+      "files": {
+        "components/sections/ScrollStory.tsx": "6e6bc6c8c013460055890400c19d63e90d53345d2fcfbcc058cd9a4de414a673"
+      }
+    },
+    "price-list": {
+      "version": "1.0.0",
+      "checksum": "7ca9d1ba84be4723702ce377c6d27882cdfeb74a4cc7988be71f3934b66e6192",
+      "files": {
+        "components/sections/PriceList.tsx": "738a83c8aab3588df085a00a3079890bd3c8cabc09cb6f398d9584478fb191f8"
+      }
+    },
+    "portfolio-cursor-list": {
+      "version": "1.0.0",
+      "checksum": "bf6344262b95b3daa18d9bf2f92b5877c3e614ef6fffad2554644c84bf1997fd",
+      "files": {
+        "components/sections/PortfolioCursorList.tsx": "7bdea1981615f48498fd416e7307072ec06cfad560cc8945b2f1858b04712901"
+      }
+    },
+    "blog-magazine": {
+      "version": "1.0.0",
+      "checksum": "85aa9964e573762c513fcb45927a07a6f66cb4d6572805ecd455950b5909a050",
+      "files": {
+        "components/sections/BlogMagazine.tsx": "0dbcab5e630abaf924a0b69fbc6a92b3b0e0bb9b2988b90f5f60e4761f516ff9"
+      }
+    },
+    "faq-with-cta": {
+      "version": "1.0.0",
+      "checksum": "ad08ead67fe15de67ecc78ab515b37a83f1c15a722d9dd696b13ce9def1345e0",
+      "files": {
+        "components/sections/FaqWithCta.tsx": "a09bf61b84c6d7968245b79be2411ed095b99b43c82324f9a6cffab70144fec7"
+      }
+    },
+    "contact-hours-map": {
+      "version": "1.0.0",
+      "checksum": "e1cfaa89d1a82937dc06fa7d56e3f568dd6fea1679fc7517898a0f2fa063275b",
+      "files": {
+        "components/sections/ContactHoursMap.tsx": "e6e6960d55cb22938a506fd5392428f3594fae6c243b08526cc0a491f12c21df"
+      }
+    },
+    "catalog-browser": {
+      "version": "1.1.0",
+      "checksum": "4adc4651c9b143c2809f8abe3f9e48289983abcf308cbfe63b450438e735b48e",
+      "files": {
+        "components/sections/CatalogBrowser.tsx": "bc055897e275700501121f9e328d8eea3b4188582efde6181c0c21f188b93115"
+      }
+    },
+    "faq-search": {
+      "version": "1.0.0",
+      "checksum": "965bfc3f98ae8cb99243c622e44cfc8b816169e8b6fa3cd878472098693fe980",
+      "files": {
+        "components/sections/FaqSearch.tsx": "dc577444df7858a2cbd37c206200d98c99f0081df96fff252b6444d88fe1fd44"
+      }
+    },
+    "cta-split-note": {
+      "version": "1.0.0",
+      "checksum": "b4ae253c1bfeca921de887766853aca6f35d2b07e0f8bf1b466834b2f15475b5",
+      "files": {
+        "components/sections/CtaSplitNote.tsx": "70053d67b997b4202da7350d229432ef2e9fcc439ee30847dbd0a429b254e0fe"
+      }
+    },
+    "features-tabs-media": {
+      "version": "1.0.0",
+      "checksum": "bc0ccf5fb28903cf4edbd09d82309976a9c5992def0d5c79ef26881377685870",
+      "files": {
+        "components/sections/FeaturesTabsMedia.tsx": "379ebd33d87592aed830786b71e98dc0c77868820affd07002dd47d51cf11f8b"
+      }
+    },
+    "cta-aurora": {
+      "version": "2.0.0",
+      "checksum": "6bf008647e752dcd8723e3695f890da4fb192d10fdb256a0cddc56032e396e74",
+      "files": {
+        "components/sections/CtaAurora.tsx": "8dfb31d6303dbcd6e20c74c495b9c7dcdade26573366cefbb49a00ba3e3d116e"
+      }
+    },
+    "section-heading": {
+      "version": "1.0.0",
+      "checksum": "3ba7c16c2dda3e3f31fb91de8e2ebf2e48fda62f1bd767eb18623819f2dede66",
+      "files": {
+        "components/ui/SectionHeading.tsx": "e0be3419905f4da8315afce4a78b231a7a1b8237b80ae5fd9c7f4a896aad62b5"
+      }
+    },
+    "contact-split": {
+      "version": "1.0.0",
+      "checksum": "08ea047e608007c7223eb5fc30b5c1c8db49e5a52252b59f41cd209888ce1a5e",
+      "files": {
+        "components/sections/ContactSplit.tsx": "a91c4f99fd9b34002a31e5b3e1163c4f5e3389b9439aca10d66aca7a5fd24ac6"
+      }
+    },
+    "portfolio-horizontal": {
+      "version": "1.0.0",
+      "checksum": "2faca35c6d0476194a2383314531fc8b7abf2cad9620256879ee9afb864d3669",
+      "files": {
+        "components/sections/PortfolioHorizontal.tsx": "6153516a41741e4190c54218838db1f307df20eb2b1b603fb040aab6e9498d78"
+      }
+    },
+    "cta-photo-band": {
+      "version": "1.0.0",
+      "checksum": "e5c68c072d89826ea02f11122d50a705912379e087ac9111357d34f49a3a2a68",
+      "files": {
+        "components/sections/CtaPhotoBand.tsx": "8ec89aa3170582758108eb18d5b6450a5ec528a3839cbb0cb9c9a86b31138f10"
+      }
+    },
+    "blog-news-feed": {
+      "version": "1.0.0",
+      "checksum": "a70bae6810d86620e913211661f9a8d8d76c635e176c60e75ef766fee36e470a",
+      "files": {
+        "components/sections/BlogNewsFeed.tsx": "70d57981a83b756208b391b23298805ef48264ab4e6a8859419adda6143a2965"
+      }
+    },
+    "product-detail": {
+      "version": "1.0.0",
+      "checksum": "78a85da49d1128ba5321ace3aad05df2f2283a92a0ed4c09c885ec6bd16e4f1b",
+      "files": {
+        "components/sections/ProductDetail.tsx": "79fceacf27c57d4cc214ce2d4092515c6e505abb1430a4b8876783455caa7f8b"
+      }
+    },
+    "cart-checkout": {
+      "version": "1.0.0",
+      "checksum": "4df6c09a89f492e5d2cfc5696fb42dd8a7a545e4e4f6e69b6ece03250eedef98",
+      "files": {
+        "components/sections/CartCheckout.tsx": "c920e430c30abf22c9856fe4b5f9e1876f41df3ef8963b5e9d93e1699121a5f1"
+      }
+    }
+  }
 }

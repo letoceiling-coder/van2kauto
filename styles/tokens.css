@@ -1,33 +1,180 @@
 /*
- * Design tokens. Generated from design-spec.json by the platform (Design Engine).
- * Components must use these tokens via Tailwind utilities (bg-background, text-primary, font-heading, rounded-token ...)
- * and never hard-code brand colors.
+ * Design tokens — generated from design-spec.json (direction: architecture-spatial). Edit design-spec.json, not this file.
  */
 :root {
   color-scheme: light;
-  --background: oklch(0.985 0.004 90);
-  --foreground: oklch(0.2 0.015 260);
-  --muted: oklch(0.95 0.006 90);
-  --muted-foreground: oklch(0.48 0.015 260);
-  --surface: oklch(1 0 0);
-  --border: oklch(0.9 0.006 90);
-  --primary: oklch(0.32 0.06 265);
-  --primary-foreground: oklch(0.98 0.004 90);
-  --secondary: oklch(0.92 0.02 85);
-  --secondary-foreground: oklch(0.22 0.02 260);
-  --accent: oklch(0.72 0.15 55);
-  --accent-foreground: oklch(0.18 0.02 60);
+  --background: oklch(0.96 0.004 250);
+  --foreground: oklch(0.2 0.01 250);
+  --muted: oklch(0.92 0.005 250);
+  --muted-foreground: oklch(0.5 0.01 250);
+  --surface: oklch(0.99 0.002 250);
+  --border: oklch(0.86 0.006 250);
+  --primary: oklch(0.22 0.01 250);
+  --primary-foreground: oklch(0.97 0.004 250);
+  --secondary: oklch(0.88 0.008 80);
+  --secondary-foreground: oklch(0.22 0.01 250);
+  --accent: oklch(0.55 0.05 60);
+  --accent-foreground: oklch(0.99 0 0);
 
-  --font-heading: ui-serif, Georgia, "Times New Roman", serif;
-  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --heading-weight: 600;
+  --font-heading: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
+  --heading-weight: 400;
   --heading-tracking: -0.02em;
   --heading-transform: none;
 
-  --radius: 0.75rem;
-  --container: 78rem;
-  --section-y: clamp(4rem, 8vw, 8rem);
+  --radius: 0.125rem;
+  --container: 88rem;
+  --section-y: clamp(5rem,10vw,11rem);
 
-  --motion-duration: 0.6s;
-  --motion-distance: 24px;
+  --motion-duration: 0.8s;
+  --motion-distance: 16px;
+}
+
+/*
+ * Premium layer (registry/premium.css) — shared utilities for v2 blocks. Built only from design tokens,
+ * so every direction (light or dark) gets its own version of glass, glow, mesh and grain.
+ */
+@utility text-display {
+  font-size: clamp(2.6rem, 7.2vw, 7.25rem);
+  line-height: 0.96;
+  letter-spacing: calc(var(--heading-tracking) - 0.015em);
+}
+@utility text-headline {
+  font-size: clamp(2rem, 4.4vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: calc(var(--heading-tracking) - 0.01em);
+}
+@utility text-title {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  line-height: 1.15;
+}
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+@utility text-gradient {
+  background: linear-gradient(100deg, var(--foreground) 0%, color-mix(in oklch, var(--accent) 70%, var(--foreground)) 50%, color-mix(in oklch, var(--accent) 80%, var(--primary)) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility glass {
+  background: color-mix(in oklch, var(--surface) 64%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  backdrop-filter: blur(18px) saturate(1.5);
+  border: 1px solid color-mix(in oklch, var(--foreground) 9%, transparent);
+}
+@utility glass-dark {
+  background: oklch(0.18 0.01 260 / 0.38);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid oklch(1 0 0 / 0.16);
+}
+@utility shadow-premium {
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.08) inset,
+    0 2px 6px -2px color-mix(in oklch, var(--foreground) 10%, transparent),
+    0 28px 64px -24px color-mix(in oklch, var(--foreground) 28%, transparent);
+}
+@utility shadow-glow {
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, var(--accent) 35%, transparent),
+    0 24px 80px -20px color-mix(in oklch, var(--accent) 55%, transparent);
+}
+@utility mesh-gradient {
+  background:
+    radial-gradient(55% 55% at 12% 18%, color-mix(in oklch, var(--accent) 38%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 88% 22%, color-mix(in oklch, var(--primary) 34%, transparent), transparent 70%),
+    radial-gradient(60% 50% at 50% 105%, color-mix(in oklch, var(--secondary) 55%, transparent), transparent 70%);
+}
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 60% at 50% 30%, black 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 75% 60% at 50% 30%, black 30%, transparent 75%);
+}
+@utility grain {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.09;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+@utility fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+@utility radius-xl {
+  border-radius: calc(var(--radius) * 2 + 0.5rem);
+}
+@utility animate-marquee {
+  animation: lv-marquee var(--marquee-duration, 48s) linear infinite;
+}
+@utility animate-marquee-reverse {
+  animation: lv-marquee var(--marquee-duration, 48s) linear infinite reverse;
+}
+@utility animate-kenburns {
+  animation: lv-kenburns 26s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-aurora {
+  animation: lv-aurora 18s ease-in-out infinite alternate;
+}
+@utility animate-rise {
+  animation: lv-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-float {
+  animation: lv-float 7s ease-in-out infinite;
+}
+
+@keyframes lv-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes lv-kenburns {
+  from { transform: scale(1.14); }
+  to { transform: scale(1); }
+}
+@keyframes lv-aurora {
+  0% { transform: translate3d(-8%, -6%, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(6%, 4%, 0) rotate(12deg) scale(1.15); }
+  100% { transform: translate3d(-4%, 8%, 0) rotate(-8deg) scale(1.05); }
+}
+@keyframes lv-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes lv-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* floating navigation: no spacer when the page opens with a full-bleed hero (it sits under the transparent nav) */
+body:has(main > :first-child [data-overlay-hero]) [data-nav-spacer] {
+  display: none;
+}
+
+/* vertical rail navigation (navbar-rail) is fixed on md+: push the page next to it instead of under it */
+@media (min-width: 48rem) {
+  body:has([data-component-id="navbar-rail"][data-rail-side="left"]) > :not(header) { margin-left: var(--rail-w, 16rem); }
+  body:has([data-component-id="navbar-rail"][data-rail-side="right"]) > :not(header) { margin-right: var(--rail-w, 16rem); }
+  body:has([data-component-id="navbar-rail"][data-rail="icons"]) { --rail-w: 5rem; }
+}
+
+/* Long Russian words in big display headings: break by syllables with a hyphen (html lang="ru"),
+   not at an arbitrary letter ("КАЖДО / М"). */
+h1, h2, h3, .text-display, .text-headline, .text-title {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 7 3 3;
 }

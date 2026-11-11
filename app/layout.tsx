@@ -1,24 +1,26 @@
 import type { Metadata } from "next";
-// fonts.css is imported by Next directly (not through Tailwind) so relative font URLs resolve correctly.
 import "../styles/fonts.css";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { site } from "@/content/site-data";
+import { NavbarScrollSolid } from "@/components/layout/NavbarScrollSolid";
+import { FooterClosingPhoto } from "@/components/layout/FooterClosingPhoto";
+import { footer, navbar } from "@/content/layout";
+import { site } from "@/content/site";
 import { PreviewBridge } from "@/components/platform/PreviewBridge";
+import { CartButton } from "@/components/ui/Shop";
 
 export const metadata: Metadata = {
-  title: site.name,
+  title: { default: site.name, template: `%s — ${site.name}` },
   description: site.description,
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={site.language} className="h-full antialiased">
       <body className="flex min-h-full flex-col">
-        <Header />
+        <NavbarScrollSolid {...navbar} />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <FooterClosingPhoto {...footer} />
+        <CartButton href="/cart" />
         <PreviewBridge />
       </body>
     </html>

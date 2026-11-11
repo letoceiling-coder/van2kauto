@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "direction": "architecture-spatial",
+  "id": "architecture-spatial",
+  "name": "Architecture / Spatial",
+  "description": "Холодные нейтральные тона, крупные фото, тонкие линии сетки, тихая типографика.",
+  "colorMode": "light",
+  "palette": {
+    "background": "oklch(0.96 0.004 250)",
+    "foreground": "oklch(0.2 0.01 250)",
+    "muted": "oklch(0.92 0.005 250)",
+    "mutedForeground": "oklch(0.5 0.01 250)",
+    "surface": "oklch(0.99 0.002 250)",
+    "border": "oklch(0.86 0.006 250)",
+    "primary": "oklch(0.22 0.01 250)",
+    "primaryForeground": "oklch(0.97 0.004 250)",
+    "secondary": "oklch(0.88 0.008 80)",
+    "secondaryForeground": "oklch(0.22 0.01 250)",
+    "accent": "oklch(0.55 0.05 60)",
+    "accentForeground": "oklch(0.99 0 0)"
+  },
+  "typography": {
+    "heading": "jost",
+    "body": "commissioner",
+    "headingWeight": 400,
+    "headingTracking": "-0.02em",
+    "headingTransform": "none"
+  },
+  "shape": {
+    "radius": "0.125rem"
+  },
+  "layout": {
+    "container": "88rem",
+    "sectionY": "clamp(5rem,10vw,11rem)"
+  },
+  "motion": {
+    "intensity": "low",
+    "distance": "16px",
+    "duration": "0.8s"
+  }
+}
