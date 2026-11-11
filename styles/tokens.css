@@ -1,0 +1,33 @@
+/*
+ * Design tokens. Generated from design-spec.json by the platform (Design Engine).
+ * Components must use these tokens via Tailwind utilities (bg-background, text-primary, font-heading, rounded-token ...)
+ * and never hard-code brand colors.
+ */
+:root {
+  color-scheme: light;
+  --background: oklch(0.985 0.004 90);
+  --foreground: oklch(0.2 0.015 260);
+  --muted: oklch(0.95 0.006 90);
+  --muted-foreground: oklch(0.48 0.015 260);
+  --surface: oklch(1 0 0);
+  --border: oklch(0.9 0.006 90);
+  --primary: oklch(0.32 0.06 265);
+  --primary-foreground: oklch(0.98 0.004 90);
+  --secondary: oklch(0.92 0.02 85);
+  --secondary-foreground: oklch(0.22 0.02 260);
+  --accent: oklch(0.72 0.15 55);
+  --accent-foreground: oklch(0.18 0.02 60);
+
+  --font-heading: ui-serif, Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --heading-weight: 600;
+  --heading-tracking: -0.02em;
+  --heading-transform: none;
+
+  --radius: 0.75rem;
+  --container: 78rem;
+  --section-y: clamp(4rem, 8vw, 8rem);
+
+  --motion-duration: 0.6s;
+  --motion-distance: 24px;
+}
