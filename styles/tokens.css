@@ -13,7 +13,7 @@
   --primary-foreground: oklch(0.97 0.004 250);
   --secondary: oklch(0.88 0.008 80);
   --secondary-foreground: oklch(0.22 0.01 250);
-  --accent: oklch(0.55 0.05 60);
+  --accent: oklch(0.92 0.25 110);
   --accent-foreground: oklch(0.99 0 0);
 
   --font-heading: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
