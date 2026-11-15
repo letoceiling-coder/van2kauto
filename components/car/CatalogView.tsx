@@ -85,6 +85,8 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
     return [...r].sort(by[sort]);
   }, [f, sort]);
 
+  // Анимация входа переигрывается только когда меняется сам набор/порядок машин, а не на каждый символ поиска.
+  const gridKey = list.map((c) => c.slug).join(",");
   const activeCount =
     (lockCountry ? 0 : f.country.length) + f.condition.length + f.body.length + f.engine.length + (f.maxPrice < MAX ? 1 : 0) + (f.drive ? 1 : 0) + (f.steering ? 1 : 0);
   const reset = () => setF({ ...EMPTY, country: lockCountry && initialCountry ? [initialCountry] : [] });
@@ -143,20 +145,21 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
       </aside>
 
       <div className="min-w-0">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex h-13 flex-1 items-center gap-3 rounded-full border border-white/10 bg-surface/70 pr-2 pl-5 backdrop-blur transition focus-within:border-accent/60">
-            <Search className="size-5 shrink-0 text-muted-foreground" />
-            <label htmlFor="cat-q" className="sr-only">Поиск по марке или модели</label>
-            <input id="cat-q" value={f.q} onChange={(e) => setF({ ...f, q: e.target.value })} placeholder="Марка или модель — можно по-русски" className="h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground/70" />
-            {f.q && <button onClick={() => setF({ ...f, q: "" })} aria-label="Очистить поиск" className="grid size-9 place-items-center rounded-full hover:bg-white/5"><X className="size-4" /></button>}
-          </div>
+        {/* Липкая панель: на телефоне остаётся под шапкой при скролле выдачи */}
+        <div className="sticky top-16 z-30 -mx-4 bg-background/95 px-4 pt-2 pb-3 sm:static sm:mx-0 sm:bg-transparent sm:p-0">
           <div className="flex gap-2">
-            <button onClick={() => setSheet(true)} className="relative inline-flex h-13 flex-1 items-center justify-center gap-2 rounded-full border border-white/10 px-5 text-sm font-medium lg:hidden">
-              <SlidersHorizontal className="size-4" />Фильтры
-              {activeCount > 0 && <span className="grid size-5 place-items-center rounded-full bg-accent text-[11px] font-bold text-accent-foreground">{activeCount}</span>}
+            <div className="flex h-12 min-w-0 flex-1 items-center gap-2.5 rounded-full border border-white/10 bg-surface pr-1.5 pl-4 transition focus-within:border-accent/60 sm:h-13 sm:pl-5">
+              <Search className="size-[18px] shrink-0 text-muted-foreground" />
+              <label htmlFor="cat-q" className="sr-only">Поиск по марке или модели</label>
+              <input id="cat-q" type="search" enterKeyHint="search" value={f.q} onChange={(e) => setF({ ...f, q: e.target.value })} placeholder="Марка или модель" className="h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted-foreground/70 [&::-webkit-search-cancel-button]:hidden" />
+              {f.q && <button onClick={() => setF({ ...f, q: "" })} aria-label="Очистить поиск" className="grid size-9 shrink-0 place-items-center rounded-full hover:bg-white/5"><X className="size-4" /></button>}
+            </div>
+            <button onClick={() => setSheet(true)} aria-label="Фильтры" className="relative grid size-12 shrink-0 place-items-center rounded-full border border-white/10 bg-surface lg:hidden">
+              <SlidersHorizontal className="size-[18px]" />
+              {activeCount > 0 && <span className="absolute -top-1 -right-1 grid size-5 place-items-center rounded-full bg-accent text-[11px] font-bold text-accent-foreground">{activeCount}</span>}
             </button>
             <label htmlFor="cat-sort" className="sr-only">Сортировка</label>
-            <select id="cat-sort" value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="h-13 flex-1 cursor-pointer appearance-none rounded-full border border-white/10 bg-surface/70 px-5 text-sm outline-none sm:flex-none">
+            <select id="cat-sort" value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="hidden h-13 cursor-pointer appearance-none rounded-full border border-white/10 bg-surface px-5 text-sm outline-none sm:block">
               <option value="relevance">По актуальности</option>
               <option value="price-asc">Сначала дешевле</option>
               <option value="price-desc">Сначала дороже</option>
@@ -164,33 +167,41 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
               <option value="mileage">По пробегу</option>
             </select>
           </div>
+          <div className="no-scrollbar mt-3 -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:mt-4 sm:px-0">
+            {!lockCountry &&
+              (Object.keys(countries) as Country[]).map((c) => (
+                <Chip key={c} on={f.country.includes(c)} onClick={() => setF({ ...f, country: toggle(f.country, c) })}>{countries[c].label}</Chip>
+              ))}
+            <Chip on={f.condition.includes("new")} onClick={() => setF({ ...f, condition: toggle(f.condition, "new") })}>Новые</Chip>
+            <Chip on={f.condition.includes("used")} onClick={() => setF({ ...f, condition: toggle(f.condition, "used") })}>С пробегом</Chip>
+            <Chip on={f.engine.includes("ev")} onClick={() => setF({ ...f, engine: toggle(f.engine, "ev") })}>Электро</Chip>
+            <Chip on={f.maxPrice <= 2_500_000} onClick={() => setF({ ...f, maxPrice: f.maxPrice <= 2_500_000 ? MAX : 2_500_000 })}>До 2,5 млн</Chip>
+          </div>
         </div>
 
-        <div className="no-scrollbar mt-4 -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-          {!lockCountry &&
-            (Object.keys(countries) as Country[]).map((c) => (
-              <Chip key={c} on={f.country.includes(c)} onClick={() => setF({ ...f, country: toggle(f.country, c) })}>{countries[c].label}</Chip>
-            ))}
-          <Chip on={f.condition.includes("new")} onClick={() => setF({ ...f, condition: toggle(f.condition, "new") })}>Новые</Chip>
-          <Chip on={f.condition.includes("used")} onClick={() => setF({ ...f, condition: toggle(f.condition, "used") })}>С пробегом</Chip>
-          <Chip on={f.engine.includes("ev")} onClick={() => setF({ ...f, engine: toggle(f.engine, "ev") })}>Электро</Chip>
-          <Chip on={f.maxPrice <= 2_500_000} onClick={() => setF({ ...f, maxPrice: f.maxPrice <= 2_500_000 ? MAX : 2_500_000 })}>До 2,5 млн</Chip>
+        <div className="mt-4 mb-5 flex items-center justify-between gap-3 sm:mt-6">
+          <p className="text-sm text-muted-foreground" aria-live="polite">
+            Найдено <span className="tnum font-semibold text-foreground">{list.length}</span> {plural(list.length, ["автомобиль", "автомобиля", "автомобилей"])}
+          </p>
+          <label htmlFor="cat-sort-m" className="sr-only">Сортировка</label>
+          <select id="cat-sort-m" value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="h-9 appearance-none rounded-full bg-transparent pr-1 text-right text-sm text-foreground/80 outline-none sm:hidden">
+            <option value="relevance">По актуальности ↓</option>
+            <option value="price-asc">Сначала дешевле ↓</option>
+            <option value="price-desc">Сначала дороже ↓</option>
+            <option value="year">Сначала новее ↓</option>
+            <option value="mileage">По пробегу ↓</option>
+          </select>
         </div>
-
-        <p className="mt-6 mb-5 text-sm text-muted-foreground" aria-live="polite">
-          Найдено <span className="tnum font-semibold text-foreground">{list.length}</span> {plural(list.length, ["автомобиль", "автомобиля", "автомобилей"])}
-        </p>
 
         {list.length ? (
-          <motion.div layout className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <AnimatePresence mode="popLayout">
-              {list.map((c, i) => (
-                <motion.div key={c.slug} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4, delay: Math.min(i, 8) * 0.03 }}>
-                  <CarCard car={c} priority={i < 3} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          // Без layout-анимаций: при смене фильтра сетка не «прыгает», карточки просто проявляются.
+          <div key={gridKey} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {list.map((c, i) => (
+              <div key={c.slug} className="card-in" style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}>
+                <CarCard car={c} priority={i < 2} />
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="card grid place-items-center px-6 py-16 text-center">
             <p className="text-2xl font-semibold tracking-tight">Ничего не нашлось</p>
@@ -206,7 +217,7 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
       <AnimatePresence>
         {sheet && (
           <motion.div className="fixed inset-0 z-[90] lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setSheet(false)} />
+            <div className="absolute inset-0 bg-black/70" onClick={() => setSheet(false)} />
             <motion.div
               role="dialog"
               aria-modal="true"

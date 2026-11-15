@@ -17,9 +17,11 @@ const items = [
 export function MobileDock() {
   const pathname = usePathname();
   const { list } = useFavorites();
+  // На карточке авто нижнюю навигацию заменяет панель с ценой и CTA (LotBar).
+  if (/^\/catalog\/[^/]+\/?$/.test(pathname)) return null;
   return (
     <nav aria-label="Быстрая навигация" className="pb-safe fixed inset-x-0 bottom-0 z-40 px-3 md:hidden">
-      <div className="mx-auto flex max-w-md items-center justify-between rounded-[1.6rem] border border-white/10 bg-[#121417]/85 p-1.5 shadow-[0_20px_60px_-10px_rgb(0_0_0/0.7)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-md items-center justify-between rounded-[1.6rem] border border-white/10 bg-[#15181b]/[0.97] p-1.5 shadow-[0_20px_60px_-10px_rgb(0_0_0/0.7)]">
         {items.map(({ href, label, icon: Icon }) => {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
           return (

@@ -29,7 +29,7 @@ export function Office() {
             <text x="40" y="380" fill="#eef0ea" fillOpacity="0.25" fontSize="12" letterSpacing="3">ЧЁРНОЕ МОРЕ</text>
           </svg>
           <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
-            <div className="grid gap-3 rounded-2xl border border-white/10 bg-background/70 p-5 backdrop-blur-xl sm:max-w-sm">
+            <div className="grid gap-3 rounded-2xl border border-white/10 bg-background/70 p-5 sm:max-w-sm">
               <p className="flex items-start gap-3"><MapPin className="mt-0.5 size-4.5 shrink-0 text-accent" />{company.address}</p>
               <p className="flex items-start gap-3"><Clock className="mt-0.5 size-4.5 shrink-0 text-accent" />{company.hours}</p>
               <p className="flex items-start gap-3"><Truck className="mt-0.5 size-4.5 shrink-0 text-accent" />Передача в Анапе, доставка в Новороссийск, Краснодар и по России</p>

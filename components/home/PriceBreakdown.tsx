@@ -29,7 +29,7 @@ export function PriceBreakdown() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#121417] via-[#121417]/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#121417]" />
           <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 lg:inset-x-6 lg:bottom-6">
             {options.map((o) => (
-              <button key={o.slug} onClick={() => setSlug(o.slug)} aria-pressed={o.slug === slug} className={cn("h-9 rounded-full px-3.5 text-[13px] font-medium backdrop-blur-md transition", o.slug === slug ? "bg-accent text-accent-foreground" : "bg-black/50 text-white/80 hover:bg-black/70")}>
+              <button key={o.slug} onClick={() => setSlug(o.slug)} aria-pressed={o.slug === slug} className={cn("h-9 rounded-full px-3.5 text-[13px] font-medium transition", o.slug === slug ? "bg-accent text-accent-foreground" : "bg-black/50 text-white/80 hover:bg-black/70")}>
                 {o.model}
               </button>
             ))}

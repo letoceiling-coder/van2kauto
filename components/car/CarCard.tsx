@@ -7,7 +7,7 @@ import { asset, cn, small } from "@/lib/utils";
 
 export function CountryTag({ country, className }: { country: Car["country"]; className?: string }) {
   return (
-    <span className={cn("inline-flex h-7 items-center gap-1.5 rounded-full bg-black/55 px-2.5 text-[11px] font-semibold tracking-wide text-white backdrop-blur-md", className)}>
+    <span className={cn("inline-flex h-7 items-center gap-1.5 rounded-full bg-black/65 px-2.5 text-[11px] font-semibold tracking-wide text-white", className)}>
       <span className="text-accent">{countries[country].flag}</span>
       {countries[country].label}
     </span>
@@ -20,7 +20,7 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
     <Link
       href={`/catalog/${car.slug}`}
       className={cn(
-        "group card relative flex flex-col overflow-hidden p-2 transition duration-300 hover:-translate-y-1 hover:border-white/15 hover:shadow-[0_30px_80px_-30px_rgb(198_244_71/0.25)]",
+        "group card card-glow relative flex flex-col overflow-hidden p-2 transition duration-300 active:scale-[0.985] hover:-translate-y-1 hover:border-white/15 hover:shadow-[0_30px_80px_-30px_rgb(198_244_71/0.25)]",
         className,
       )}
     >
@@ -34,8 +34,8 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
           <CountryTag country={car.country} />
           {car.badge && <span className="inline-flex h-7 items-center rounded-full bg-accent px-2.5 text-[11px] font-bold text-accent-foreground">{car.badge}</span>}
         </div>
-        <FavButton slug={car.slug} className="absolute top-2.5 right-2.5 size-10 bg-black/45 text-white backdrop-blur-md hover:bg-black/65" />
-        <span className="absolute bottom-3 left-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-black/55 px-2.5 text-[11px] font-medium text-white/90 backdrop-blur-md">
+        <FavButton slug={car.slug} className="absolute top-2.5 right-2.5 size-10 bg-black/60 text-white hover:bg-black/65" />
+        <span className="absolute bottom-3 left-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-black/65 px-2.5 text-[11px] font-medium text-white/90">
           <span className={cn("size-1.5 rounded-full", car.status === "auction" ? "bg-amber-300" : "anim-pulse bg-accent")} />
           {labels.status[car.status]}
         </span>

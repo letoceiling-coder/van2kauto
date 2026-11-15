@@ -26,8 +26,8 @@ export function Cases({ compact }: { compact?: boolean }) {
             </div>
             <div className="absolute inset-x-0 bottom-0 p-6">
               <div className="flex flex-wrap gap-2 text-xs">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 backdrop-blur"><MapPin className="size-3.5 text-accent" />{c.city}</span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 backdrop-blur"><Clock className="size-3.5 text-accent" />{c.days} дней</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1"><MapPin className="size-3.5 text-accent" />{c.city}</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1"><Clock className="size-3.5 text-accent" />{c.days} дней</span>
                 <span className="rounded-full bg-accent px-2.5 py-1 font-semibold text-accent-foreground">{c.budget}</span>
               </div>
               <h3 className="mt-4 text-2xl font-semibold tracking-tight">{c.car}</h3>

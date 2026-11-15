@@ -19,8 +19,8 @@
   --accent-2: #ddf982;
   --accent-foreground: #0c1013;
 
-  --font-heading: "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Commissioner Variable", "Commissioner Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Commissioner Variable", "Commissioner Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Jost Variable", "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
   --heading-weight: 600;
   --heading-tracking: -0.03em;

@@ -33,7 +33,7 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className={cn("transition-all duration-300", scrolled || open ? "border-b border-white/[0.06] bg-background/75 backdrop-blur-xl" : "border-b border-transparent")}>
+      <div className={cn("transition-all duration-300", scrolled || open ? "border-b border-white/[0.06] bg-background/92 md:bg-background/75 md:backdrop-blur-xl" : "border-b border-transparent")}>
         <div className="mx-auto flex h-16 max-w-site items-center gap-6 px-4 sm:px-6 lg:h-[72px] lg:px-8">
           <Logo />
           <nav aria-label="Основная навигация" className="ml-auto hidden items-center gap-1 xl:flex">
@@ -63,7 +63,7 @@ export function Header() {
       </div>
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-background/95 backdrop-blur-xl xl:hidden">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-x-0 top-16 bottom-0 overflow-y-auto bg-background xl:hidden">
             <nav aria-label="Меню" className="flex flex-col px-4 pt-4 pb-32 sm:px-6">
               {[{ label: "Главная", href: "/" }, ...nav, { label: "Подбор по бюджету", href: "/selection" }, { label: "Избранное", href: "/favorites" }].map((l, i) => (
                 <motion.div key={l.href} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03 * i, duration: 0.35 }}>

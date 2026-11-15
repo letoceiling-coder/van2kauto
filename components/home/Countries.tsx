@@ -26,12 +26,12 @@ export function Countries() {
                 <Image src={asset(META[k].image)} alt={`Автомобиль ${countries[k].from}`} fill sizes="(min-width:1024px) 33vw, 100vw" className="-z-10 object-cover transition duration-[1.2s] ease-out group-hover:scale-[1.07]" />
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#0a0c0e] via-[#0a0c0e]/55 to-transparent" />
                 <span className="absolute top-6 left-6 font-display text-7xl font-bold tracking-tight text-white/90 mix-blend-overlay sm:text-8xl">{countries[k].flag}</span>
-                <span className="absolute top-6 right-6 grid size-12 place-items-center rounded-full bg-white/10 backdrop-blur-md transition duration-300 group-hover:rotate-45 group-hover:bg-accent group-hover:text-accent-foreground">
+                <span className="absolute top-6 right-6 grid size-12 place-items-center rounded-full bg-white/10 transition duration-300 group-hover:rotate-45 group-hover:bg-accent group-hover:text-accent-foreground">
                   <ArrowUpRight className="size-5" />
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {META[k].tags.map((t) => (
-                    <span key={t} className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[11px] text-white/80 backdrop-blur">{t}</span>
+                    <span key={t} className="rounded-full border border-white/15 bg-black/30 px-2.5 py-1 text-[11px] text-white/80">{t}</span>
                   ))}
                 </div>
                 <h3 className="mt-4 text-3xl font-semibold tracking-tight">Авто {countries[k].from}</h3>

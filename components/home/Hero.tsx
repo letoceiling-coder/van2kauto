@@ -7,6 +7,8 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { ArrowUpRight, Search, ChevronDown } from "lucide-react";
 import { useLead } from "@/components/site/Lead";
 import { asset } from "@/lib/utils";
+import { useMedia } from "@/lib/useMedia";
+import { Counter } from "@/components/motion/Counter";
 
 const POPULAR = ["Changan Q05", "Tayron", "Jimny", "BYD Seagull", "Freed", "BMW 3"];
 
@@ -14,7 +16,9 @@ export function Hero({ count }: { count: number }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "18%"]);
+  // Параллакс только на десктопе с мышью — на телефонах он даёт рывки при скролле.
+  const desktop = useMedia("(min-width: 1024px) and (pointer: fine)");
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce || !desktop ? "0%" : "18%"]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const router = useRouter();
   const lead = useLead();
@@ -55,10 +59,10 @@ export function Hero({ count }: { count: number }) {
         </defs>
       </svg>
 
-      <motion.div style={{ opacity: fade }} className="mx-auto flex w-full max-w-site flex-1 flex-col justify-end px-4 pt-32 pb-10 sm:px-6 lg:px-8 lg:pb-16">
+      <motion.div style={desktop ? { opacity: fade } : undefined} className="mx-auto flex w-full max-w-site flex-1 flex-col justify-end px-4 pt-32 pb-10 sm:px-6 lg:px-8 lg:pb-16">
         <div className="grid items-end gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
-            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] py-1.5 pr-3.5 pl-1.5 text-xs font-medium text-white/85 backdrop-blur-md">
+            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] py-1.5 pr-3.5 pl-1.5 text-xs font-medium text-white/85">
               <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold tracking-wider text-accent-foreground uppercase">Анапа</span>
               Офис, выдача и доставка по России
             </motion.p>
@@ -89,7 +93,7 @@ export function Hero({ count }: { count: number }) {
                 router.push(`/catalog${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ""}`);
               }}
               role="search"
-              className="mt-8 flex max-w-xl items-center gap-2 rounded-full border border-white/12 bg-black/35 p-1.5 pl-5 backdrop-blur-xl transition focus-within:border-accent/60"
+              className="mt-8 flex max-w-xl items-center gap-2 rounded-full border border-white/12 bg-black/55 p-1.5 pl-5 md:bg-black/35 md:backdrop-blur-xl transition focus-within:border-accent/60"
             >
               <Search className="size-5 shrink-0 text-white/50" />
               <label htmlFor="hero-q" className="sr-only">Марка или модель</label>
@@ -98,7 +102,7 @@ export function Hero({ count }: { count: number }) {
             </motion.form>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-4 flex flex-wrap gap-2">
               {POPULAR.map((p) => (
-                <Link key={p} href={`/catalog?q=${encodeURIComponent(p)}`} className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[13px] text-white/75 backdrop-blur transition hover:border-accent/50 hover:text-white">
+                <Link key={p} href={`/catalog?q=${encodeURIComponent(p)}`} className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[13px] text-white/75 transition hover:border-accent/50 hover:text-white">
                   {p}
                 </Link>
               ))}
@@ -106,7 +110,7 @@ export function Hero({ count }: { count: number }) {
           </div>
 
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="lg:col-span-4">
-            <div className="rounded-[1.75rem] border border-white/10 bg-black/35 p-5 backdrop-blur-xl sm:p-6">
+            <div className="rounded-[1.75rem] border border-white/10 bg-black/55 p-5 md:bg-black/35 md:backdrop-blur-xl sm:p-6">
               <div className="grid grid-cols-2 gap-x-4 gap-y-5">
                 {[
                   [String(count), "моделей в каталоге"],
@@ -115,7 +119,7 @@ export function Hero({ count }: { count: number }) {
                   ["0 ₽", "скрытых платежей"],
                 ].map(([v, l]) => (
                   <div key={l}>
-                    <p className="tnum text-3xl font-semibold tracking-tight">{v}</p>
+                    <p className="tnum text-3xl font-semibold tracking-tight">{/^\d+$/.test(v) ? <Counter to={Number(v)} /> : v}</p>
                     <p className="mt-1 text-xs text-white/55">{l}</p>
                   </div>
                 ))}

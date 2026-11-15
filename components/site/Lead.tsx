@@ -132,7 +132,7 @@ function LeadModal({ ctx, onClose }: { ctx: LeadCtx; onClose: () => void }) {
 
   return (
     <motion.div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
       <motion.div
         ref={ref}
         role="dialog"
