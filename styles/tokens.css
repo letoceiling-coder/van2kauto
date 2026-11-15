@@ -2,32 +2,36 @@
  * Design tokens — generated from design-spec.json (direction: architecture-spatial). Edit design-spec.json, not this file.
  */
 :root {
-  color-scheme: light;
-  --background: oklch(0.96 0.004 250);
-  --foreground: oklch(0.2 0.01 250);
-  --muted: oklch(0.92 0.005 250);
-  --muted-foreground: oklch(0.5 0.01 250);
-  --surface: oklch(0.99 0.002 250);
-  --border: oklch(0.86 0.006 250);
-  --primary: oklch(0.22 0.01 250);
-  --primary-foreground: oklch(0.97 0.004 250);
-  --secondary: oklch(0.88 0.008 80);
-  --secondary-foreground: oklch(0.22 0.01 250);
-  --accent: oklch(0.92 0.25 110);
-  --accent-foreground: oklch(0.99 0 0);
+  color-scheme: dark;
+  /* VAN2KAUTO dark — graphite + lime accent (ТЗ §3) */
+  --background: #0a0c0e;
+  --foreground: #eef0ea;
+  --muted: #15181b;
+  --muted-foreground: #949ca5;
+  --surface: #121417;
+  --surface-2: #1a1d21;
+  --border: #252a2f;
+  --primary: #eef0ea;
+  --primary-foreground: #0a0c0e;
+  --secondary: #1e2226;
+  --secondary-foreground: #eef0ea;
+  --accent: #c6f447;
+  --accent-2: #ddf982;
+  --accent-foreground: #0c1013;
 
-  --font-heading: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
-  --heading-weight: 400;
-  --heading-tracking: -0.02em;
+  --font-display: "Jost Variable", "Commissioner Variable", ui-sans-serif, system-ui, sans-serif;
+  --heading-weight: 600;
+  --heading-tracking: -0.03em;
   --heading-transform: none;
 
-  --radius: 0.125rem;
-  --container: 88rem;
-  --section-y: clamp(5rem,10vw,11rem);
+  --radius: 1.25rem;
+  --container: 80rem;
+  --section-y: clamp(4rem, 8vw, 7.5rem);
 
-  --motion-duration: 0.8s;
-  --motion-distance: 16px;
+  --motion-duration: 0.7s;
+  --motion-distance: 20px;
 }
 
 /*
@@ -35,13 +39,13 @@
  * so every direction (light or dark) gets its own version of glass, glow, mesh and grain.
  */
 @utility text-display {
-  font-size: clamp(2.6rem, 7.2vw, 7.25rem);
-  line-height: 0.96;
+  font-size: clamp(2.25rem, 5.4vw, 4.75rem);
+  line-height: 1.02;
   letter-spacing: calc(var(--heading-tracking) - 0.015em);
 }
 @utility text-headline {
-  font-size: clamp(2rem, 4.4vw, 4rem);
-  line-height: 1.04;
+  font-size: clamp(1.75rem, 3.4vw, 2.85rem);
+  line-height: 1.1;
   letter-spacing: calc(var(--heading-tracking) - 0.01em);
 }
 @utility text-title {

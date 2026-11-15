@@ -4,7 +4,7 @@
   "id": "architecture-spatial",
   "name": "Architecture / Spatial",
   "description": "Холодные нейтральные тона, крупные фото, тонкие линии сетки, тихая типографика.",
-  "colorMode": "light",
+  "colorMode": "dark",
   "palette": {
     "background": "oklch(0.96 0.004 250)",
     "foreground": "oklch(0.2 0.01 250)",

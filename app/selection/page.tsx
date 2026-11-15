@@ -1,26 +1,19 @@
 import type { Metadata } from "next";
-import { FeaturesTabsMedia } from "@/components/sections/FeaturesTabsMedia";
-import { CtaAurora } from "@/components/sections/CtaAurora";
-import { ContactSplit } from "@/components/sections/ContactSplit";
-import * as content from "@/content/pages/selection";
+import { PageHero } from "@/components/site/PageHero";
+import { Quiz } from "@/components/site/Quiz";
 
 export const metadata: Metadata = {
-  "title": "Подбор авто",
-  "description": "Заполните квиз, чтобы получить персональную подборку автомобилей под ваш бюджет и требования."
+  title: "Подбор авто под бюджет",
+  description: "Квиз подбора автомобиля из Китая, Кореи или Японии: задача, страна, бюджет и город — менеджер пришлёт варианты с ценой под ключ.",
 };
 
 export default function Page() {
   return (
     <>
-      <div id="features" className="scroll-mt-20">
-        <FeaturesTabsMedia {...content.features} />
-      </div>
-      <div id="cta" className="scroll-mt-20">
-        <CtaAurora {...content.cta} />
-      </div>
-      <div className="scroll-mt-20">
-        <ContactSplit {...content.contact} />
-      </div>
+      <PageHero eyebrow="Подбор за 2 минуты" title="Найдём автомобиль под ваш бюджет" text="Четыре шага — и менеджер пришлёт до трёх вариантов с ценой под ключ до вашего города. Ответы сохраняются, можно вернуться назад." image="/media/generated/car-selection.webp" watermark="MATCH" />
+      <section className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
+        <Quiz />
+      </section>
     </>
   );
 }

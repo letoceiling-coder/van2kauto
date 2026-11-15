@@ -1,27 +1,20 @@
 import type { Metadata } from "next";
-import { CatalogBrowser } from "@/components/sections/CatalogBrowser";
-import { FaqSearch } from "@/components/sections/FaqSearch";
-import { CtaSplitNote } from "@/components/sections/CtaSplitNote";
-import { catalog } from "@/content/catalog";
-import * as content from "@/content/pages/catalog";
+import { CatalogView } from "@/components/car/CatalogView";
+import { PageHero } from "@/components/site/PageHero";
+import { cars, PRICE_DATE } from "@/content/cars";
 
 export const metadata: Metadata = {
-  "title": "Каталог",
-  "description": "Полный каталог автомобилей из Китая, Кореи и Японии. Удобные фильтры по марке, году, цене и состоянию."
+  title: "Каталог авто из Китая, Кореи и Японии — цены под ключ до Анапы",
+  description: "Каталог автомобилей под заказ: новые и с пробегом из Китая, Кореи и Японии. Фильтры по стране, бюджету, кузову и двигателю, цена под ключ до Анапы.",
 };
 
 export default function Page() {
   return (
     <>
-      <div id="products" className="scroll-mt-20">
-        <CatalogBrowser {...content.products} products={catalog.products} currency={catalog.currency} />
-      </div>
-      <div id="faq" className="scroll-mt-20">
-        <FaqSearch {...content.faq} />
-      </div>
-      <div id="cta" className="scroll-mt-20">
-        <CtaSplitNote {...content.cta} />
-      </div>
+      <PageHero eyebrow={`Каталог · ${cars.length} моделей`} title="Каталог автомобилей под заказ" text={`Цены — предварительный ориентир под ключ до Анапы на ${PRICE_DATE}. Нужной машины нет в списке? Найдём на площадках по вашему запросу.`} image="/media/generated/auto-dark-landscape.webp" watermark="CATALOG" />
+      <section className="mx-auto max-w-site px-4 pb-10 sm:px-6 lg:px-8">
+        <CatalogView />
+      </section>
     </>
   );
 }
