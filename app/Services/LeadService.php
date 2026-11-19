@@ -21,7 +21,7 @@ class LeadService
             }
         }
 
-        $lead = Lead::query()->create($data);
+        $lead = Lead::query()->create($data + ['status' => 'new', 'notify_attempts' => 0]);
         try {
             $this->notifier->notify($lead);
         } catch (\Throwable $e) {

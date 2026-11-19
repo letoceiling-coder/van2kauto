@@ -45,7 +45,10 @@ class Settings
         $value = $all[$key] ?? null;
 
         if ($value === null || $value === '') {
-            return $default ?? (self::DEFAULTS[$key] ?? null);
+            // Значение из админки пустое → берём заводское значение, и только если его нет — $default.
+            $fallback = self::DEFAULTS[$key] ?? null;
+
+            return ($fallback !== null && $fallback !== '') ? $fallback : $default;
         }
 
         return $value;
@@ -101,7 +104,7 @@ class Settings
 
         return array_values(array_filter(array_map(
             fn ($v) => (int) trim($v),
-            preg_split('/[\s,;]+/', $raw) ?: []
+            preg_split('/[\s,;]+/u', $raw) ?: []
         )));
     }
 

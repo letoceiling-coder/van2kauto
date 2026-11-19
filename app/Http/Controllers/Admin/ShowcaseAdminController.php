@@ -212,7 +212,7 @@ class ShowcaseAdminController extends Controller
             'spec_id' => ['nullable', 'integer'],
         ]);
 
-        $data['highlights'] = array_values(array_filter(array_map('trim', preg_split('/\R/', (string) ($data['highlights_text'] ?? '')) ?: [])));
+        $data['highlights'] = array_values(array_filter(array_map('trim', preg_split('/\R/u', (string) ($data['highlights_text'] ?? '')) ?: [])));
         $data['utilization_override'] = match ($data['utilization'] ?? 'auto') {
             'yes' => true, 'no' => false, default => null,
         };

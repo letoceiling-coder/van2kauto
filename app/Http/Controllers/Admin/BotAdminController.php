@@ -36,6 +36,7 @@ class BotAdminController extends Controller
             'button_url' => ['nullable', 'url', 'max:2048', 'required_with:button_text'],
             'mode' => ['required', 'in:test,send'],
         ]);
+        $data += ['photo_url' => null, 'button_text' => null, 'button_url' => null];
         if ($data['photo_url'] && mb_strlen($data['text']) > 1024) {
             return back()->withInput()->withErrors(['text' => 'С фото текст не длиннее 1024 символов (ограничение Telegram)']);
         }
