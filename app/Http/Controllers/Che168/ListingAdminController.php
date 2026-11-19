@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Listing;
 use App\Models\Series;
+use App\Models\ShowcaseCar;
+use App\Support\Settings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -53,6 +55,15 @@ class ListingAdminController extends Controller
         if ($request->filled('mileage_max')) {
             $query->where('mileage_km', '<=', (int) $request->input('mileage_max'));
         }
+        if ($request->filled('power_min')) {
+            $query->where('power_hp', '>=', (int) $request->input('power_min'));
+        }
+        if ($request->filled('power_max')) {
+            $query->where('power_hp', '<=', (int) $request->input('power_max'));
+        }
+        if ($request->boolean('not_in_showcase')) {
+            $query->whereNotIn('infoid', ShowcaseCar::query()->whereNotNull('source_infoid')->select('source_infoid'));
+        }
 
         if ($q = trim($request->string('q')->toString())) {
             $like = '%'.$q.'%';
@@ -75,7 +86,7 @@ class ListingAdminController extends Controller
 
         $sort = $request->input('sort', 'scraped_at');
         $dir = $request->input('dir', 'desc') === 'asc' ? 'asc' : 'desc';
-        $query->orderBy(in_array($sort, ['price_usd', 'mileage_km', 'scraped_at', 'title'], true) ? $sort : 'scraped_at', $dir);
+        $query->orderBy(in_array($sort, ['price_usd', 'mileage_km', 'scraped_at', 'title', 'power_hp'], true) ? $sort : 'scraped_at', $dir);
 
         $brandId = $request->filled('brand_id') ? (int) $request->input('brand_id') : null;
 
@@ -84,7 +95,7 @@ class ListingAdminController extends Controller
             'filters' => $request->only([
                 'status', 'q', 'price_min', 'price_max', 'sort', 'dir',
                 'brand_id', 'series_id', 'fuel', 'gearbox', 'body', 'color', 'seats',
-                'year_min', 'year_max', 'mileage_min', 'mileage_max',
+                'year_min', 'year_max', 'mileage_min', 'mileage_max', 'power_min', 'power_max', 'not_in_showcase',
             ]),
             'brands' => Brand::query()->orderBy('name')->get(['brand_id', 'name']),
             'series' => $brandId
@@ -93,6 +104,13 @@ class ListingAdminController extends Controller
             'fuels' => Listing::query()->whereNotNull('fuel_name')->distinct()->orderBy('fuel_name')->pluck('fuel_name'),
             'gearboxes' => Listing::query()->whereNotNull('gearbox')->distinct()->orderBy('gearbox')->pluck('gearbox'),
             'bodies' => Listing::query()->whereNotNull('body_type')->distinct()->orderBy('body_type')->pluck('body_type'),
+            'inShowcase' => ShowcaseCar::query()->whereNotNull('source_infoid')->pluck('id', 'source_infoid'),
+            'passPreset' => [
+                'power_max' => Settings::int('utilization_max_hp', 160),
+                'year_min' => now()->year - Settings::int('utilization_max_age', 5),
+                'year_max' => now()->year - Settings::int('utilization_min_age', 3),
+                'status' => 'active',
+            ],
             'colors' => Listing::query()->whereNotNull('color')->distinct()->orderBy('color')->pluck('color'),
         ]);
     }

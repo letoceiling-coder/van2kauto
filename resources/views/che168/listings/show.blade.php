@@ -104,6 +104,7 @@
 
         @if($listing->detail_url)<p style="margin-top:1rem"><a href="{{ $listing->detail_url }}" target="_blank">Открыть на Che168</a></p>@endif
     </div>
+    <div>
     <form method="post" action="{{ route('che168.listings.update', $listing) }}" class="card">
         @csrf
         @method('PUT')
@@ -120,5 +121,11 @@
         <input name="price_usd" type="number" step="0.01" value="{{ $listing->price_usd }}">
         <button class="btn btn-accent" style="margin-top:1rem;width:100%" type="submit">Сохранить</button>
     </form>
+    <form method="post" action="{{ route('admin.showcase.from-listing', $listing) }}" class="card" style="margin-top:1rem">
+        @csrf
+        <p class="muted" style="margin-top:0">Мощность: {{ $listing->power_hp ? $listing->power_hp.' л.с.' : 'не определена' }}</p>
+        <button class="btn btn-ghost" style="width:100%">В витрину (черновик)</button>
+    </form>
+    </div>
 </div>
 @endsection

@@ -26,6 +26,8 @@ class ListingPresenter
             'body_type' => $listing->body_type,
             'color' => $listing->color,
             'engine' => $listing->engine,
+            'power_hp' => $listing->power_hp,
+            'displacement_l' => $listing->displacement_l !== null ? (float) $listing->displacement_l : null,
             'driving_mode' => $listing->driving_mode,
             'steering' => $listing->steering,
             'seats' => $listing->seats,

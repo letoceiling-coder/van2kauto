@@ -39,10 +39,12 @@ class EndpointCatalog
                     ['name' => 'year_max', 'desc' => 'Год регистрации до, включительно.'],
                     ['name' => 'price_min', 'desc' => 'Цена USD от.'],
                     ['name' => 'price_max', 'desc' => 'Цена USD до.'],
+                    ['name' => 'power_min', 'desc' => 'Мощность л.с. от (разобрана из строки двигателя или характеристик комплектации).'],
+                    ['name' => 'power_max', 'desc' => 'Мощность л.с. до. Проходные по утильсбору: power_max=160.'],
                     ['name' => 'mileage_min', 'desc' => 'Пробег км от.'],
                     ['name' => 'mileage_max', 'desc' => 'Пробег км до.'],
                     ['name' => 'cert_status', 'desc' => 'Числовой флаг сертификации с донора.'],
-                    ['name' => 'sort', 'desc' => 'scraped_at (по умолчанию), price, mileage, year, title.'],
+                    ['name' => 'sort', 'desc' => 'scraped_at (по умолчанию), price, mileage, year, power, title.'],
                     ['name' => 'dir', 'desc' => 'asc или desc. По умолчанию desc.'],
                 ], $paging),
                 'example' => '/api/v1/listings?q=mazda&category_id=33&price_max=20000&year_min=2018&limit=24&offset=0&sort=price&dir=asc',
@@ -195,6 +197,50 @@ JSON,
                 'example' => '/api/v1/properties',
                 'response' => <<<'JSON'
 {"data": [{"key": "fuel", "title": "Топливо", "values": ["Diesel", "Gasoline"]}, {"key": "gearbox", "title": "КПП", "values": ["Automatic", "Manual"]}]}
+JSON,
+            ],
+            [
+                'method' => 'GET',
+                'path' => '/api/v1/showcase',
+                'title' => 'Витрина сайта',
+                'summary' => 'Опубликованные карточки витрины в порядке из админки. Данных донора нет: только цена «от» в рублях и свои фото. Кэшируется: ETag + Cache-Control (max-age=60, stale-while-revalidate=600); повторный запрос с If-None-Match отдаёт 304. Версия в meta.version растёт при любом изменении.',
+                'params' => [],
+                'example' => '/api/v1/showcase',
+                'response' => <<<'JSON'
+{"data": [{"slug": "mazda-cx-5-2023", "brand": "Mazda", "model": "CX-5", "trim": "2.5L AWD", "year": 2023, "country": "china", "condition": "used", "body": "crossover", "engine": "petrol", "engine_label": "Бензин, 2.5 л, 194 л.с.", "power_hp": 194, "drive": "AWD", "mileage_km": 30000, "price_from_rub": 2890000, "status": "order", "utilization_ok": false, "hit": true, "images": [{"src": "https://vanauto-api.neeklo.ru/storage/showcase/1/a.jpg", "alt": "Mazda CX-5 2023"}], "eta": [30, 45]}], "meta": {"total": 1, "version": 12}}
+JSON,
+            ],
+            [
+                'method' => 'GET',
+                'path' => '/api/v1/showcase/{slug}',
+                'title' => 'Карточка витрины',
+                'summary' => 'Одна опубликованная карточка по slug. 404, если снята с публикации.',
+                'params' => [['name' => 'slug', 'desc' => 'slug карточки в пути.']],
+                'example' => '/api/v1/showcase/mazda-cx-5-2023',
+                'response' => <<<'JSON'
+{"data": {"slug": "mazda-cx-5-2023", "price_from_rub": 2890000, "images": []}}
+JSON,
+            ],
+            [
+                'method' => 'POST',
+                'path' => '/api/v1/leads',
+                'title' => 'Заявка с сайта',
+                'summary' => 'JSON-тело. Заявка сохраняется в админке и сразу уходит менеджерам в Telegram. Обязательно: contact (телефон или @username) и consent=true. Скрытое поле website должно быть пустым (защита от ботов). Лимит 5 в минуту и 30 в час с IP. Ответ 201.',
+                'params' => [
+                    ['name' => 'contact', 'desc' => 'Телефон или @username. Обязательно.'],
+                    ['name' => 'consent', 'desc' => 'true — согласие на обработку ПДн. Обязательно.'],
+                    ['name' => 'name', 'desc' => 'Имя.'],
+                    ['name' => 'channel', 'desc' => 'Как связаться: Telegram, WhatsApp, Звонок.'],
+                    ['name' => 'car_slug', 'desc' => 'slug карточки витрины, если заявка по машине.'],
+                    ['name' => 'comment', 'desc' => 'Комментарий.'],
+                    ['name' => 'context', 'desc' => 'Объект: ответы квиза и т.п. (ключ → значение).'],
+                    ['name' => 'page', 'desc' => 'Страница, с которой отправлена заявка.'],
+                    ['name' => 'utm', 'desc' => 'Объект utm_source, utm_medium, utm_campaign, utm_content, utm_term, referrer.'],
+                    ['name' => 'ym_client_id', 'desc' => 'ClientID Яндекс.Метрики.'],
+                ],
+                'example' => '/api/v1/leads',
+                'response' => <<<'JSON'
+{"ok": true, "id": 128}
 JSON,
             ],
         ];

@@ -87,6 +87,14 @@ class ListingFilter
                 $query->where('reg_date', '<', (string) ((int) $request->input('year_max') + 1));
             }
         }
+        if (! isset($skip['power'])) {
+            if ($request->filled('power_min')) {
+                $query->where('power_hp', '>=', (int) $request->input('power_min'));
+            }
+            if ($request->filled('power_max')) {
+                $query->where('power_hp', '<=', (int) $request->input('power_max'));
+            }
+        }
         if (! isset($skip['cert']) && $request->filled('cert_status')) {
             $query->where('cert_status', (int) $request->input('cert_status'));
         }
@@ -107,6 +115,7 @@ class ListingFilter
             'mileage', 'mileage_km' => 'mileage_km',
             'year', 'reg_date' => 'reg_date',
             'title' => 'title',
+            'power', 'power_hp' => 'power_hp',
             default => 'scraped_at',
         };
 
@@ -137,6 +146,7 @@ class ListingFilter
             'years' => $this->yearFacet($request),
             'price' => $this->range($request, 'price_usd', ['price']),
             'mileage' => $this->range($request, 'mileage_km', ['mileage']),
+            'power' => $this->range($request, 'power_hp', ['power']),
         ];
     }
 

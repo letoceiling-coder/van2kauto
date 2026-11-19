@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\EngineParser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -34,6 +35,8 @@ class Listing extends Model
         'vin_masked',
         'fuel_name',
         'engine',
+        'power_hp',
+        'displacement_l',
         'gearbox',
         'driving_mode',
         'steering',
@@ -68,6 +71,18 @@ class Listing extends Model
             'scraped_at' => 'datetime',
             'raw_carinfo' => 'array',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Listing $listing) {
+            if ($listing->isDirty('engine') || $listing->power_hp === null) {
+                $listing->power_hp = EngineParser::powerHp($listing->engine)
+                    ?? ($listing->spec_id ? EngineParser::powerFromSpecParam(Spec::query()->find($listing->spec_id)?->raw_param) : null)
+                    ?? $listing->power_hp;
+                $listing->displacement_l = EngineParser::displacementL($listing->engine) ?? $listing->displacement_l;
+            }
+        });
     }
 
     public function brand(): BelongsTo

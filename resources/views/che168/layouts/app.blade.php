@@ -83,6 +83,22 @@
         .facts span { display: block; color: var(--muted); font-size: .75rem; }
         .spec-block { margin-top: 1.25rem; }
         .spec-block h3 { margin: 0 0 .5rem; font-size: .95rem; }
+        .row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+        .form-grid { display: grid; gap: .75rem 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+        .form-grid .wide { grid-column: 1 / -1; }
+        .muted { color: var(--muted); font-size: .85rem; }
+        .err-list { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.4); border-radius: .75rem; padding: .75rem 1rem; margin-bottom: 1rem; }
+        .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .75rem; }
+        .thumbs figure { margin: 0; background: rgba(255,255,255,.03); border: 1px solid var(--border); border-radius: .6rem; padding: .4rem; }
+        .thumbs img { width: 100%; height: 100px; object-fit: cover; border-radius: .4rem; display: block; }
+        .thumbs label { display: flex; gap: .35rem; align-items: center; margin: .3rem 0 0; }
+        .thumbs input[type=number] { width: 70px; padding: .2rem .4rem; }
+        input[type=checkbox], input[type=radio] { width: auto; }
+        .tag { display: inline-block; font-size: .72rem; padding: .1rem .45rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+        .tag-ok { border-color: rgba(34,197,94,.5); color: #86efac; }
+        .tag-warn { border-color: rgba(234,179,8,.5); color: #fde68a; }
+        .btn-sm { padding: .3rem .65rem; font-size: .78rem; }
+        pre.out { white-space: pre-wrap; font-size: .72rem; max-height: 200px; overflow: auto; background: #0d1014; padding: .5rem; border-radius: .5rem; }
     </style>
     @stack('head')
 </head>
@@ -102,6 +118,11 @@
             <a href="{{ route('automarket.dashboard') }}">Аукционы</a>
             <a href="{{ route('che168.dashboard') }}" class="@if(request()->routeIs('che168.dashboard')) active @endif">Парсер</a>
             <a href="{{ route('che168.listings.index') }}" class="@if(request()->routeIs('che168.listings.*')) active @endif">Объявления</a>
+            <a href="{{ route('admin.showcase.index') }}" class="@if(request()->routeIs('admin.showcase.*')) active @endif">Витрина</a>
+            @php($newLeads = \App\Models\Lead::query()->where('status', 'new')->count())
+            <a href="{{ route('admin.leads.index') }}" class="@if(request()->routeIs('admin.leads.*')) active @endif">Заявки @if($newLeads)<span class="badge badge-active">{{ $newLeads }}</span>@endif</a>
+            <a href="{{ route('admin.bot.index') }}" class="@if(request()->routeIs('admin.bot.*')) active @endif">Бот</a>
+            <a href="{{ route('admin.settings.show') }}" class="@if(request()->routeIs('admin.settings.*')) active @endif">Настройки</a>
             <a href="{{ route('api.docs') }}" class="@if(request()->routeIs('api.docs')) active @endif">Документация</a>
             <a href="{{ route('che168.gate.public') }}" target="_blank">Captcha</a>
             @endif
@@ -120,6 +141,9 @@
 <main class="wrap" style="padding-top:1.5rem">
     @if(session('ok'))
         <div class="alert alert-ok">{{ session('ok') }}</div>
+    @endif
+    @if($errors->any())
+        <div class="err-list">@foreach($errors->all() as $error)<div>{{ $error }}</div>@endforeach</div>
     @endif
     @yield('content')
 </main>

@@ -11,6 +11,10 @@ use App\Http\Controllers\Che168\DashboardController;
 use App\Http\Controllers\Che168\ListingAdminController;
 use App\Http\Controllers\Che168\ParseRunController;
 use App\Http\Controllers\Che168GateController;
+use App\Http\Controllers\Admin\BotAdminController;
+use App\Http\Controllers\Admin\LeadAdminController;
+use App\Http\Controllers\Admin\SettingsAdminController;
+use App\Http\Controllers\Admin\ShowcaseAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/che168');
@@ -57,4 +61,36 @@ Route::prefix('a-automarket')->name('automarket.')->middleware('auth')->group(fu
     Route::post('/proxies', [ProxyController::class, 'store'])->name('proxies.store');
     Route::post('/proxies/{proxy}/toggle', [ProxyController::class, 'toggle'])->name('proxies.toggle');
     Route::delete('/proxies/{proxy}', [ProxyController::class, 'destroy'])->name('proxies.destroy');
+});
+Route::prefix('che168')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/showcase', [ShowcaseAdminController::class, 'index'])->name('showcase.index');
+    Route::get('/showcase/create', [ShowcaseAdminController::class, 'create'])->name('showcase.create');
+    Route::post('/showcase', [ShowcaseAdminController::class, 'store'])->name('showcase.store');
+    Route::post('/showcase/bulk', [ShowcaseAdminController::class, 'bulk'])->name('showcase.bulk');
+    Route::post('/showcase/from-listings', [ShowcaseAdminController::class, 'bulkFromListings'])->name('showcase.from-listings');
+    Route::post('/showcase/from-listing/{listing}', [ShowcaseAdminController::class, 'fromListing'])->name('showcase.from-listing');
+    Route::get('/showcase/{car}/edit', [ShowcaseAdminController::class, 'edit'])->name('showcase.edit');
+    Route::put('/showcase/{car}', [ShowcaseAdminController::class, 'update'])->name('showcase.update');
+    Route::delete('/showcase/{car}', [ShowcaseAdminController::class, 'destroy'])->name('showcase.destroy');
+    Route::post('/showcase/{car}/duplicate', [ShowcaseAdminController::class, 'duplicate'])->name('showcase.duplicate');
+    Route::post('/showcase/{car}/publish', [ShowcaseAdminController::class, 'togglePublish'])->name('showcase.publish');
+    Route::post('/showcase/{car}/fill', [ShowcaseAdminController::class, 'fillFromListing'])->name('showcase.fill');
+    Route::post('/showcase/{car}/photos', [ShowcaseAdminController::class, 'uploadPhotos'])->name('showcase.photos.upload');
+    Route::put('/showcase/{car}/photos', [ShowcaseAdminController::class, 'updatePhotos'])->name('showcase.photos.update');
+
+    Route::get('/leads', [LeadAdminController::class, 'index'])->name('leads.index');
+    Route::get('/leads/{lead}', [LeadAdminController::class, 'show'])->name('leads.show');
+    Route::put('/leads/{lead}', [LeadAdminController::class, 'update'])->name('leads.update');
+    Route::post('/leads/{lead}/renotify', [LeadAdminController::class, 'renotify'])->name('leads.renotify');
+
+    Route::get('/bot', [BotAdminController::class, 'index'])->name('bot.index');
+    Route::post('/bot/broadcasts', [BotAdminController::class, 'storeBroadcast'])->name('bot.broadcasts.store');
+    Route::post('/bot/broadcasts/{broadcast}/cancel', [BotAdminController::class, 'cancelBroadcast'])->name('bot.broadcasts.cancel');
+
+    Route::get('/settings', [SettingsAdminController::class, 'show'])->name('settings.show');
+    Route::put('/settings', [SettingsAdminController::class, 'update'])->name('settings.update');
+    Route::post('/settings/bot-test', [SettingsAdminController::class, 'testBot'])->name('settings.bot-test');
+    Route::post('/settings/webhook', [SettingsAdminController::class, 'setWebhook'])->name('settings.webhook');
+    Route::delete('/settings/webhook', [SettingsAdminController::class, 'deleteWebhook'])->name('settings.webhook.delete');
+    Route::post('/settings/rebuild', [SettingsAdminController::class, 'rebuild'])->name('settings.rebuild');
 });
