@@ -6,6 +6,8 @@ SRC="${SRC:-/opt/van2kauto}"
 DIST="${DIST:-/var/www/vanauto.neeklo.ru}"
 export SHOWCASE_API_URL="${SHOWCASE_API_URL:-https://vanauto-api.neeklo.ru/api/v1/showcase}"
 export STATIC_EXPORT=1 NEXT_TELEMETRY_DISABLED=1
+# Планировщик запускает от www-data: кэши npm/pnpm держим внутри SRC.
+export HOME="$SRC/.home"; mkdir -p "$HOME"
 
 cd "$SRC"
 echo "== $(date -Is) сборка из $SRC"
