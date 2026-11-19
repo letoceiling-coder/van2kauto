@@ -14,7 +14,9 @@ const TABS: { id: Tab; label: string }[] = [{ id: "all", label: "Все" }, ...(
 
 export function Hits() {
   const [tab, setTab] = useState<Tab>("all");
-  const list = cars.filter((c) => c.hit && (tab === "all" || c.country === tab)).slice(0, 8);
+  // Хиты из админки; если их не отметили — первые карточки витрины.
+  const pool = cars.some((c) => c.hit) ? cars.filter((c) => c.hit) : cars;
+  const list = pool.filter((c) => tab === "all" || c.country === tab).slice(0, 8);
   return (
     <section data-component-id="hits" className="relative mx-auto max-w-site px-4 py-[var(--section-y)] sm:px-6 lg:px-8">
       <SectionHead

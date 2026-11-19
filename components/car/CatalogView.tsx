@@ -113,12 +113,12 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
         <input type="range" min={1_000_000} max={MAX} step={100_000} value={f.maxPrice} onChange={(e) => setF({ ...f, maxPrice: Number(e.target.value) })} aria-label="Максимальный бюджет" className="w-full accent-[#c6f447]" />
       </div>
       <Group title="Кузов">
-        {(Object.keys(labels.body) as Body[]).map((b) => (
+        {(Object.keys(labels.body) as Body[]).filter((b) => ALL.some((c) => c.body === b)).map((b) => (
           <Chip key={b} on={f.body.includes(b)} onClick={() => setF({ ...f, body: toggle(f.body, b) })}>{labels.body[b]}</Chip>
         ))}
       </Group>
       <Group title="Двигатель">
-        {(Object.keys(labels.engine) as Engine[]).map((e) => (
+        {(Object.keys(labels.engine) as Engine[]).filter((e) => ALL.some((c) => c.engine === e)).map((e) => (
           <Chip key={e} on={f.engine.includes(e)} onClick={() => setF({ ...f, engine: toggle(f.engine, e) })}>{e === "erev" ? "EREV" : labels.engine[e]}</Chip>
         ))}
       </Group>

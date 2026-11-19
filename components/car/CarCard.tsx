@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Gauge, Fuel, Calendar } from "lucide-react";
 import { FavButton } from "./FavButton";
-import { type Car, carName, countries, formatKm, formatPrice, labels, photos, PRICE_CITY } from "@/content/cars";
+import { type Car, carName, countries, formatKm, labels, photos, PRICE_CITY, priceText } from "@/content/cars";
 import { asset, cn, small } from "@/lib/utils";
 
 export function CountryTag({ country, className }: { country: Car["country"]; className?: string }) {
@@ -33,6 +33,7 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           <CountryTag country={car.country} />
           {car.badge && <span className="inline-flex h-7 items-center rounded-full bg-accent px-2.5 text-[11px] font-bold text-accent-foreground">{car.badge}</span>}
+          {car.utilizationOk && <span className="inline-flex h-7 items-center rounded-full bg-black/65 px-2.5 text-[11px] font-semibold text-accent">Проходной</span>}
         </div>
         <FavButton slug={car.slug} className="absolute top-2.5 right-2.5 size-10 bg-black/60 text-white hover:bg-black/65" />
         <span className="absolute bottom-3 left-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-black/65 px-2.5 text-[11px] font-medium text-white/90">
@@ -57,10 +58,10 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
         </dl>
         <div className="mt-4 flex items-end justify-between gap-2 border-t border-white/[0.06] pt-4">
           <div>
-            <p className="tnum text-[1.4rem] leading-none font-semibold tracking-tight">{formatPrice(car.price)}</p>
-            <p className="mt-1.5 text-xs text-muted-foreground">Предварительно до {PRICE_CITY}</p>
+            <p className="tnum text-[1.4rem] leading-none font-semibold tracking-tight">{priceText(car)}</p>
+            <p className="mt-1.5 text-xs text-muted-foreground">{car.priceFrom ? "Точная цена — по запросу" : `Предварительно до ${PRICE_CITY}`}</p>
           </div>
-          <span className="text-xs text-muted-foreground">{car.power} л.с.</span>
+          {car.power > 0 && <span className="text-xs text-muted-foreground">{car.power} л.с.</span>}
         </div>
       </div>
     </Link>

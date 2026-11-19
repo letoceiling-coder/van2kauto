@@ -11,6 +11,7 @@ export const useLead = () => useContext(Ctx);
 
 export function LeadProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<LeadCtx | null>(null);
+  useEffect(() => rememberUtm(), []);
   const open = useCallback((c?: LeadCtx) => setState(c ?? {}), []);
   return (
     <Ctx.Provider value={open}>
@@ -31,6 +32,59 @@ export function LeadButton({ children, className, context, title }: { children: 
 
 const CHANNELS = ["Telegram", "WhatsApp", "Звонок"] as const;
 
+const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "https://vanauto-api.neeklo.ru").replace(/\/$/, "");
+const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
+
+/** UTM и реферер первого захода — сохраняем на сессию, чтобы не потерять при переходах по сайту. */
+export function rememberUtm() {
+  try {
+    if (sessionStorage.getItem("v2k_utm")) return;
+    const q = new URLSearchParams(location.search);
+    const utm: Record<string, string> = {};
+    for (const k of UTM_KEYS) { const v = q.get(k); if (v) utm[k] = v.slice(0, 200); }
+    if (document.referrer && !document.referrer.startsWith(location.origin)) utm.referrer = document.referrer.slice(0, 250);
+    sessionStorage.setItem("v2k_utm", JSON.stringify(utm));
+  } catch {}
+}
+
+function readUtm(): Record<string, string> {
+  try { return JSON.parse(sessionStorage.getItem("v2k_utm") || "{}"); } catch { return {}; }
+}
+
+function ymClientId(): string | undefined {
+  try {
+    const m = document.cookie.match(/(?:^|; )_ym_uid=(\d+)/);
+    return m?.[1];
+  } catch { return undefined; }
+}
+
+/** Отправка заявки в админку → Telegram менеджерам. Машина определяется по адресу /catalog/<slug>. */
+export async function sendLead(payload: { name?: string; contact: string; channel?: string; comment?: string; website?: string; context?: Record<string, string> }) {
+  rememberUtm();
+  const m = location.pathname.match(/\/catalog\/([^/]+)/);
+  const res = await fetch(`${API_URL}/api/v1/leads`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      ...payload,
+      consent: true,
+      car_slug: m ? decodeURIComponent(m[1]) : undefined,
+      page: location.pathname + location.search,
+      utm: readUtm(),
+      ym_client_id: ymClientId(),
+    }),
+  });
+  if (res.status === 429) throw new Error("Слишком много заявок подряд. Попробуйте через минуту.");
+  if (res.status === 422) {
+    const j = await res.json().catch(() => null);
+    const first = j?.errors ? (Object.values(j.errors)[0] as string[])[0] : null;
+    throw new Error(first || "Проверьте телефон или @username");
+  }
+  if (!res.ok) throw new Error("Не удалось отправить. Напишите нам в Telegram.");
+  try { (window as unknown as { ym?: (...a: unknown[]) => void }).ym?.(Number(process.env.NEXT_PUBLIC_YM_ID ?? 0), "reachGoal", "lead_submit"); } catch {}
+  return res.json();
+}
+
 export function LeadForm({ context, onDone, compact }: { context?: string; onDone?: () => void; compact?: boolean }) {
   const id = useId();
   const [channel, setChannel] = useState<(typeof CHANNELS)[number]>("Telegram");
@@ -47,10 +101,21 @@ export function LeadForm({ context, onDone, compact }: { context?: string; onDon
     }
     setError("");
     setStatus("sending");
-    // Демо: заявка сохраняется на стороне API (POST /api/leads) после подключения бэкенда.
-    await new Promise((r) => setTimeout(r, 900));
-    setStatus("done");
-    onDone?.();
+    try {
+      await sendLead({
+        name: String(data.get("name") ?? "").trim() || undefined,
+        contact: phone,
+        channel,
+        comment: String(data.get("message") ?? "").trim() || undefined,
+        website: String(data.get("website") ?? ""),
+        context: context ? { "Запрос": context } : undefined,
+      });
+      setStatus("done");
+      onDone?.();
+    } catch (err) {
+      setStatus("idle");
+      setError(err instanceof Error ? err.message : "Не удалось отправить. Напишите нам в Telegram.");
+    }
   }
 
   if (status === "done") {
@@ -76,6 +141,8 @@ export function LeadForm({ context, onDone, compact }: { context?: string; onDon
           {context}
         </div>
       )}
+      {/* Ловушка для ботов: люди это поле не видят и не заполняют. */}
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
       <label className="sr-only" htmlFor={`${id}-name`}>Имя</label>
       <input id={`${id}-name`} name="name" autoComplete="given-name" placeholder="Как к вам обращаться" className={field} />
       <label className="sr-only" htmlFor={`${id}-contact`}>Телефон или Telegram</label>
@@ -100,7 +167,7 @@ export function LeadForm({ context, onDone, compact }: { context?: string; onDon
         {status === "sending" ? "Отправляем…" : "Отправить заявку"}
       </button>
       <p className="px-1 text-xs leading-relaxed text-muted-foreground">
-        Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Ответим без навязчивых звонков.
+        Нажимая кнопку, вы соглашаетесь на <a href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/privacy/`} className="underline underline-offset-2 hover:text-foreground">обработку персональных данных</a>. Ответим без навязчивых звонков.
       </p>
     </form>
   );

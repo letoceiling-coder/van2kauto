@@ -37,8 +37,8 @@ export function Countries() {
                 <h3 className="mt-4 text-3xl font-semibold tracking-tight">Авто {countries[k].from}</h3>
                 <p className="mt-2 max-w-sm text-[15px] text-white/65">{META[k].text}</p>
                 <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-sm">
-                  <span className="text-white/60">{list.length} моделей · {countries[k].city}</span>
-                  <span className="tnum font-semibold">от {formatPrice(min)}</span>
+                  <span className="text-white/60">{list.length ? `${list.length} моделей · ` : "Подбор под заказ · "}{countries[k].city}</span>
+                  {list.length > 0 && <span className="tnum font-semibold">от {formatPrice(min)}</span>}
                 </div>
               </Link>
             </Reveal>

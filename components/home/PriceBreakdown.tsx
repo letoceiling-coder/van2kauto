@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SectionHead } from "./SectionHead";
 import { LeadButton } from "@/components/site/Lead";
-import { cars, carName, estimate, formatPrice, photos, PRICE_DATE, PRICE_CITY } from "@/content/cars";
+import { demoCars as cars, carName, estimate, formatPrice, photos, PRICE_DATE, PRICE_CITY } from "@/content/cars";
 import { asset, cn } from "@/lib/utils";
 
 const COLORS = ["#c6f447", "#9fd13a", "#6f8f2f", "#4a5d2a", "#353f26", "#262b22"];

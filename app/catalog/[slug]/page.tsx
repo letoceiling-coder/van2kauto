@@ -8,7 +8,7 @@ import { FavButton } from "@/components/car/FavButton";
 import { LotBar } from "@/components/car/LotBar";
 import { LeadButton } from "@/components/site/Lead";
 import { Reveal } from "@/components/motion/Reveal";
-import { cars, carName, countries, estimate, formatKm, formatPrice, labels, photos, PRICE_CITY, PRICE_DATE } from "@/content/cars";
+import { cars, carName, countries, estimate, formatKm, formatPrice, labels, photos, PRICE_CITY, PRICE_DATE, priceText } from "@/content/cars";
 
 export const dynamicParams = false;
 
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const c = cars.find((x) => x.slug === slug);
   if (!c) return {};
   const title = `${carName(c)} ${c.year} ${countries[c.country].from} под заказ — цена под ключ`;
-  const description = `${carName(c)} ${c.trim}, ${c.year}. ${c.summary} Ориентир ${formatPrice(c.price)} до Анапы.`;
+  const description = `${carName(c)} ${c.trim}, ${c.year}. ${c.summary} ${c.priceFrom ? `Цена ${priceText(c)}, точный расчёт под ключ — по запросу.` : `Ориентир ${formatPrice(c.price)} до Анапы.`}`;
   return { title, description, openGraph: { title, description, images: [photos(c)[0].src] } };
 }
 
@@ -40,7 +40,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     ["Пробег", formatKm(car.mileage)],
     ["Кузов", labels.body[car.body]],
     ["Двигатель", car.engineLabel],
-    ["Мощность", `${car.power} л.с.`],
+    ...(car.power ? ([["Мощность", `${car.power} л.с.`]] as [string, string][]) : []),
+    ...(car.utilizationOk != null ? ([["Утильсбор", car.utilizationOk ? "Проходной (льготный)" : "Полный"]] as [string, string][]) : []),
     ["Привод", labels.drive[car.drive]],
     ["Руль", labels.steering[car.steering]],
     ...(car.generation ? ([["Поколение", car.generation]] as [string, string][]) : []),
@@ -48,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const quick = [
     { icon: Calendar, v: String(car.year), l: "год" },
     { icon: Gauge, v: car.mileage ? `${Math.round(car.mileage / 1000)} тыс.` : "0 км", l: "пробег" },
-    { icon: Zap, v: `${car.power}`, l: "л.с." },
+    { icon: Zap, v: car.power ? `${car.power}` : "—", l: "л.с." },
     { icon: Cog, v: car.drive === "AWD" ? "4WD" : car.drive, l: labels.drive[car.drive].toLowerCase() },
   ];
   const [a, b] = car.eta;
@@ -106,9 +107,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
             <div className="card relative mt-4 overflow-hidden p-5 sm:p-6">
               <div aria-hidden="true" className="absolute -top-20 -right-20 size-56 rounded-full bg-[radial-gradient(closest-side,rgb(198_244_71/0.16),transparent)]" />
-              <p className="relative text-sm text-muted-foreground">Ориентир под ключ</p>
-              <p className="tnum relative mt-1 text-[2.4rem] leading-none font-semibold tracking-tight">{formatPrice(car.price)}</p>
-              <p className="relative mt-2.5 text-[13px] text-muted-foreground">Предварительно до {PRICE_CITY} · расчёт от {PRICE_DATE} · 7 дней</p>
+              <p className="relative text-sm text-muted-foreground">{car.priceFrom ? "Цена под ключ" : "Ориентир под ключ"}</p>
+              <p className="tnum relative mt-1 text-[2.4rem] leading-none font-semibold tracking-tight">{priceText(car)}</p>
+              <p className="relative mt-2.5 text-[13px] text-muted-foreground">{car.priceFrom ? "Зависит от лота, курса и комплектации — точную сумму пришлём по запросу" : `Предварительно до ${PRICE_CITY} · расчёт от ${PRICE_DATE} · 7 дней`}</p>
               <div className="relative mt-5 grid grid-cols-2 gap-2 text-[13px]">
                 <div className="rounded-2xl bg-white/[0.04] p-3.5"><Clock className="mb-2 size-4 text-accent" />{a}–{b} дней до выдачи</div>
                 <div className="rounded-2xl bg-white/[0.04] p-3.5"><ShieldCheck className="mb-2 size-4 text-accent" />Проверка лота до выкупа</div>
@@ -145,6 +146,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h2 className="text-2xl font-semibold tracking-tight">Из чего цена</h2>
             <FileText className="size-5 text-accent" />
           </div>
+          {car.priceFrom ? (
+            <div className="mt-5 grid gap-3 text-[15px]">
+              {["Автомобиль у продавца", "Экспорт, осмотр, доставка", "Таможня и утильсбор", "Брокер, СБКТС, ЭПТС", "Комиссия VAN2KAUTO"].map((n) => (
+                <div key={n} className="flex items-center gap-3"><Check className="size-4 shrink-0 text-accent" strokeWidth={3} />{n}</div>
+              ))}
+              <p className="text-[13px] text-muted-foreground">Цена «под ключ» уже включает всё перечисленное. Смету по конкретному лоту — с курсом и сроком действия — пришлём до оплаты.</p>
+              <LeadButton context={context} title={`Расчёт по ${name}`} className="btn-accent mt-1 inline-flex h-12 items-center justify-center rounded-full font-semibold">Получить точный расчёт</LeadButton>
+            </div>
+          ) : (
+          <>
           <ul className="mt-5 divide-y divide-white/[0.06]">
             {rows.map((r) => (
               <li key={r.name} className="flex justify-between gap-4 py-3 text-[15px]"><span className="text-muted-foreground">{r.name}</span><span className="tnum shrink-0 font-medium">{formatPrice(r.value)}</span></li>
@@ -152,6 +163,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <li className="flex justify-between gap-4 pt-4 text-lg font-semibold"><span>Итого</span><span className="tnum text-accent">{formatPrice(car.price)}</span></li>
           </ul>
           <p className="mt-4 text-[13px] text-muted-foreground">Пример расчёта. Финальная смета фиксируется по лоту — с курсом, датой и сроком действия — до оплаты.</p>
+          </>
+          )}
         </Reveal>
         <Reveal delay={0.12} className="card p-5 sm:p-8">
           <div className="flex items-center justify-between gap-4">
@@ -185,7 +198,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </section>
       )}
 
-      <LotBar slug={car.slug} price={formatPrice(car.price)} context={context} title={name} />
+      <LotBar slug={car.slug} price={priceText(car)} context={context} title={name} />
     </div>
   );
 }

@@ -8,11 +8,11 @@ import { motion } from "motion/react";
 import { CarCard } from "./CarCard";
 import { useFavorites } from "@/components/site/favorites";
 import { LeadButton } from "@/components/site/Lead";
-import { type Car, cars, carName, countries, formatKm, formatPrice, labels, photos } from "@/content/cars";
+import { type Car, cars, carName, countries, formatKm, labels, photos, priceText } from "@/content/cars";
 import { asset, cn, small } from "@/lib/utils";
 
 const ROWS: { label: string; get: (c: Car) => string; best?: (cs: Car[]) => number }[] = [
-  { label: "Цена под ключ", get: (c) => formatPrice(c.price), best: (cs) => Math.min(...cs.map((c) => c.price)) },
+  { label: "Цена под ключ", get: (c) => priceText(c), best: (cs) => Math.min(...cs.map((c) => c.price)) },
   { label: "Страна", get: (c) => countries[c.country].label },
   { label: "Год", get: (c) => String(c.year) },
   { label: "Пробег", get: (c) => formatKm(c.mileage) },

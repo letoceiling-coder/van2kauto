@@ -1,10 +1,12 @@
 // Каталог VAN2KAUTO. Демо-ассортимент: цены — предварительный ориентир «под ключ до Анапы»,
 // финальная смета формируется менеджером по конкретному лоту (ТЗ §6).
 
+import showcase from "./showcase.json";
+
 export type Country = "china" | "korea" | "japan";
 export type Condition = "new" | "used";
-export type Body = "crossover" | "sedan" | "hatchback" | "minivan" | "kei" | "suv";
-export type Engine = "petrol" | "hybrid" | "ev" | "erev";
+export type Body = "crossover" | "sedan" | "hatchback" | "minivan" | "kei" | "suv" | "wagon" | "coupe" | "pickup";
+export type Engine = "petrol" | "diesel" | "hybrid" | "phev" | "ev" | "erev";
 export type Status = "order" | "auction" | "stock";
 
 export interface CarImage {
@@ -39,6 +41,10 @@ export interface Car {
   images: CarImage[];
   /** Срок от предоплаты до выдачи, дней. */
   eta: [number, number];
+  /** Карточка из витрины админки: цена — «от», точная по запросу. */
+  priceFrom?: boolean;
+  /** Проходной по утильсбору (≤160 л.с., возраст по правилу из админки); null — неизвестно. */
+  utilizationOk?: boolean | null;
 }
 
 export const countries: Record<Country, { label: string; from: string; flag: string; href: string; city: string; road: string }> = {
@@ -49,8 +55,8 @@ export const countries: Record<Country, { label: string; from: string; flag: str
 
 export const labels = {
   condition: { new: "Новый", used: "С пробегом" } as Record<Condition, string>,
-  body: { crossover: "Кроссовер", sedan: "Седан", hatchback: "Хэтчбек", minivan: "Минивэн", kei: "Кей-кар", suv: "Внедорожник" } as Record<Body, string>,
-  engine: { petrol: "Бензин", hybrid: "Гибрид", ev: "Электро", erev: "Последовательный гибрид" } as Record<Engine, string>,
+  body: { crossover: "Кроссовер", sedan: "Седан", hatchback: "Хэтчбек", minivan: "Минивэн", kei: "Кей-кар", suv: "Внедорожник", wagon: "Универсал", coupe: "Купе", pickup: "Пикап" } as Record<Body, string>,
+  engine: { petrol: "Бензин", diesel: "Дизель", hybrid: "Гибрид", phev: "Подключаемый гибрид", ev: "Электро", erev: "Последовательный гибрид" } as Record<Engine, string>,
   drive: { FWD: "Передний", RWD: "Задний", AWD: "Полный" } as Record<Car["drive"], string>,
   steering: { left: "Левый", right: "Правый" } as Record<Car["steering"], string>,
   status: { order: "Под заказ", auction: "Аукцион", stock: "В наличии в РФ" } as Record<Status, string>,
@@ -65,7 +71,8 @@ const img = (slug: string, n: number, alt: string, kind: CarImage["kind"] = "mod
 export const PRICE_DATE = "15.11.2026";
 export const PRICE_CITY = "Анапы";
 
-export const cars: Car[] = [
+/** Демо-ассортимент: показывается, пока в витрине админки нет опубликованных карточек. */
+export const demoCars: Car[] = [
   {
     slug: "changan-qiyuan-q05",
     brand: "Changan",
@@ -579,6 +586,18 @@ export const cars: Car[] = [
     eta: [30, 45],
   },
 ];
+
+/**
+ * Витрина из админки (vanauto-api). Файл content/showcase.json пишет scripts/fetch-showcase.mjs перед сборкой.
+ * Пусто → демо-каталог.
+ */
+const liveCars = (showcase as unknown as { cars?: Car[] }).cars ?? [];
+export const isLiveCatalog = liveCars.length > 0;
+export const cars: Car[] = isLiveCatalog ? liveCars : demoCars;
+
+export function priceText(c: Pick<Car, "price" | "priceFrom">) {
+  return `${c.priceFrom ? "от " : ""}${formatPrice(c.price)}`;
+}
 
 export function carName(c: Pick<Car, "brand" | "model">) {
   return `${c.brand} ${c.model}`;
