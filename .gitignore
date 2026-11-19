@@ -31,3 +31,7 @@ node_modules/
 storage/*.key
 database/database.sqlite
 .phpunit.result.cache
+storage/framework/
+storage/logs/
+storage/app/
+bootstrap/cache/*.php
