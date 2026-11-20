@@ -57,6 +57,8 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setF((s) => ({ ...s, q: q ?? s.q, country: country && country in countries ? [country] : s.country }));
     }
+    // Фильтр из адреса применён — показываем сетку (её прятал RevealScript, чтобы не мигал полный список).
+    requestAnimationFrame(() => document.documentElement.classList.remove("catalog-pending"));
   }, []);
 
   useEffect(() => {
@@ -110,7 +112,7 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
           <span className="font-medium">Бюджет до Анапы</span>
           <span className="tnum text-accent">до {formatPrice(f.maxPrice)}</span>
         </div>
-        <input type="range" min={1_000_000} max={MAX} step={100_000} value={f.maxPrice} onChange={(e) => setF({ ...f, maxPrice: Number(e.target.value) })} aria-label="Максимальный бюджет" className="w-full accent-[#c6f447]" />
+        <input type="range" min={1_000_000} max={MAX} step={100_000} value={f.maxPrice} onChange={(e) => setF({ ...f, maxPrice: Number(e.target.value) })} aria-label="Максимальный бюджет" className="w-full accent-[#eb111d]" />
       </div>
       <Group title="Кузов">
         {(Object.keys(labels.body) as Body[]).filter((b) => ALL.some((c) => c.body === b)).map((b) => (
@@ -195,7 +197,7 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
 
         {list.length ? (
           // Без layout-анимаций: при смене фильтра сетка не «прыгает», карточки просто проявляются.
-          <div key={gridKey} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div key={gridKey} data-catalog-results="" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {list.map((c, i) => (
               <div key={c.slug} className="card-in" style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}>
                 <CarCard car={c} priority={i < 2} />

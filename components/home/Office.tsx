@@ -11,7 +11,7 @@ export function Office() {
         <div className="relative min-h-[360px] overflow-hidden border-b border-white/[0.06] lg:border-r lg:border-b-0">
           <div className="dots absolute inset-0 opacity-60" />
           <svg aria-hidden="true" viewBox="0 0 500 420" className="absolute inset-0 size-full" preserveAspectRatio="xMidYMid slice" fill="none">
-            <path d="M-20 300 C 60 280, 90 250, 140 255 S 230 300, 270 270 S 330 180, 390 170 S 480 120, 540 100" stroke="#c6f447" strokeOpacity="0.35" strokeWidth="1.5" />
+            <path d="M-20 300 C 60 280, 90 250, 140 255 S 230 300, 270 270 S 330 180, 390 170 S 480 120, 540 100" stroke="#eb111d" strokeOpacity="0.35" strokeWidth="1.5" />
             <path d="M-20 300 C 60 280, 90 250, 140 255 S 230 300, 270 270 S 330 180, 390 170 S 480 120, 540 100 L 540 440 L -20 440 Z" fill="#3b6cff" fillOpacity="0.05" />
             <path d="M150 230 C 220 200, 300 150, 420 110" stroke="#eef0ea" strokeOpacity="0.25" strokeDasharray="3 6" className="anim-dash" />
             <path d="M150 230 C 200 170, 260 110, 330 60" stroke="#eef0ea" strokeOpacity="0.2" strokeDasharray="3 6" className="anim-dash" />
@@ -21,8 +21,8 @@ export function Office() {
               [330, 60, "Краснодар"],
             ].map(([x, y, n], i) => (
               <g key={String(n)}>
-                <circle cx={Number(x)} cy={Number(y)} r={i === 0 ? 7 : 4} fill={i === 0 ? "#c6f447" : "#eef0ea"} />
-                {i === 0 && <circle cx={Number(x)} cy={Number(y)} r="18" stroke="#c6f447" strokeOpacity="0.4" />}
+                <circle cx={Number(x)} cy={Number(y)} r={i === 0 ? 7 : 4} fill={i === 0 ? "#eb111d" : "#eef0ea"} />
+                {i === 0 && <circle cx={Number(x)} cy={Number(y)} r="18" stroke="#eb111d" strokeOpacity="0.4" />}
                 <text x={Number(x) + 14} y={Number(y) + 5} fill="#eef0ea" fillOpacity={i === 0 ? 1 : 0.6} fontSize={i === 0 ? 18 : 13} fontWeight={i === 0 ? 600 : 400}>{String(n)}</text>
               </g>
             ))}

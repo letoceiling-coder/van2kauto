@@ -14,6 +14,7 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);
+  --color-silver: var(--silver);
   --color-accent-2: var(--accent-2);
   --color-accent-foreground: var(--accent-foreground);
   --font-heading: var(--font-heading);
@@ -65,13 +66,24 @@
   background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--foreground) 14%, transparent), transparent);
 }
 @utility card {
-  background: linear-gradient(180deg, color-mix(in oklch, var(--surface-2) 92%, white 2%), var(--surface));
+  background: linear-gradient(180deg, color-mix(in oklch, var(--surface-2) 94%, white 3%), var(--surface) 70%);
   border: 1px solid var(--border);
   border-radius: 1.5rem;
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 0.05) inset, 0 24px 60px -36px rgb(0 0 0 / 0.9);
 }
 @utility btn-accent {
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  background: linear-gradient(180deg, color-mix(in oklch, var(--accent) 88%, white) 0%, var(--accent) 45%, var(--accent-2) 100%);
   color: var(--accent-foreground);
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 0.22) inset, 0 10px 30px -12px rgb(235 17 29 / 0.7);
+  transition: box-shadow 0.3s ease, filter 0.3s ease, transform 0.2s ease;
+  &:hover { filter: brightness(1.06); box-shadow: 0 1px 0 0 rgb(255 255 255 / 0.25) inset, 0 14px 40px -12px rgb(235 17 29 / 0.85); }
+}
+/* Серебряный «металлический» текст — как надпись в логотипе */
+@utility text-metal {
+  background: linear-gradient(180deg, #ffffff 0%, #e4e4e6 45%, #a9a9ae 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 @utility text-outline {
   color: transparent;
@@ -105,6 +117,8 @@
   50% { transform: translate3d(-5vw, -6vh, 0) scale(0.95); }
 }
 @keyframes dash { to { stroke-dashoffset: -400; } }
+@keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+.anim-nudge { animation: nudge 2.4s ease-in-out infinite; }
 @keyframes pulse-dot {
   0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--accent) 60%, transparent); }
   100% { box-shadow: 0 0 0 10px transparent; }
@@ -114,8 +128,8 @@
   100% { transform: translateY(100%); }
 }
 
-.backdrop-glow-a { background: radial-gradient(closest-side, rgb(198 244 71 / 0.075), transparent); }
-.backdrop-glow-b { background: radial-gradient(closest-side, rgb(59 108 255 / 0.08), transparent); }
+.backdrop-glow-a { background: radial-gradient(closest-side, rgb(235 17 29 / 0.085), transparent); }
+.backdrop-glow-b { background: radial-gradient(closest-side, rgb(220 220 225 / 0.045), transparent); }
 .backdrop-grid {
   background-image: linear-gradient(to right, rgb(255 255 255 / 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.03) 1px, transparent 1px);
   background-size: 72px 72px;
@@ -150,7 +164,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(140deg, rgb(198 244 71 / 0.55), transparent 35%, transparent 65%, rgb(255 255 255 / 0.18));
+  background: linear-gradient(140deg, rgb(235 17 29 / 0.6), transparent 35%, transparent 65%, rgb(255 255 255 / 0.2));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -162,3 +176,33 @@
   .card-glow:hover::after { opacity: 1; }
 }
 
+
+/* ── Появление без дёрганий ─────────────────────────────────────────────────────────────
+   Чистый CSS, привязанный к прокрутке: без JS, без изменения DOM до гидрации, без «выпрыгивания».
+   Что видно при загрузке — уже в конечном состоянии; ниже — проявляется по мере входа в экран.
+   Браузеры без поддержки просто показывают контент. */
+@keyframes reveal-up { from { opacity: 0; transform: translate3d(0, 26px, 0); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+.reveal-word { display: inline; }
+.reveal-word > span { display: inline; }
+
+/* Вход первого экрана: CSS-анимация стартует с первой отрисовкой и не перезапускается при гидрации */
+@keyframes hero-in { from { opacity: 0; transform: translate3d(0, 18px, 0); } to { opacity: 1; transform: none; } }
+@keyframes hero-word { from { transform: translate3d(0, 108%, 0); } to { transform: none; } }
+.hero-in { animation: hero-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--d, 0s); }
+.hero-word { display: inline-block; overflow: hidden; padding-bottom: 0.1em; vertical-align: bottom; }
+.hero-word > span { display: inline-block; animation: hero-word 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--d, 0s); }
+
+/* Каталог с параметрами в адресе: прячем сетку на кадр, пока фильтр не применён (без мигания полного списка) */
+html.catalog-pending [data-catalog-results] { visibility: hidden; }
+
+/* Скроллбар не исчезает при открытии меню/модалки — страница не сдвигается вбок */
+html { scrollbar-gutter: stable; }

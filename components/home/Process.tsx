@@ -21,12 +21,10 @@ export function Process() {
           <motion.div style={{ height: h }} className="w-px bg-accent" />
         </div>
         {process.map((s, i) => (
-          <motion.li
+          <li
             key={s.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.6, delay: (i % 2) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            data-reveal=""
+            style={{ "--reveal-delay": `${(i % 2) * 0.08}s` } as React.CSSProperties}
             className="group card relative flex gap-5 overflow-hidden p-4 pr-5 sm:p-5"
           >
             <span className="relative z-10 grid size-14 shrink-0 place-items-center rounded-2xl border border-white/10 bg-background font-display text-xl font-semibold text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
@@ -42,7 +40,7 @@ export function Process() {
             <div className="relative hidden w-28 shrink-0 overflow-hidden rounded-xl sm:block">
               <Image src={asset(small(IMAGES[i]))} alt="" fill sizes="112px" className="object-cover opacity-70 grayscale transition duration-500 group-hover:scale-110 group-hover:opacity-100 group-hover:grayscale-0" />
             </div>
-          </motion.li>
+          </li>
         ))}
       </ol>
     </section>

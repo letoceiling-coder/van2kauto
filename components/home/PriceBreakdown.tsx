@@ -8,7 +8,7 @@ import { LeadButton } from "@/components/site/Lead";
 import { demoCars as cars, carName, estimate, formatPrice, photos, PRICE_DATE, PRICE_CITY } from "@/content/cars";
 import { asset, cn } from "@/lib/utils";
 
-const COLORS = ["#c6f447", "#9fd13a", "#6f8f2f", "#4a5d2a", "#353f26", "#262b22"];
+const COLORS = ["#eb111d", "#b40c16", "#7d0a11", "#d4d4d6", "#8e8e94", "#4a4a4f"];
 const PICK = ["vw-tayron", "changan-qiyuan-q05", "honda-freed", "kia-sportage", "suzuki-jimny"];
 
 export function PriceBreakdown() {
@@ -26,7 +26,7 @@ export function PriceBreakdown() {
               <Image src={asset(photos(car)[0].src)} alt={photos(car)[0].alt} fill sizes="(min-width:1024px) 40vw, 100vw" className="object-cover" />
             </motion.div>
           </AnimatePresence>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#121417] via-[#121417]/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#121417]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111112] via-[#111112]/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#111112]" />
           <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 lg:inset-x-6 lg:bottom-6">
             {options.map((o) => (
               <button key={o.slug} onClick={() => setSlug(o.slug)} aria-pressed={o.slug === slug} className={cn("h-9 rounded-full px-3.5 text-[13px] font-medium transition", o.slug === slug ? "bg-accent text-accent-foreground" : "bg-black/50 text-white/80 hover:bg-black/70")}>
@@ -49,7 +49,7 @@ export function PriceBreakdown() {
           </div>
           <div className="mt-7 flex h-3 overflow-hidden rounded-full bg-white/5" role="img" aria-label="Доли статей расходов">
             {rows.map((r, i) => (
-              <motion.div key={r.name} initial={false} animate={{ width: `${(r.value / car.price) * 100}%` }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} style={{ background: COLORS[i] }} className="h-full border-r border-[#121417] last:border-0" />
+              <motion.div key={r.name} initial={false} animate={{ width: `${(r.value / car.price) * 100}%` }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} style={{ background: COLORS[i] }} className="h-full border-r border-[#111112] last:border-0" />
             ))}
           </div>
           <ul className="mt-6 divide-y divide-white/[0.06]">

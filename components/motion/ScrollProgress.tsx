@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useSpring } from "motion/react";
 
-/** Тонкая лаймовая линия прогресса чтения вверху экрана (только transform — без перерисовки вёрстки). */
+/** Тонкая красная линия прогресса чтения вверху экрана (только transform — без перерисовки вёрстки). */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40, restDelta: 0.001 });

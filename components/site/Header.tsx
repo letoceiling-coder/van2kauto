@@ -33,7 +33,8 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <div className={cn("transition-all duration-300", scrolled || open ? "border-b border-white/[0.06] bg-background/92 md:bg-background/75 md:backdrop-blur-xl" : "border-b border-transparent")}>
+      <div className={cn("relative border-b transition-[background-color,border-color] duration-300", scrolled || open ? "border-white/[0.06] bg-background/92 md:bg-background/75 md:backdrop-blur-xl" : "border-transparent")}>
+        <span aria-hidden="true" className={cn("pointer-events-none absolute inset-x-0 -bottom-px h-px bg-[linear-gradient(90deg,transparent,rgb(235_17_29/0.55),transparent)] transition-opacity duration-500", scrolled ? "opacity-100" : "opacity-0")} />
         <div className="mx-auto flex h-16 max-w-site items-center gap-6 px-4 sm:px-6 lg:h-[72px] lg:px-8">
           <Logo />
           <nav aria-label="Основная навигация" className="ml-auto hidden items-center gap-1 xl:flex">

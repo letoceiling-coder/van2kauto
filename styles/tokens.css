@@ -3,21 +3,22 @@
  */
 :root {
   color-scheme: dark;
-  /* VAN2KAUTO dark — graphite + lime accent (ТЗ §3) */
-  --background: #0a0c0e;
-  --foreground: #eef0ea;
-  --muted: #15181b;
-  --muted-foreground: #949ca5;
-  --surface: #121417;
-  --surface-2: #1a1d21;
-  --border: #252a2f;
-  --primary: #eef0ea;
-  --primary-foreground: #0a0c0e;
-  --secondary: #1e2226;
-  --secondary-foreground: #eef0ea;
-  --accent: #c6f447;
-  --accent-2: #ddf982;
-  --accent-foreground: #0c1013;
+  /* ВАН23АВТО — цвета из логотипа: глубокий чёрный, серебро, фирменный красный #EB111D */
+  --background: #09090a;
+  --foreground: #ededee;
+  --muted: #141415;
+  --muted-foreground: #9b9ba1;
+  --surface: #111112;
+  --surface-2: #18181a;
+  --border: #252527;
+  --primary: #ededee;
+  --primary-foreground: #09090a;
+  --secondary: #1c1c1e;
+  --secondary-foreground: #ededee;
+  --accent: #eb111d;
+  --accent-2: #b40c16;
+  --accent-foreground: #ffffff;
+  --silver: #d4d4d6;
 
   --font-heading: "Commissioner Variable", "Commissioner Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Commissioner Variable", "Commissioner Fallback", ui-sans-serif, system-ui, sans-serif;

@@ -33,7 +33,7 @@ export function FavoritesView() {
   if (!items.length)
     return (
       <div className="card relative mt-10 grid place-items-center overflow-hidden px-6 py-20 text-center">
-        <div aria-hidden="true" className="absolute -bottom-32 left-1/2 size-80 -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(198_244_71/0.14),transparent)]" />
+        <div aria-hidden="true" className="absolute -bottom-32 left-1/2 size-80 -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(235_17_29/0.14),transparent)]" />
         <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 260, damping: 16 }} className="relative grid size-20 place-items-center rounded-full border border-white/10 bg-white/[0.04]">
           <Heart className="size-8 text-accent" />
         </motion.div>

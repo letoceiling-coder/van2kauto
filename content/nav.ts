@@ -9,7 +9,7 @@ export const nav = [
 ];
 
 export const company = {
-  name: "VAN2KAUTO",
+  name: "ВАН23АВТО",
   legal: "One Auto / «Ван Авто»",
   city: "Анапа",
   address: "Анапа, Краснодарский край — офис и выдача",

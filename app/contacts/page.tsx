@@ -7,7 +7,7 @@ import { LeadButton } from "@/components/site/Lead";
 import { Reveal } from "@/components/motion/Reveal";
 import { company } from "@/content/nav";
 
-export const metadata: Metadata = { title: "Контакты — офис в Анапе", description: "Офис VAN2KAUTO в Анапе: выдача автомобилей, консультации и расчёт стоимости. Доставка в Новороссийск, Краснодар и по России." };
+export const metadata: Metadata = { title: "Контакты — офис в Анапе", description: "Офис ВАН23АВТО в Анапе: выдача автомобилей, консультации и расчёт стоимости. Доставка в Новороссийск, Краснодар и по России." };
 
 const ACTIONS = [
   { icon: MessageCircle, title: "Написать менеджеру", text: "Telegram или WhatsApp — пришлём варианты и смету в чат.", cta: "Написать", lead: "Написать менеджеру" },
@@ -37,7 +37,7 @@ export default function Page() {
           {ACTIONS.map(({ icon: Icon, title, text, cta, lead }, i) => (
             <Reveal key={title} delay={i * 0.06}>
               <LeadButton title={lead} className="group card relative grid h-full w-full grid-cols-[auto_1fr] items-start gap-x-4 overflow-hidden p-5 text-left md:flex md:flex-col md:p-6 transition hover:-translate-y-1 hover:border-accent/30">
-                <span aria-hidden="true" className="absolute -top-16 -right-16 size-40 rounded-full bg-[radial-gradient(closest-side,rgb(198_244_71/0.18),transparent)] opacity-0 transition duration-500 group-hover:opacity-100" />
+                <span aria-hidden="true" className="absolute -top-16 -right-16 size-40 rounded-full bg-[radial-gradient(closest-side,rgb(235_17_29/0.18),transparent)] opacity-0 transition duration-500 group-hover:opacity-100" />
                 <span className="row-span-3 grid size-12 place-items-center rounded-2xl bg-accent text-accent-foreground transition duration-300 group-hover:rotate-[-8deg] group-hover:scale-105"><Icon className="size-5" /></span>
                 <span className="text-lg font-semibold tracking-tight md:mt-5 md:text-xl">{title}</span>
                 <span className="mt-1 text-[14px] leading-relaxed text-muted-foreground md:mt-2 md:text-[15px]">{text}</span>

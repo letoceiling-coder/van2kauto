@@ -20,7 +20,7 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
     <Link
       href={`/catalog/${car.slug}`}
       className={cn(
-        "group card card-glow relative flex flex-col overflow-hidden p-2 transition duration-300 active:scale-[0.985] hover:-translate-y-1 hover:border-white/15 hover:shadow-[0_30px_80px_-30px_rgb(198_244_71/0.25)]",
+        "group card card-glow relative flex flex-col overflow-hidden p-2 transition duration-300 active:scale-[0.985] hover:-translate-y-1 hover:border-white/15 hover:shadow-[0_30px_80px_-30px_rgb(235_17_29/0.25)]",
         className,
       )}
     >

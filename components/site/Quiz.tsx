@@ -97,7 +97,7 @@ export function Quiz() {
                   <h2 className="text-3xl font-semibold tracking-tight">Бюджет и город получения</h2>
                   <p className="mt-2 text-muted-foreground">Бюджет под ключ — с таможней, логистикой и оформлением.</p>
                   <p className="tnum mt-8 text-5xl font-semibold tracking-tight">{new Intl.NumberFormat("ru-RU").format(a.budget)} ₽</p>
-                  <input type="range" min={1_000_000} max={10_000_000} step={100_000} value={a.budget} onChange={(e) => setA({ ...a, budget: Number(e.target.value) })} aria-label="Бюджет" className="mt-5 w-full accent-[#c6f447]" />
+                  <input type="range" min={1_000_000} max={10_000_000} step={100_000} value={a.budget} onChange={(e) => setA({ ...a, budget: Number(e.target.value) })} aria-label="Бюджет" className="mt-5 w-full accent-[#eb111d]" />
                   <div className="mt-1 flex justify-between text-xs text-muted-foreground"><span>1 млн</span><span>10 млн</span></div>
                   <p className="mt-8 mb-3 text-sm font-medium">Город</p>
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">

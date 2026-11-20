@@ -10,7 +10,7 @@ export function QuizBand() {
       <Reveal>
         <div className="relative isolate overflow-hidden rounded-[2rem] border border-white/[0.08] px-6 py-14 sm:px-12 sm:py-20">
           <Image src={asset("/media/generated/auto-dark-landscape.webp")} alt="" fill sizes="100vw" className="-z-10 object-cover" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0a0c0e] via-[#0a0c0e]/80 to-[#0a0c0e]/20" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#09090a] via-[#09090a]/80 to-[#09090a]/20" />
           <div aria-hidden="true" className="absolute -bottom-24 -left-24 -z-10 size-80 rounded-full bg-accent/20 blur-[100px]" />
           <p className="inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.22em] text-accent uppercase"><span className="h-px w-6 bg-accent" />Подбор за 2 минуты</p>
           <h2 className="text-headline mt-4 max-w-xl">Не знаете, что выбрать? Начните с бюджета</h2>

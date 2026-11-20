@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <p className={cn("inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.22em] text-accent uppercase", className)}>
-      <span className="h-px w-6 bg-accent" />
+      <span className="h-px w-6 bg-gradient-to-r from-transparent to-accent" />
       {children}
     </p>
   );
@@ -20,7 +20,7 @@ export function SectionHead({ eyebrow, title, text, aside, className, watermark 
       )}
       <Reveal className="relative max-w-2xl">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <h2 className="text-headline mt-4">{title}</h2>
+        <h2 className="text-headline text-metal mt-4 pb-[0.06em]">{title}</h2>
         {text && <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground">{text}</p>}
       </Reveal>
       {aside && <Reveal delay={0.1} className="relative shrink-0">{aside}</Reveal>}

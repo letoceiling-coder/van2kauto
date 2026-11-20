@@ -41,20 +41,21 @@ export function Hero({ count }: { count: number }) {
           aria-hidden="true"
         />
       </motion.div>
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(10_12_14/0.55)_0%,rgb(10_12_14/0.25)_35%,rgb(10_12_14/0.85)_78%,#0a0c0e_100%)]" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_15%_60%,rgb(10_12_14/0.8),transparent_70%)]" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(9_9_10/0.6)_0%,rgb(9_9_10/0.25)_35%,rgb(9_9_10/0.88)_78%,#09090a_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_60%_at_15%_60%,rgb(9_9_10/0.82),transparent_70%)]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-px bg-[linear-gradient(90deg,transparent,rgb(235_17_29/0.6),transparent)]" />
 
       {/* Маршрут Азия → Анапа: тонкие линии поверх видео */}
       <svg aria-hidden="true" className="pointer-events-none absolute right-0 bottom-[18%] -z-10 hidden h-[60%] w-[55%] opacity-60 lg:block" viewBox="0 0 600 400" fill="none">
         <path d="M580 60 C 420 40, 360 200, 200 220 S 40 330, 10 360" stroke="url(#g1)" strokeWidth="1.2" className="anim-dash" />
         <path d="M590 150 C 470 150, 380 260, 260 270 S 80 340, 10 360" stroke="url(#g1)" strokeWidth="1" className="anim-dash" style={{ animationDelay: "-6s" }} />
         <path d="M560 260 C 450 290, 330 320, 10 360" stroke="url(#g1)" strokeWidth="0.8" className="anim-dash" style={{ animationDelay: "-11s" }} />
-        <circle cx="10" cy="360" r="4" fill="#c6f447" />
-        <circle cx="10" cy="360" r="12" stroke="#c6f447" strokeOpacity="0.4" />
+        <circle cx="10" cy="360" r="4" fill="#eb111d" />
+        <circle cx="10" cy="360" r="12" stroke="#eb111d" strokeOpacity="0.4" />
         <defs>
           <linearGradient id="g1" x1="600" y1="0" x2="0" y2="400" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#c6f447" stopOpacity="0" />
-            <stop offset="1" stopColor="#c6f447" stopOpacity="0.9" />
+            <stop stopColor="#eb111d" stopOpacity="0" />
+            <stop offset="1" stopColor="#eb111d" stopOpacity="0.9" />
           </linearGradient>
         </defs>
       </svg>
@@ -62,55 +63,49 @@ export function Hero({ count }: { count: number }) {
       <motion.div style={desktop ? { opacity: fade } : undefined} className="mx-auto flex w-full max-w-site flex-1 flex-col justify-end px-4 pt-32 pb-10 sm:px-6 lg:px-8 lg:pb-16">
         <div className="grid items-end gap-10 lg:grid-cols-12">
           <div className="lg:col-span-8">
-            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] py-1.5 pr-3.5 pl-1.5 text-xs font-medium text-white/85">
+            <p className="hero-in inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] py-1.5 pr-3.5 pl-1.5 text-xs font-medium text-white/85">
               <span className="rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold tracking-wider text-accent-foreground uppercase">Анапа</span>
-              Офис, выдача и доставка по России
-            </motion.p>
+              Привоз авто из-за рубежа под ключ
+            </p>
             <h1 className="text-display mt-6 max-w-[15ch] font-semibold" aria-label="Авто из Китая, Кореи и Японии под заказ">
               {words.map((w, i) => (
-                <span key={i} className="inline-block overflow-hidden pb-[0.1em] align-bottom" aria-hidden="true">
-                  <motion.span
-                    className={i >= 2 && i <= 5 && w !== "и" ? "inline-block text-accent" : "inline-block"}
-                    initial={{ y: "110%" }}
-                    animate={{ y: 0 }}
-                    transition={reduce ? { duration: 0 } : { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.1 + i * 0.06 }}
-                  >
+                <span key={i} className="hero-word" aria-hidden="true">
+                  <span className={i >= 2 && i <= 5 && w !== "и" ? "text-accent" : "text-metal"} style={{ "--d": `${0.08 + i * 0.05}s` } as React.CSSProperties}>
                     {w}&nbsp;
-                  </motion.span>
+                  </span>
                 </span>
               ))}
             </h1>
-            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55 }} className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/70 sm:text-lg">
+            <p style={{ "--d": "0.45s" } as React.CSSProperties} className="hero-in mt-6 max-w-xl text-[17px] leading-relaxed text-white/70 sm:text-lg">
               Подбираем, проверяем и привозим под ключ. Смета по статьям до оплаты, один менеджер и статус на каждом этапе.
-            </motion.p>
+            </p>
 
-            <motion.form
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.7 }}
+            <form
+              style={{ "--d": "0.55s" } as React.CSSProperties}
               onSubmit={(e) => {
                 e.preventDefault();
                 router.push(`/catalog${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ""}`);
               }}
               role="search"
-              className="mt-8 flex max-w-xl items-center gap-2 rounded-full border border-white/12 bg-black/55 p-1.5 pl-5 md:bg-black/35 md:backdrop-blur-xl transition focus-within:border-accent/60"
+              className="hero-in mt-8 flex max-w-xl items-center gap-2 rounded-full border border-white/12 bg-black/55 p-1.5 pl-5 shadow-[0_20px_60px_-30px_rgb(0_0_0/0.9)] transition-[border-color] focus-within:border-accent/60 md:bg-black/35 md:backdrop-blur-xl"
             >
               <Search className="size-5 shrink-0 text-white/50" />
               <label htmlFor="hero-q" className="sr-only">Марка или модель</label>
               <input id="hero-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Марка или модель" className="h-12 min-w-0 flex-1 bg-transparent text-[15px] text-white outline-none placeholder:text-white/45" />
               <button className="btn-accent shine h-12 shrink-0 rounded-full px-5 text-sm font-semibold sm:px-7">Найти</button>
-            </motion.form>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-4 flex flex-wrap gap-2">
+            </form>
+            <div style={{ "--d": "0.65s" } as React.CSSProperties} className="hero-in mt-4 flex flex-wrap gap-2">
               {POPULAR.map((p) => (
                 <Link key={p} href={`/catalog?q=${encodeURIComponent(p)}`} className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[13px] text-white/75 transition hover:border-accent/50 hover:text-white">
                   {p}
                 </Link>
               ))}
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="lg:col-span-4">
-            <div className="rounded-[1.75rem] border border-white/10 bg-black/55 p-5 md:bg-black/35 md:backdrop-blur-xl sm:p-6">
+          <div style={{ "--d": "0.7s" } as React.CSSProperties} className="hero-in lg:col-span-4">
+            <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/55 p-5 shadow-[0_30px_80px_-40px_rgb(0_0_0/0.9)] sm:p-6 md:bg-black/40 md:backdrop-blur-xl">
+              <span aria-hidden="true" className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(235_17_29/0.8),transparent)]" />
               <div className="grid grid-cols-2 gap-x-4 gap-y-5">
                 {[
                   [String(count), "моделей в каталоге"],
@@ -119,24 +114,24 @@ export function Hero({ count }: { count: number }) {
                   ["0 ₽", "скрытых платежей"],
                 ].map(([v, l]) => (
                   <div key={l}>
-                    <p className="tnum text-3xl font-semibold tracking-tight">{/^\d+$/.test(v) ? <Counter to={Number(v)} /> : v}</p>
+                    <p className="tnum text-metal text-3xl font-semibold tracking-tight">{/^\d+$/.test(v) ? <Counter to={Number(v)} /> : v}</p>
                     <p className="mt-1 text-xs text-white/55">{l}</p>
                   </div>
                 ))}
               </div>
               <div className="mt-5 flex gap-2 border-t border-white/10 pt-5">
-                <Link href="/catalog" className="group inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white text-sm font-semibold text-black transition hover:bg-white/90">
+                <Link href="/catalog" className="group inline-flex h-12 flex-1 items-center justify-center gap-1.5 rounded-full bg-white px-3 text-sm font-semibold whitespace-nowrap text-black transition hover:bg-white/90">
                   Смотреть каталог <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
                 </Link>
-                <button onClick={() => lead({ title: "Рассчитать стоимость под ключ" })} className="h-12 flex-1 rounded-full border border-white/15 text-sm font-semibold transition hover:border-white/40">
+                <button onClick={() => lead({ title: "Рассчитать стоимость под ключ" })} className="h-12 flex-1 rounded-full border border-white/15 px-3 text-sm font-semibold whitespace-nowrap transition hover:border-white/40">
                   Рассчитать
                 </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
         <a href="#brands" aria-label="Листать вниз" className="mx-auto mt-10 hidden size-11 place-items-center rounded-full border border-white/15 text-white/70 transition hover:text-white lg:grid">
-          <ChevronDown className="size-5 animate-bounce" />
+          <ChevronDown className="anim-nudge size-5" />
         </a>
       </motion.div>
     </section>

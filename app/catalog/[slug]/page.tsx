@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </div>
 
             <div className="card relative mt-4 overflow-hidden p-5 sm:p-6">
-              <div aria-hidden="true" className="absolute -top-20 -right-20 size-56 rounded-full bg-[radial-gradient(closest-side,rgb(198_244_71/0.16),transparent)]" />
+              <div aria-hidden="true" className="absolute -top-20 -right-20 size-56 rounded-full bg-[radial-gradient(closest-side,rgb(235_17_29/0.16),transparent)]" />
               <p className="relative text-sm text-muted-foreground">{car.priceFrom ? "Цена под ключ" : "Ориентир под ключ"}</p>
               <p className="tnum relative mt-1 text-[2.4rem] leading-none font-semibold tracking-tight">{priceText(car)}</p>
               <p className="relative mt-2.5 text-[13px] text-muted-foreground">{car.priceFrom ? "Зависит от лота, курса и комплектации — точную сумму пришлём по запросу" : `Предварительно до ${PRICE_CITY} · расчёт от ${PRICE_DATE} · 7 дней`}</p>
@@ -148,7 +148,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </div>
           {car.priceFrom ? (
             <div className="mt-5 grid gap-3 text-[15px]">
-              {["Автомобиль у продавца", "Экспорт, осмотр, доставка", "Таможня и утильсбор", "Брокер, СБКТС, ЭПТС", "Комиссия VAN2KAUTO"].map((n) => (
+              {["Автомобиль у продавца", "Экспорт, осмотр, доставка", "Таможня и утильсбор", "Брокер, СБКТС, ЭПТС", "Комиссия ВАН23АВТО"].map((n) => (
                 <div key={n} className="flex items-center gap-3"><Check className="size-4 shrink-0 text-accent" strokeWidth={3} />{n}</div>
               ))}
               <p className="text-[13px] text-muted-foreground">Цена «под ключ» уже включает всё перечисленное. Смету по конкретному лоту — с курсом и сроком действия — пришлём до оплаты.</p>

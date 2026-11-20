@@ -10,8 +10,8 @@ export function PageHero({ eyebrow, title, text, image, watermark, children }: {
       {image && (
         <>
           <Image src={asset(image)} alt="" fill priority sizes="100vw" className="animate-kenburns -z-20 object-cover opacity-70" />
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(10_12_14/0.55),rgb(10_12_14/0.6)_50%,#0a0c0e)]" />
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_80%_at_0%_100%,#0a0c0e,transparent)]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(9_9_10/0.55),rgb(9_9_10/0.6)_50%,#09090a)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_80%_at_0%_100%,#09090a,transparent)]" />
         </>
       )}
       {watermark && (
