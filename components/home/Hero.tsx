@@ -119,11 +119,11 @@ export function Hero({ count }: { count: number }) {
                   </div>
                 ))}
               </div>
-              <div className="mt-5 flex gap-2 border-t border-white/10 pt-5">
-                <Link href="/catalog" className="group inline-flex h-12 flex-1 items-center justify-center gap-1.5 rounded-full bg-white px-3 text-sm font-semibold whitespace-nowrap text-black transition hover:bg-white/90">
+              <div className="mt-5 flex flex-col gap-2 border-t border-white/10 pt-5 sm:flex-row lg:flex-col xl:flex-row">
+                <Link href="/catalog" className="group inline-flex h-12 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-sm font-semibold whitespace-nowrap text-black transition hover:bg-white/90">
                   Смотреть каталог <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
                 </Link>
-                <button onClick={() => lead({ title: "Рассчитать стоимость под ключ" })} className="h-12 flex-1 rounded-full border border-white/15 px-3 text-sm font-semibold whitespace-nowrap transition hover:border-white/40">
+                <button onClick={() => lead({ title: "Рассчитать стоимость под ключ" })} className="h-12 min-w-0 flex-1 rounded-full border border-white/15 px-4 text-sm font-semibold whitespace-nowrap transition hover:border-white/40">
                   Рассчитать
                 </button>
               </div>
