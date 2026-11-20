@@ -79,7 +79,7 @@ class SettingsAdminController extends Controller
             Settings::set('tg_bot_username', (string) ($me['username'] ?? ''));
             $sent = 0;
             foreach (Settings::managerChatIds() as $chatId) {
-                $telegram->sendMessage($chatId, '✅ Тест: бот VAN2KAUTO подключён, заявки будут приходить сюда.');
+                $telegram->sendMessage($chatId, '✅ Тест: бот ВАН23АВТО подключён, заявки будут приходить сюда.');
                 $sent++;
             }
 

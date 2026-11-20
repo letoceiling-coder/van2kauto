@@ -11,7 +11,7 @@ class MetaController extends Controller
     public function index(): JsonResponse
     {
         return response()->json([
-            'name' => 'VAN2KAUTO Che168 API',
+            'name' => 'ВАН23АВТО Che168 API',
             'version' => '1',
             'docs' => url('/api/docs'),
             'openapi' => url('/api/v1/openapi.json'),

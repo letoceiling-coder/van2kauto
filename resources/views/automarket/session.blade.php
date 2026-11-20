@@ -1,7 +1,7 @@
 @extends('che168.layouts.app')
 @section('title', 'Вход в A-Automarket')
 @section('cabinet-logo')
-    <a href="{{ route('automarket.dashboard') }}" class="logo">VAN<span>2</span>KAUTO · Auctions</a>
+    <a href="{{ route('automarket.dashboard') }}" class="logo">ВАН<span>23</span>АВТО · Auctions</a>
 @endsection
 @section('cabinet-nav')
     <a href="{{ route('automarket.dashboard') }}">Парсер</a>

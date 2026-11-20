@@ -249,7 +249,7 @@ JSON,
     public static function plain(string $base): string
     {
         $lines = [
-            'VAN2KAUTO Che168 API',
+            'ВАН23АВТО Che168 API',
             'База: '.$base,
             'Чтение без авторизации. Ответ JSON.',
             'Пагинация: limit или per_page, page с 1, либо offset с 0. offset важнее page.',
@@ -298,7 +298,7 @@ JSON,
         return [
             'openapi' => '3.0.3',
             'info' => [
-                'title' => 'VAN2KAUTO Che168 API',
+                'title' => 'ВАН23АВТО Che168 API',
                 'version' => '1.0.0',
             ],
             'servers' => [

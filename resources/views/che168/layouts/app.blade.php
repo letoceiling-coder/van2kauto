@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Che168 — VAN2KAUTO')</title>
+    <title>@yield('title', 'Che168 — ВАН23АВТО')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -108,7 +108,7 @@
         @hasSection('cabinet-logo')
             @yield('cabinet-logo')
         @else
-            <a href="{{ route('che168.dashboard') }}" class="logo">VAN<span>2</span>KAUTO · Che168</a>
+            <a href="{{ route('che168.dashboard') }}" class="logo">ВАН<span>23</span>АВТО · Che168</a>
         @endif
         @auth
         <nav>
