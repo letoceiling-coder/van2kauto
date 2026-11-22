@@ -4,6 +4,12 @@
 <div class="row" style="justify-content:space-between">
     <h1 style="margin:0">Витрина сайта</h1>
     <div class="row">
+        <form method="post" action="{{ route('admin.showcase.top') }}" class="row" onsubmit="return confirm('Собрать топ-10 популярных проходных моделей из фида? Уже добавленные модели не дублируются.')">
+            @csrf
+            <input type="hidden" name="limit" value="10">
+            <label class="row muted" style="margin:0"><input type="checkbox" name="publish" value="1"> сразу на сайт</label>
+            <button class="btn btn-ghost">Топ-10 из фида</button>
+        </form>
         <a class="btn btn-ghost" href="{{ route('che168.listings.index', ['power_max' => \App\Support\Settings::int('utilization_max_hp', 160)]) }}">Подобрать из фида</a>
         <a class="btn btn-accent" href="{{ route('admin.showcase.create') }}">+ Новая карточка</a>
     </div>

@@ -36,6 +36,28 @@
 </div>
 
 <div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Цена «от» по формуле</h3>
+    <p class="muted">(цена у продавца + экспорт + порт, $) × курс × коэффициент + фикс, округление вниз. Применяется при «В витрину» и «Топ-10 из фида»; в карточке — кнопка «По формуле». Ручная цена в карточке всегда главнее.</p>
+    <div class="form-grid">
+        <div><label>Курс $, ₽</label><input name="price_usd_rate" value="{{ $s('price_usd_rate') }}"></div>
+        <div><label>Курс</label><select name="price_rate_auto"><option value="1" @selected($s('price_rate_auto')==='1')>Автоматически по ЦБ (ежедневно)</option><option value="0" @selected($s('price_rate_auto')==='0')>Вручную</option></select></div>
+        <div><label>Коэффициент «под ключ»</label><input name="price_multiplier" value="{{ $s('price_multiplier') }}"></div>
+        <div><label>Фикс. добавка, ₽ (логистика, брокер, комиссия)</label><input name="price_fixed_rub" type="number" value="{{ $s('price_fixed_rub') }}"></div>
+        <div><label>Округление вниз до, ₽</label><input name="price_round_rub" type="number" value="{{ $s('price_round_rub') }}"></div>
+    </div>
+    <p class="muted">Пример: авто за ${{ number_format($priceExample['usd'], 0, '.', ' ') }} + сборы $900 → от {{ number_format((int) $priceExample['rub'], 0, '.', ' ') }} ₽@if($s('price_rate_updated_at')) · курс обновлён {{ \Illuminate\Support\Carbon::parse($s('price_rate_updated_at'))->format('d.m H:i') }}@endif. <b>Стартовые значения ориентировочные — проверьте на 2–3 реальных сделках.</b></p>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Парсер che168</h3>
+    <div class="form-grid">
+        <div><label>Автозапуск</label><select name="parser_auto"><option value="1" @selected($s('parser_auto')==='1')>Включён: новые — ежедневно, полный обход — по воскресеньям</option><option value="0" @selected($s('parser_auto')==='0')>Выключен (только вручную)</option></select></div>
+        <div><label>Час ежедневного запуска (время сервера, UTC)</label><input name="parser_daily_hour" type="number" value="{{ $s('parser_daily_hour') }}"></div>
+    </div>
+    <p class="muted">@if($lastRun)Последний запуск #{{ $lastRun->id }}: {{ $lastRun->status }}, {{ $lastRun->created_at->format('d.m H:i') }}, сохранено {{ $lastRun->items_saved }}.@else Запусков ещё не было.@endif Если che168 попросит капчу — менеджерам придёт сообщение в Telegram; пройдите её в «Парсер → Captcha».</p>
+</div>
+
+<div class="card" style="margin-top:1rem">
     <h3 style="margin-top:0">Правило «проходной по утильсбору»</h3>
     <div class="form-grid">
         <div><label>Мощность до, л.с.</label><input name="utilization_max_hp" type="number" value="{{ $s('utilization_max_hp') }}"></div>

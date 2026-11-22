@@ -59,7 +59,7 @@
 
     <h3>Продажа</h3>
     <div class="form-grid">
-        <div><label>Цена «от», ₽ (обязательно для публикации)</label><input name="price_from_rub" type="number" step="1000" value="{{ $v('price_from_rub') }}"></div>
+        <div><label>Цена «от», ₽ (обязательно для публикации)</label><input name="price_from_rub" type="number" step="1000" value="{{ $v('price_from_rub') }}">@if($car->source_infoid)<button class="btn btn-ghost btn-sm" style="margin-top:.35rem" formaction="{{ route('admin.showcase.reprice', $car) }}" formmethod="post" onclick="this.form.querySelector('[name=_method]')?.remove()">По формуле</button>@endif</div>
         <div><label>Срок доставки, дней от</label><input name="eta_from" type="number" value="{{ $v('eta_from', 30) }}"></div>
         <div><label>до</label><input name="eta_to" type="number" value="{{ $v('eta_to', 45) }}"></div>
         <div><label>Бейдж</label><input name="badge" value="{{ $v('badge') }}" placeholder="Хит продаж"></div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\ListingController;
 use App\Http\Controllers\Api\V1\MetaController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\TelegramWebhookController;
+use App\Http\Controllers\Api\V1\ChatController;
 use App\Http\Controllers\Api\V1\LeadController;
 use App\Http\Controllers\Api\V1\ShowcaseController;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/showcase', [ShowcaseController::class, 'index']);
     Route::get('/showcase/{slug}', [ShowcaseController::class, 'show']);
     Route::post('/leads', [LeadController::class, 'store'])->middleware('throttle:leads');
+
+    Route::post('/chat', [ChatController::class, 'start'])->middleware('throttle:leads');
+    Route::post('/chat/{token}', [ChatController::class, 'send'])->middleware('throttle:chat');
+    Route::get('/chat/{token}', [ChatController::class, 'poll'])->middleware('throttle:chat-poll');
 });
 
 Route::post('/telegram/webhook', TelegramWebhookController::class)->middleware('throttle:120,1');

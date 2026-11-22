@@ -22,8 +22,9 @@ class ListingImporter
             'series_id' => $listing->series_id,
             'spec_id' => $listing->spec_id,
             'country' => 'china',
-            'brand' => $listing->brand?->name ?? strtok((string) $listing->title, ' '),
-            'model' => $listing->series?->name ?? (string) $listing->title,
+            'brand' => $brand = trim((string) ($listing->brand?->name ?? strtok((string) $listing->title, ' '))),
+            // В справочнике che168 модель часто начинается с марки («Audi A3», «Volkswagen T-ROC») — убираем повтор.
+            'model' => self::cleanModel($brand, (string) ($listing->series?->name ?? $listing->title)),
             'trim' => $listing->spec?->name,
             'year' => $year,
             'condition' => (int) $listing->mileage_km < 1000 ? 'new' : 'used',
@@ -38,9 +39,20 @@ class ListingImporter
         ];
     }
 
+    public static function cleanModel(string $brand, string $model): string
+    {
+        $model = trim($model);
+        if ($brand !== '' && mb_stripos($model, $brand.' ') === 0) {
+            $model = trim(mb_substr($model, mb_strlen($brand) + 1));
+        }
+
+        return $model;
+    }
+
     public function createDraft(Listing $listing, int $photoLimit = 8): ShowcaseCar
     {
         $car = ShowcaseCar::query()->create($this->attributes($listing) + [
+            'price_from_rub' => PriceEstimator::fromListing($listing),
             'is_published' => false,
             'status' => 'order',
             'sort_order' => (int) ShowcaseCar::query()->max('sort_order') + 10,

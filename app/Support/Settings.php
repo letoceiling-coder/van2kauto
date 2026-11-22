@@ -34,6 +34,17 @@ class Settings
         'site_rebuild_requested_at' => '',
         'showcase_version' => '1',
         'leads_allowed_origins' => 'https://vanauto.neeklo.ru',
+        // Цена «от» по формуле: (цена у продавца + экспорт + порт) × курс $ × коэффициент + фикс, округление вниз.
+        // Стартовые значения ориентировочные — их проверяет и правит менеджер в «Настройках».
+        'price_usd_rate' => '95',
+        'price_rate_auto' => '1',
+        'price_rate_updated_at' => '',
+        'price_multiplier' => '1.35',
+        'price_fixed_rub' => '250000',
+        'price_round_rub' => '10000',
+        // Парсер che168: автозапуск (новые — каждый день, полный обход — по воскресеньям).
+        'parser_auto' => '1',
+        'parser_daily_hour' => '5',
         'utilization_max_hp' => '160',
         'utilization_min_age' => '3',
         'utilization_max_age' => '5',

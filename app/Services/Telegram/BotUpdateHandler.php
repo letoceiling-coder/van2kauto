@@ -50,6 +50,24 @@ class BotUpdateHandler
             return;
         }
 
+        // Ответ менеджера реплаем на заявку/сообщение чата → клиенту на сайт (и в бота).
+        if (in_array($chatId, Settings::managerChatIds(), true) && isset($message['reply_to_message']['message_id']) && $text !== '') {
+            $chatService = app(\App\Services\ChatService::class);
+            $lead = $chatService->leadByTelegramReply($chatId, (int) $message['reply_to_message']['message_id']);
+            if ($lead) {
+                $from = $message['from'] ?? [];
+                $author = trim(($from['first_name'] ?? '').' '.($from['last_name'] ?? '')) ?: (isset($from['username']) ? '@'.$from['username'] : 'Менеджер');
+                $chatService->managerReply($lead, $text, $author);
+                app(\App\Services\Telegram\LeadNotifier::class)->remember($lead, $chatId, (int) ($message['message_id'] ?? 0));
+                try {
+                    $this->telegram->call('setMessageReaction', ['chat_id' => $chatId, 'message_id' => (int) $message['message_id'], 'reaction' => [['type' => 'emoji', 'emoji' => '👍']]]);
+                } catch (\Throwable) {
+                }
+            }
+
+            return;
+        }
+
         if (($chat['type'] ?? '') !== 'private') {
             return; // в группах бот только присылает заявки
         }

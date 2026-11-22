@@ -15,7 +15,24 @@
             <div><span>Metrika ClientID</span>{{ $lead->ym_client_id ?: '—' }}</div>
             <div><span>IP</span>{{ $lead->ip ?: '—' }}</div>
         </div>
-        @if($lead->comment)<h3>Сообщение</h3><p style="white-space:pre-wrap">{{ $lead->comment }}</p>@endif
+        @if($lead->messages->isNotEmpty() || $lead->chat_token || $lead->tg_user_chat_id)
+            <h3>Переписка</h3>
+            <div style="display:grid;gap:.5rem;max-height:420px;overflow:auto">
+                @forelse($lead->messages as $m)
+                    <div style="justify-self:{{ $m->sender === 'client' ? 'start' : 'end' }};max-width:80%;padding:.55rem .8rem;border-radius:.9rem;background:{{ $m->sender === 'client' ? 'rgba(255,255,255,.06)' : 'rgba(59,158,255,.18)' }}">
+                        <div class="muted" style="font-size:.72rem">{{ $m->sender === 'client' ? 'Клиент' : ($m->author ?: 'Менеджер') }} · {{ $m->created_at->format('d.m H:i') }}</div>
+                        <div style="white-space:pre-wrap">{{ $m->text }}</div>
+                    </div>
+                @empty
+                    <p class="muted">Сообщений пока нет.</p>
+                @endforelse
+            </div>
+            <form method="post" action="{{ route('admin.leads.reply', $lead) }}" class="row" style="margin-top:.75rem">
+                @csrf
+                <input name="text" placeholder="Ответ клиенту" required style="flex:1">
+                <button class="btn btn-accent">Ответить</button>
+            </form>
+        @elseif($lead->comment)<h3>Сообщение</h3><p style="white-space:pre-wrap">{{ $lead->comment }}</p>@endif
         @if($lead->context)<h3>Ответы</h3>@foreach($lead->context as $k=>$val)<div><span class="muted">{{ $k }}:</span> {{ $val }}</div>@endforeach @endif
         @if($lead->utm)<h3>UTM</h3>@foreach($lead->utm as $k=>$val)<div><span class="muted">{{ $k }}:</span> {{ $val }}</div>@endforeach @endif
         <h3>Telegram</h3>

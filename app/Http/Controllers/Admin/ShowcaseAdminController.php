@@ -121,6 +121,29 @@ class ShowcaseAdminController extends Controller
         return back()->with('ok', $car->is_published ? 'Опубликовано' : 'Снято с публикации');
     }
 
+    /** Топ популярных «проходных» моделей из фида — в фоне (качает фото), результат появится в списке через 1–2 минуты. */
+    public function top(Request $request): RedirectResponse
+    {
+        $limit = max(1, min(20, (int) $request->input('limit', 10)));
+        $publish = $request->boolean('publish') ? ' --publish' : '';
+        $log = storage_path('logs/showcase-top.log');
+        exec('cd '.escapeshellarg(base_path()).' && php artisan showcase:top --limit='.$limit.$publish.' > '.escapeshellarg($log).' 2>&1 &');
+
+        return back()->with('ok', "Собираю топ-{$limit} из фида: фото скачиваются, карточки появятся здесь через 1–2 минуты. Модели, которые уже есть в витрине, не дублируются.");
+    }
+
+    public function reprice(ShowcaseCar $car): RedirectResponse
+    {
+        $listing = $car->source_infoid ? Listing::query()->find($car->source_infoid) : null;
+        $price = $listing ? \App\Services\Showcase\PriceEstimator::fromListing($listing) : null;
+        if ($price === null) {
+            return back()->with('ok', 'Нет исходного объявления с ценой — укажите цену вручную.');
+        }
+        $car->update(['price_from_rub' => $price]);
+
+        return back()->with('ok', 'Цена пересчитана по формуле: от '.number_format($price, 0, '.', ' ').' ₽');
+    }
+
     public function fromListing(Listing $listing): RedirectResponse
     {
         $car = $this->importer->createDraft($listing);

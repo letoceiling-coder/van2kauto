@@ -33,7 +33,7 @@ class LeadAdminController extends Controller
 
     public function show(Lead $lead): View
     {
-        return view('admin.leads.show', ['lead' => $lead->load('car')]);
+        return view('admin.leads.show', ['lead' => $lead->load(['car', 'messages'])]);
     }
 
     public function update(Request $request, Lead $lead, LeadService $service): RedirectResponse
@@ -47,6 +47,14 @@ class LeadAdminController extends Controller
         $service->setStatus($lead, $data['status'], $data['manager'] ?? $request->user()?->name);
 
         return back()->with('ok', 'Сохранено');
+    }
+
+    public function reply(Request $request, Lead $lead, \App\Services\ChatService $chat): RedirectResponse
+    {
+        $data = $request->validate(['text' => ['required', 'string', 'max:2000']]);
+        $chat->managerReply($lead, trim($data['text']), $request->user()?->name ?: 'Менеджер');
+
+        return back()->with('ok', $lead->chat_token ? 'Ответ отправлен клиенту в чат на сайте' : ($lead->tg_user_chat_id ? 'Ответ отправлен клиенту в Telegram' : 'Ответ сохранён (у заявки нет чата — свяжитесь по контакту)'));
     }
 
     public function renotify(Lead $lead, LeadNotifier $notifier): RedirectResponse

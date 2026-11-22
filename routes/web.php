@@ -67,6 +67,8 @@ Route::prefix('che168')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/showcase/create', [ShowcaseAdminController::class, 'create'])->name('showcase.create');
     Route::post('/showcase', [ShowcaseAdminController::class, 'store'])->name('showcase.store');
     Route::post('/showcase/bulk', [ShowcaseAdminController::class, 'bulk'])->name('showcase.bulk');
+    Route::post('/showcase/top', [ShowcaseAdminController::class, 'top'])->name('showcase.top');
+    Route::post('/showcase/{car}/reprice', [ShowcaseAdminController::class, 'reprice'])->name('showcase.reprice');
     Route::post('/showcase/from-listings', [ShowcaseAdminController::class, 'bulkFromListings'])->name('showcase.from-listings');
     Route::post('/showcase/from-listing/{listing}', [ShowcaseAdminController::class, 'fromListing'])->name('showcase.from-listing');
     Route::get('/showcase/{car}/edit', [ShowcaseAdminController::class, 'edit'])->name('showcase.edit');
@@ -82,6 +84,7 @@ Route::prefix('che168')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/leads/{lead}', [LeadAdminController::class, 'show'])->name('leads.show');
     Route::put('/leads/{lead}', [LeadAdminController::class, 'update'])->name('leads.update');
     Route::post('/leads/{lead}/renotify', [LeadAdminController::class, 'renotify'])->name('leads.renotify');
+    Route::post('/leads/{lead}/reply', [LeadAdminController::class, 'reply'])->name('leads.reply');
 
     Route::get('/bot', [BotAdminController::class, 'index'])->name('bot.index');
     Route::post('/bot/broadcasts', [BotAdminController::class, 'storeBroadcast'])->name('bot.broadcasts.store');

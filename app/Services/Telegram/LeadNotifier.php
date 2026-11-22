@@ -28,6 +28,7 @@ class LeadNotifier
             try {
                 $result = $this->telegram->sendMessage($chatId, $this->text($lead), ['reply_markup' => $this->keyboard($lead)]);
                 $messages[(string) $chatId] = (int) ($result['message_id'] ?? 0);
+                $this->remember($lead, $chatId, (int) ($result['message_id'] ?? 0));
             } catch (\Throwable $e) {
                 $errors[] = "{$chatId}: ".$e->getMessage();
             }
@@ -42,6 +43,32 @@ class LeadNotifier
         ]);
 
         return $ok;
+    }
+
+    public function remember(Lead $lead, int $chatId, int $messageId): void
+    {
+        if ($messageId > 0) {
+            \Illuminate\Support\Facades\DB::table('lead_tg_messages')->insertOrIgnore([
+                'lead_id' => $lead->id, 'chat_id' => $chatId, 'message_id' => $messageId, 'created_at' => now(), 'updated_at' => now(),
+            ]);
+        }
+    }
+
+    /** Новое сообщение клиента в чате — реплаем на исходную заявку в каждом чате менеджеров. */
+    public function forwardClientMessage(Lead $lead, string $text): void
+    {
+        if (! $this->telegram->configured()) {
+            return;
+        }
+        $e = fn (?string $v) => htmlspecialchars((string) $v, ENT_QUOTES);
+        foreach (Settings::managerChatIds() as $chatId) {
+            $root = (int) (($lead->tg_messages ?? [])[(string) $chatId] ?? 0);
+            try {
+                $res = $this->telegram->sendMessage($chatId, "💬 <b>#{$lead->id}</b> {$e($lead->name ?: $lead->contact)}:\n{$e($text)}\n\n<i>Ответьте реплаем — ответ уйдёт клиенту</i>", $root ? ['reply_to_message_id' => $root, 'allow_sending_without_reply' => true] : []);
+                $this->remember($lead, $chatId, (int) ($res['message_id'] ?? 0));
+            } catch (\Throwable) {
+            }
+        }
     }
 
     /** Обновить сообщения у всех менеджеров после смены статуса. */
@@ -76,6 +103,9 @@ class LeadNotifier
         $lines[] = '📞 '.$e($lead->contact).($lead->channel ? ' · '.$e($lead->channel) : '');
         if ($lead->comment) {
             $lines[] = '💬 '.$e($lead->comment);
+        }
+        if ($lead->chat_token) {
+            $lines[] = '<i>Чат на сайте: ответьте на это сообщение реплаем — клиент увидит ответ сразу.</i>';
         }
         foreach ((array) $lead->context as $key => $value) {
             if ($value === null || $value === '' || $value === []) {
