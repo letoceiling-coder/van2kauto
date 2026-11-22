@@ -62,7 +62,7 @@ export function FavoritesView() {
       </div>
 
       {view === "grid" ? (
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {items.map((c, i) => (
             <div key={c.slug} className="card-in" style={{ animationDelay: `${i * 50}ms` }}><CarCard car={c} /></div>
           ))}

@@ -6,7 +6,7 @@ import { asset } from "@/lib/utils";
 /** Шапка внутренних страниц: фото с затемнением, крупный водяной знак, без пустоты. */
 export function PageHero({ eyebrow, title, text, image, watermark, children }: { eyebrow: string; title: string; text?: string; image?: string; watermark?: string; children?: React.ReactNode }) {
   return (
-    <section className="relative isolate overflow-hidden pt-28 pb-12 sm:pt-36 sm:pb-16">
+    <section className="relative isolate overflow-hidden pt-24 pb-6 sm:pt-36 sm:pb-16">
       {image && (
         <>
           <Image src={asset(image)} alt="" fill priority sizes="100vw" className="animate-kenburns -z-20 object-cover opacity-70" />
@@ -15,7 +15,7 @@ export function PageHero({ eyebrow, title, text, image, watermark, children }: {
         </>
       )}
       {watermark && (
-        <span aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 -z-10 translate-y-[18%] font-display text-[clamp(6rem,22vw,18rem)] leading-none font-bold tracking-tight text-outline select-none">
+        <span aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 -z-10 hidden translate-y-[18%] font-display md:block text-[clamp(6rem,22vw,18rem)] leading-none font-bold tracking-tight text-outline select-none">
           {watermark}
         </span>
       )}
@@ -23,13 +23,13 @@ export function PageHero({ eyebrow, title, text, image, watermark, children }: {
         <Reveal>
           <p className="inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.22em] text-accent uppercase"><span className="h-px w-6 bg-accent" />{eyebrow}</p>
         </Reveal>
-        <TextReveal text={title} className="text-display mt-5 max-w-[18ch] font-semibold" />
+        <TextReveal text={title} className="text-display mt-3 max-w-[18ch] font-semibold sm:mt-5" />
         {text && (
           <Reveal delay={0.2}>
-            <p className="mt-5 max-w-2xl text-[17px] leading-relaxed text-foreground/70 sm:text-lg">{text}</p>
+            <p className="mt-3 max-w-2xl text-[15px] leading-[1.45] text-foreground/70 sm:mt-5 sm:text-lg">{text}</p>
           </Reveal>
         )}
-        {children && <Reveal delay={0.3} className="mt-8">{children}</Reveal>}
+        {children && <Reveal delay={0.3} className="mt-5 sm:mt-8">{children}</Reveal>}
       </div>
     </section>
   );

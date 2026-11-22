@@ -16,7 +16,7 @@ export function Process() {
   return (
     <section data-component-id="process" className="relative mx-auto max-w-site px-4 py-[var(--section-y)] sm:px-6 lg:px-8">
       <SectionHead watermark="ROUTE" eyebrow="Как заказать" title="Шесть шагов от заявки до ключей" text="Каждый этап с понятным сроком и ответственным. Вы всегда знаете, где машина и что будет дальше." />
-      <ol ref={ref} className="relative grid gap-4 md:grid-cols-2 lg:gap-x-10">
+      <ol ref={ref} className="relative grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-x-10">
         <div aria-hidden="true" className="absolute top-0 bottom-0 left-[27px] w-px bg-white/[0.08] md:hidden">
           <motion.div style={{ height: h }} className="w-px bg-accent" />
         </div>

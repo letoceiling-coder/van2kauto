@@ -7,7 +7,7 @@ import { company } from "@/content/nav";
 export function Office() {
   return (
     <section data-component-id="office" className="relative mx-auto max-w-site px-4 py-[var(--section-y)] sm:px-6 lg:px-8">
-      <div className="card relative grid overflow-hidden lg:grid-cols-2">
+      <div className="card relative grid grid-cols-1 overflow-hidden lg:grid-cols-2">
         <div className="relative min-h-[360px] overflow-hidden border-b border-white/[0.06] lg:border-r lg:border-b-0">
           <div className="dots absolute inset-0 opacity-60" />
           <svg aria-hidden="true" viewBox="0 0 500 420" className="absolute inset-0 size-full" preserveAspectRatio="xMidYMid slice" fill="none">
@@ -39,7 +39,7 @@ export function Office() {
         <Reveal className="p-6 sm:p-8 lg:p-12">
           <p className="inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.22em] text-accent uppercase"><span className="h-px w-6 bg-accent" />Офис в Анапе</p>
           <h2 className="text-headline mt-4">Приезжайте на кофе или оставьте заявку</h2>
-          <p className="mt-3 mb-8 text-muted-foreground">Покажем примеры смет и отчётов осмотра, обсудим модель и бюджет. Ответим в течение 15 минут в рабочее время.</p>
+          <p className="mt-3 mb-8 text-muted-foreground">Покажем примеры смет и отчётов осмотра, обсудим модель и бюджет. Ответим в рабочее время.</p>
           <LeadForm />
         </Reveal>
       </div>

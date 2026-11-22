@@ -5,6 +5,8 @@ set -euo pipefail
 SRC="${SRC:-/opt/van2kauto}"
 DIST="${DIST:-/var/www/vanauto.neeklo.ru}"
 export SHOWCASE_API_URL="${SHOWCASE_API_URL:-https://vanauto-api.neeklo.ru/api/v1/showcase}"
+# Строго: если API недоступен или витрина пуста — сборка падает, а сайт остаётся прежним (админка покажет ошибку).
+export SHOWCASE_STRICT=1
 export STATIC_EXPORT=1 NEXT_TELEMETRY_DISABLED=1
 # Планировщик запускает от www-data: кэши npm/pnpm держим внутри SRC.
 export HOME="$SRC/.home"; mkdir -p "$HOME"

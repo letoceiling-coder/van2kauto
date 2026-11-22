@@ -35,7 +35,7 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
           {car.badge && <span className="inline-flex h-7 items-center rounded-full bg-accent px-2.5 text-[11px] font-bold text-accent-foreground">{car.badge}</span>}
           {car.utilizationOk && <span className="inline-flex h-7 items-center rounded-full bg-black/65 px-2.5 text-[11px] font-semibold text-accent">Проходной</span>}
         </div>
-        <FavButton slug={car.slug} className="absolute top-2.5 right-2.5 size-10 bg-black/60 text-white hover:bg-black/65" />
+        <FavButton slug={car.slug} className="absolute top-2 right-2 size-11 bg-black/60 text-white hover:bg-black/65" />
         <span className="absolute bottom-3 left-3 inline-flex h-7 items-center gap-1.5 rounded-full bg-black/65 px-2.5 text-[11px] font-medium text-white/90">
           <span className={cn("size-1.5 rounded-full", car.status === "auction" ? "bg-amber-300" : "anim-pulse bg-accent")} />
           {labels.status[car.status]}

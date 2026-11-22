@@ -34,7 +34,7 @@ export function CountryPage({ c }: { c: CountryContent }) {
             </Reveal>
           ))}
         </div>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
           {c.points.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.06} className="card h-full p-6">
               <span className="font-display text-sm font-semibold text-accent">0{i + 1}</span>

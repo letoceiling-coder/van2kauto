@@ -18,7 +18,7 @@ export function Logo({ className, tagline }: { className?: string; tagline?: boo
         fetchPriority="high"
         className="h-[20px] w-auto transition-opacity duration-300 group-hover:opacity-85 sm:h-[24px]"
       />
-      {tagline && <span className="mt-2 text-[10px] font-medium tracking-[0.34em] text-muted-foreground uppercase">Привоз авто из-за рубежа</span>}
+      {tagline && <span className="mt-2 text-[11px] font-medium tracking-[0.28em] text-muted-foreground uppercase">Привоз авто из-за рубежа</span>}
     </Link>
   );
 }

@@ -12,16 +12,16 @@ export function Eyebrow({ children, className }: { children: React.ReactNode; cl
 
 export function SectionHead({ eyebrow, title, text, aside, className, watermark }: { eyebrow?: string; title: React.ReactNode; text?: string; aside?: React.ReactNode; className?: string; watermark?: string }) {
   return (
-    <div className={cn("relative mb-10 flex flex-col gap-6 md:mb-14 md:flex-row md:items-end md:justify-between", className)}>
+    <div className={cn("relative mb-6 flex flex-col gap-4 md:mb-14 md:flex-row md:items-end md:justify-between md:gap-6", className)}>
       {watermark && (
-        <span aria-hidden="true" className="pointer-events-none absolute -top-[0.55em] -left-1 font-display text-[clamp(4rem,13vw,10rem)] leading-none font-bold tracking-tight text-outline select-none">
+        <span aria-hidden="true" className="pointer-events-none absolute -top-[0.55em] -left-1 hidden font-display md:block text-[clamp(4rem,13vw,10rem)] leading-none font-bold tracking-tight text-outline select-none">
           {watermark}
         </span>
       )}
       <Reveal className="relative max-w-2xl">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <h2 className="text-headline text-metal mt-4 pb-[0.06em]">{title}</h2>
-        {text && <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-muted-foreground">{text}</p>}
+        <h2 className="text-headline mt-2 sm:mt-4">{title}</h2>
+        {text && <p className="mt-2 max-w-xl text-[15px] leading-[1.45] text-muted-foreground sm:mt-4 sm:text-[17px]">{text}</p>}
       </Reveal>
       {aside && <Reveal delay={0.1} className="relative shrink-0">{aside}</Reveal>}
     </div>

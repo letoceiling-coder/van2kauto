@@ -7,7 +7,7 @@ export function Brands() {
       <div className="fade-x overflow-hidden">
         <div className="animate-marquee flex w-max items-center gap-12 pr-12 [--marquee-duration:40s]">
           {row.map((b, i) => (
-            <span key={i} className="flex items-center gap-12 font-display text-2xl font-semibold tracking-tight whitespace-nowrap text-foreground/35 sm:text-3xl">
+            <span key={i} className="flex items-center gap-8 font-display text-[17px] font-semibold tracking-tight whitespace-nowrap text-foreground/40 sm:gap-12 sm:text-3xl">
               {b}
               <span className="size-1.5 rounded-full bg-accent/60" />
             </span>

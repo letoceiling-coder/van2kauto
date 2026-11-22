@@ -18,32 +18,32 @@ export function WhyUs() {
   ];
   return (
     <section data-component-id="why" className="relative mx-auto max-w-site px-4 py-[var(--section-y)] sm:px-6 lg:px-8">
-      <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-28">
             <Eyebrow>Почему мы</Eyebrow>
             <h2 className="text-headline mt-4 pb-[0.06em]" style={{ hyphens: "manual", WebkitHyphens: "manual" }}>
               <span className="text-metal">Почему клиенты выбирают</span> <span className="text-foreground/40">ВАН23АВТО</span>
             </h2>
-            <div className="mt-6 flex items-center gap-2" aria-label="Китай, Корея, Япония">
+            <div className="mt-4 flex items-center gap-2 sm:mt-6" aria-label="Китай, Корея, Япония">
               {["CN", "KR", "JP"].map((f) => (
-                <span key={f} className="grid size-10 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-[11px] font-bold tracking-wider text-foreground/80">{f}</span>
+                <span key={f} className="grid size-9 place-items-center sm:size-10 rounded-full border border-white/10 bg-white/[0.04] text-[11px] font-bold tracking-wider text-foreground/80">{f}</span>
               ))}
-              <span className="ml-2 text-sm text-muted-foreground">Работаем с проверенными площадками и аукционами</span>
+              <span className="ml-1 text-[13px] text-muted-foreground sm:ml-2 sm:text-sm">Проверенные площадки и аукционы</span>
             </div>
             <LeadButton title="Рассчитать стоимость под ключ" className="btn-accent mt-8 hidden h-12 items-center rounded-full px-6 text-sm font-semibold lg:inline-flex">
               Рассчитать стоимость
             </LeadButton>
           </div>
         </div>
-        <dl className="lg:col-span-7">
+        <dl className="grid grid-cols-2 gap-2 sm:gap-3 lg:col-span-7 lg:block">
           {rows.map((r) => (
-            <div key={r.t} data-reveal="" className="grid gap-2 border-t border-white/[0.08] py-7 sm:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] sm:gap-8 sm:py-9">
+            <div key={r.t} data-reveal="" className="flex flex-col justify-between gap-1 rounded-[1.25rem] bg-white/[0.04] p-4 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-8 lg:rounded-none lg:border-t lg:border-white/[0.08] lg:bg-transparent lg:px-0 lg:py-9">
               <dt>
-                <span className="text-metal tnum block text-[clamp(2.1rem,3.6vw,3.4rem)] leading-[1] font-semibold tracking-tight whitespace-nowrap">{r.v}</span>
-                <span className="mt-2 block text-sm font-medium text-accent">{r.t}</span>
+                <span className="tnum block text-[22px] leading-[1.15] font-semibold tracking-tight sm:text-[28px] lg:text-[clamp(2.1rem,3.6vw,3.4rem)] lg:leading-none lg:whitespace-nowrap">{r.v}</span>
+                <span className="mt-1 block text-[13px] text-muted-foreground lg:mt-2 lg:text-sm lg:font-medium lg:text-accent">{r.t}</span>
               </dt>
-              <dd className="self-end text-[15px] leading-relaxed text-muted-foreground">{r.d}</dd>
+              <dd className="hidden self-end text-[15px] leading-relaxed text-muted-foreground lg:block">{r.d}</dd>
             </div>
           ))}
         </dl>

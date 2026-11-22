@@ -68,7 +68,11 @@ const img = (slug: string, n: number, alt: string, kind: CarImage["kind"] = "mod
   kind,
 });
 
-export const PRICE_DATE = "15.11.2026";
+/** Дата актуальности цен: для живой витрины — дата выгрузки из админки. */
+export const PRICE_DATE = (() => {
+  const g = (showcase as unknown as { generatedAt?: string | null }).generatedAt;
+  return g ? new Date(g).toLocaleDateString("ru-RU", { timeZone: "Europe/Moscow" }) : "15.11.2026";
+})();
 export const PRICE_CITY = "Анапы";
 
 /** Демо-ассортимент: показывается, пока в витрине админки нет опубликованных карточек. */

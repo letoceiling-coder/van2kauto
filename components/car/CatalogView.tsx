@@ -133,7 +133,7 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
   );
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-8">
       <aside className="hidden lg:block">
         <div className="card sticky top-24 p-6">
           <div className="mb-6 flex items-center justify-between">
@@ -186,7 +186,7 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
             Найдено <span className="tnum font-semibold text-foreground">{list.length}</span> {plural(list.length, ["автомобиль", "автомобиля", "автомобилей"])}
           </p>
           <label htmlFor="cat-sort-m" className="sr-only">Сортировка</label>
-          <select id="cat-sort-m" value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="h-9 appearance-none rounded-full bg-transparent pr-1 text-right text-sm text-foreground/80 outline-none sm:hidden">
+          <select id="cat-sort-m" value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="h-11 appearance-none rounded-full bg-transparent pr-1 text-right text-sm text-foreground/80 outline-none sm:hidden">
             <option value="relevance">По актуальности ↓</option>
             <option value="price-asc">Сначала дешевле ↓</option>
             <option value="price-desc">Сначала дороже ↓</option>
@@ -197,7 +197,7 @@ export function CatalogView({ initialCountry, initialCondition, lockCountry }: {
 
         {list.length ? (
           // Без layout-анимаций: при смене фильтра сетка не «прыгает», карточки просто проявляются.
-          <div key={gridKey} data-catalog-results="" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div key={gridKey} data-catalog-results="" className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
             {list.map((c, i) => (
               <div key={c.slug} className="card-in" style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}>
                 <CarCard car={c} priority={i < 2} />
@@ -262,7 +262,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 
 function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button type="button" onClick={onClick} aria-pressed={on} className={cn("h-10 shrink-0 rounded-full border px-4 text-sm whitespace-nowrap transition active:scale-95", on ? "border-accent bg-accent font-medium text-accent-foreground" : "border-white/10 bg-white/[0.02] text-foreground/80 hover:border-white/25")}>
+    <button type="button" onClick={onClick} aria-pressed={on} className={cn("h-11 shrink-0 rounded-full border px-4 text-sm whitespace-nowrap transition active:scale-95", on ? "border-accent bg-accent font-medium text-accent-foreground" : "border-white/10 bg-white/[0.02] text-foreground/80 hover:border-white/25")}>
       {children}
     </button>
   );

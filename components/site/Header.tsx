@@ -36,7 +36,7 @@ export function Header() {
       <div className={cn("relative border-b transition-[background-color,border-color] duration-300", scrolled || open ? "border-white/[0.06] bg-background/92 md:bg-background/75 md:backdrop-blur-xl" : "border-transparent")}>
         <span aria-hidden="true" className={cn("pointer-events-none absolute inset-x-0 -bottom-px h-px bg-[linear-gradient(90deg,transparent,rgb(235_17_29/0.55),transparent)] transition-opacity duration-500", scrolled ? "opacity-100" : "opacity-0")} />
         <div className="mx-auto flex h-16 max-w-site items-center gap-6 px-4 sm:px-6 lg:h-[72px] lg:px-8">
-          <Logo />
+          <Logo className="h-11" />
           <nav aria-label="Основная навигация" className="ml-auto hidden items-center gap-1 xl:flex">
             {nav.map((l) => {
               const active = pathname === l.href || pathname.startsWith(l.href + "/");

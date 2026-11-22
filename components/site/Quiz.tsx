@@ -44,7 +44,7 @@ export function Quiz() {
   const summary = [a.link.trim() ? `Ссылка: ${a.link.trim()}` : a.task, a.country === "any" ? "любая страна" : { china: "Китай", korea: "Корея", japan: "Япония" }[a.country], a.condition === "any" ? "" : a.condition === "new" ? "новый" : "с пробегом", `до ${new Intl.NumberFormat("ru-RU").format(a.budget)} ₽`, a.city].filter(Boolean).join(" · ");
 
   return (
-    <div className="grid gap-8 lg:grid-cols-12">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
       <div className="card relative overflow-hidden p-6 sm:p-10 lg:col-span-7">
         <div aria-hidden="true" className="absolute -top-24 -right-24 size-64 rounded-full bg-accent/10 blur-3xl" />
         <ol className="relative flex items-center gap-2" aria-label="Шаги">
@@ -65,7 +65,7 @@ export function Quiz() {
                 <>
                   <h2 className="text-3xl font-semibold tracking-tight">Какая задача у автомобиля? <span className="text-accent">*</span></h2>
                   <p className="mt-2 text-muted-foreground">Выберите вариант или вставьте ссылку на объявление — тогда пропустим лишние вопросы.</p>
-                  <div className="mt-6 grid gap-2 sm:grid-cols-2">
+                  <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {TASKS.map((t) => (
                       <Option key={t} on={a.task === t} onClick={() => setA({ ...a, task: t })}>{t}</Option>
                     ))}
@@ -130,14 +130,14 @@ export function Quiz() {
         </div>
       </div>
 
-      <aside className="lg:col-span-5">
+      <aside className="min-w-0 lg:col-span-5">
         <div className="lg:sticky lg:top-24">
           <p className="text-sm text-muted-foreground">Подходит под ваши ответы</p>
           <p className="mt-1 text-2xl font-semibold tracking-tight">{matches.length ? "Предварительные варианты" : "Подберём на площадках"}</p>
           <div className="mt-5 grid gap-4">
             <AnimatePresence mode="popLayout">
               {matches.map((c) => (
-                <motion.div key={c.slug} layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                <motion.div key={c.slug} layout className="min-w-0" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
                   <CarCard car={c} />
                 </motion.div>
               ))}

@@ -8,12 +8,12 @@ export function Footer() {
   const brands = Array.from(new Set(cars.map((c) => c.brand)));
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-white/[0.06] pb-28 md:pb-10">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -bottom-[0.18em] text-center font-display text-[15vw] leading-none font-bold italic tracking-tight text-outline select-none">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -bottom-[0.18em] hidden text-center font-display md:block text-[15vw] leading-none font-bold italic tracking-tight text-outline select-none">
         ВАН23АВТО
       </div>
-      <div className="relative mx-auto grid max-w-site gap-12 px-4 pt-16 sm:px-6 lg:grid-cols-12 lg:px-8">
+      <div className="relative mx-auto grid grid-cols-1 max-w-site gap-12 px-4 pt-16 sm:px-6 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-4">
-          <Logo tagline />
+          <Logo tagline className="min-h-11" />
           <p className="mt-6 max-w-sm text-muted-foreground">
             Автомобили из Китая, Кореи и Японии под заказ. Офис и выдача в Анапе, доставка по Краснодарскому краю и всей России.
           </p>
@@ -24,17 +24,17 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-8">
           <div>
             <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">Разделы</p>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-4 space-y-0 sm:space-y-2.5">
               {nav.map((l) => (
-                <li key={l.href}><Link className="text-foreground/80 transition hover:text-accent" href={l.href}>{l.label}</Link></li>
+                <li key={l.href}><Link className="inline-flex min-h-11 min-w-11 items-center text-foreground/80 transition hover:text-accent sm:min-h-0 sm:min-w-0" href={l.href}>{l.label}</Link></li>
               ))}
             </ul>
           </div>
           <div>
             <p className="text-xs tracking-[0.18em] text-muted-foreground uppercase">Марки</p>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-4 space-y-0 sm:space-y-2.5">
               {brands.slice(0, 9).map((b) => (
-                <li key={b}><Link className="text-foreground/80 transition hover:text-accent" href={`/catalog?q=${encodeURIComponent(b)}`}>{b}</Link></li>
+                <li key={b}><Link className="inline-flex min-h-11 min-w-11 items-center text-foreground/80 transition hover:text-accent sm:min-h-0 sm:min-w-0" href={`/catalog?q=${encodeURIComponent(b)}`}>{b}</Link></li>
               ))}
             </ul>
           </div>

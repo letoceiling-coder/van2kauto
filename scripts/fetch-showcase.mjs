@@ -57,7 +57,9 @@ async function main() {
     const res = await fetch(url, { headers, signal: AbortSignal.timeout(20000) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
-    const cars = (json.data || []).filter((x) => x.slug && x.price_from_rub).map(toCar);
+    const cars = (json.data || []).filter((x) => x.slug && x.price_from_rub && (x.images || []).length > 0).map(toCar);
+    // Пустая витрина на проде = на сайте оказался бы демо-каталог под видом реального. Не допускаем.
+    if (cars.length === 0 && strict) throw new Error("витрина пуста — демо-каталог на проде не публикуем");
     const data = { generatedAt: new Date().toISOString(), version: json.meta?.version ?? null, cars };
     await writeFile(out, JSON.stringify(data, null, 2) + "\n");
     console.log(`showcase: ${cars.length} карточек (версия ${data.version}) → content/showcase.json`);

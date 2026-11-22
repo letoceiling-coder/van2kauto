@@ -4,7 +4,6 @@ export const nav = [
   { label: "Корея", href: "/cars-from-korea" },
   { label: "Япония", href: "/cars-from-japan" },
   { label: "Как заказать", href: "/how-it-works" },
-  { label: "Выдачи", href: "/cases" },
   { label: "Контакты", href: "/contacts" },
 ];
 

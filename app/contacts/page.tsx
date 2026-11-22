@@ -25,7 +25,7 @@ const CITIES = [
 export default function Page() {
   return (
     <>
-      <PageHero eyebrow="Контакты" title="Офис и выдача в Анапе" text={`Менеджер по заявкам — ${company.manager}. Ответим в течение 15 минут в рабочее время.`} image="/media/generated/car-handover.webp" watermark="ANAPA">
+      <PageHero eyebrow="Контакты" title="Офис и выдача в Анапе" text={`Менеджер по заявкам — ${company.manager}. Ответим в рабочее время.`} image="/media/generated/car-handover.webp" watermark="ANAPA">
         <div className="flex flex-wrap items-center gap-3">
           <OpenNow />
           <span className="inline-flex h-7 items-center gap-2 rounded-full bg-white/[0.06] px-3 text-xs text-foreground/80"><Clock className="size-3.5 text-accent" />{company.hours}</span>
@@ -33,7 +33,7 @@ export default function Page() {
       </PageHero>
 
       <section data-component-id="contact-actions" className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
           {ACTIONS.map(({ icon: Icon, title, text, cta, lead }, i) => (
             <Reveal key={title} delay={i * 0.06}>
               <LeadButton title={lead} className="group card relative grid h-full w-full grid-cols-[auto_1fr] items-start gap-x-4 overflow-hidden p-5 text-left md:flex md:flex-col md:p-6 transition hover:-translate-y-1 hover:border-accent/30">
@@ -53,7 +53,7 @@ export default function Page() {
           <p className="inline-flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.22em] text-accent uppercase"><span className="h-px w-6 bg-accent" />Где получить</p>
           <h2 className="text-headline mt-4 max-w-2xl">Передаём автомобиль там, где вам удобно</h2>
         </Reveal>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {CITIES.map((c, i) => (
             <Reveal key={c.city} delay={i * 0.05} className="card h-full p-5">
               <div className="flex items-center justify-between gap-2">
@@ -69,7 +69,7 @@ export default function Page() {
       <Office />
 
       <section className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
-        <div className="card grid gap-6 p-6 text-sm sm:grid-cols-3 sm:p-8">
+        <div className="card grid grid-cols-1 gap-6 p-6 text-sm sm:grid-cols-3 sm:p-8">
           <div className="flex gap-3"><FileCheck2 className="mt-0.5 size-5 shrink-0 text-accent" /><div><p className="text-muted-foreground">Сторона договора</p><p className="mt-1 text-base font-medium">{company.legal}</p></div></div>
           <div><p className="text-muted-foreground">Реквизиты</p><p className="mt-1 text-base font-medium">Публикуются после заполнения по документам компании</p></div>
           <div><p className="text-muted-foreground">Города выдачи</p><p className="mt-1 text-base font-medium">{company.cities.join(" · ")}</p></div>

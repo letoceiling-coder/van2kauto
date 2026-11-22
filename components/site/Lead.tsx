@@ -62,13 +62,14 @@ export function ymClientId(): string | undefined {
 export async function sendLead(payload: { name?: string; contact: string; channel?: string; comment?: string; website?: string; context?: Record<string, string>; car_slug?: string }) {
   rememberUtm();
   const m = location.pathname.match(/\/catalog\/([^/]+)/);
+  const slugFromPath = (() => { try { return m ? decodeURIComponent(m[1]) : undefined; } catch { return undefined; } })();
   const res = await fetch(`${API_URL}/api/v1/leads`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
       ...payload,
       consent: true,
-      car_slug: payload.car_slug ?? (m ? decodeURIComponent(m[1]) : undefined),
+      car_slug: payload.car_slug ?? slugFromPath,
       page: location.pathname + location.search,
       utm: readUtm(),
       ym_client_id: ymClientId(),
@@ -148,7 +149,7 @@ export function LeadForm({ context, onDone, compact, car }: { context?: string; 
       <input id={`${id}-name`} name="name" autoComplete="given-name" placeholder="Как к вам обращаться" className={field} />
       <label className="sr-only" htmlFor={`${id}-contact`}>Телефон или Telegram</label>
       <input id={`${id}-contact`} name="contact" inputMode="tel" autoComplete="tel" required placeholder="Телефон или @telegram *" className={cn(field, error && "border-red-400/70")} aria-invalid={!!error} aria-describedby={error ? `${id}-err` : undefined} />
-      {error && <p id={`${id}-err`} className="-mt-1 px-1 text-sm text-red-300">{error}</p>}
+      {error && <p id={`${id}-err`} role="alert" className="-mt-1 px-1 text-sm text-red-300">{error}</p>}
       {!compact && (
         <>
           <label className="sr-only" htmlFor={`${id}-msg`}>Комментарий</label>
@@ -158,7 +159,7 @@ export function LeadForm({ context, onDone, compact, car }: { context?: string; 
       <fieldset className="flex flex-wrap gap-2">
         <legend className="mb-2 px-1 text-sm text-muted-foreground">Удобный канал связи</legend>
         {CHANNELS.map((c) => (
-          <button key={c} type="button" onClick={() => setChannel(c)} aria-pressed={channel === c} className={cn("h-10 rounded-full border px-4 text-sm transition", channel === c ? "border-accent bg-accent text-accent-foreground" : "border-border hover:border-foreground/30")}>
+          <button key={c} type="button" onClick={() => setChannel(c)} aria-pressed={channel === c} className={cn("h-11 rounded-full border px-4 text-sm transition", channel === c ? "border-accent bg-accent text-accent-foreground" : "border-border hover:border-foreground/30")}>
             {c}
           </button>
         ))}
@@ -213,10 +214,10 @@ function LeadModal({ ctx, onClose }: { ctx: LeadCtx; onClose: () => void }) {
         transition={{ type: "spring", damping: 30, stiffness: 320 }}
       >
         <div className="mx-auto -mt-2 mb-4 h-1 w-10 rounded-full bg-foreground/15 sm:hidden" />
-        <button onClick={onClose} aria-label="Закрыть" className="absolute top-4 right-4 grid size-10 place-items-center rounded-full bg-foreground/5 transition hover:bg-foreground/10">
+        <button onClick={onClose} aria-label="Закрыть" className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-foreground/5 transition hover:bg-foreground/10">
           <X className="size-5" />
         </button>
-        <p className="text-xs font-medium tracking-[0.18em] text-accent uppercase">Ответ за 15 минут</p>
+        <p className="text-xs font-medium tracking-[0.18em] text-accent uppercase">Ответим в рабочее время</p>
         <h2 id="lead-title" className="mt-2 pr-10 text-2xl sm:text-3xl">{ctx.title ?? "Подберём и посчитаем авто под ключ"}</h2>
         <p className="mt-2 mb-6 text-muted-foreground">Руслан уточнит наличие, состояние и пришлёт смету до вашего города.</p>
         <LeadForm context={ctx.context} car={ctx.car} />

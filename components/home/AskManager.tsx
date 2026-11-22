@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUp, Check, Loader2, MessageCircle, Sparkles } from "lucide-react";
 import { Eyebrow } from "./SectionHead";
@@ -77,7 +78,15 @@ export function AskManager() {
     const tick = () => {
       if (document.visibilityState !== "visible") return;
       fetch(`${API_URL}/api/v1/chat/${token}?after=${lastRef.current}`, { headers: { Accept: "application/json" } })
-        .then((r) => (r.ok ? r.json() : null))
+        .then((r) => {
+          if (r.status === 404) {
+            // переписка удалена — перестаём опрашивать
+            try { localStorage.removeItem(STORE); } catch {}
+            setToken(null);
+            return null;
+          }
+          return r.ok ? r.json() : null;
+        })
         .then((j) => j && merge(j.messages ?? []))
         .catch(() => {});
     };
@@ -165,17 +174,17 @@ export function AskManager() {
 
   return (
     <section data-component-id="ask" id="ask" className="relative mx-auto max-w-site px-4 py-[var(--section-y)] sm:px-6 lg:px-8">
-      <div className="card relative grid overflow-hidden lg:grid-cols-12">
+      <div className="card relative grid grid-cols-1 overflow-hidden lg:grid-cols-12">
         <span aria-hidden="true" className="absolute inset-x-10 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(235_17_29/0.7),transparent)]" />
         {/* Левая панель: живой человек */}
-        <div className="relative flex flex-col gap-6 border-b border-white/[0.07] p-6 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0">
+        <div className="relative flex flex-col gap-4 border-b border-white/[0.07] p-5 sm:gap-6 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0">
           <div>
             <Eyebrow>Вопрос без звонков</Eyebrow>
-            <h2 className="text-headline text-metal mt-4 pb-[0.06em]">Спросите — ответит живой человек</h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-muted-foreground">Ассистент сразу ответит на частые вопросы. Свой вопрос напишите в чат — его получит менеджер и ответит здесь же, без звонков и навязчивых рассылок.</p>
+            <h2 className="text-headline mt-2 sm:mt-4">Спросите — ответит живой человек</h2>
+            <p className="mt-2 text-[15px] leading-[1.45] text-muted-foreground sm:mt-4">Ассистент сразу ответит на частые вопросы. Свой вопрос напишите в чат — его получит менеджер и ответит здесь же, без звонков и навязчивых рассылок.</p>
           </div>
-          <div className="mt-auto flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <span className="relative grid size-14 shrink-0 place-items-center rounded-full bg-gradient-to-b from-accent to-accent-2 text-xl font-bold text-white">
+          <div className="mt-auto flex items-center gap-3 rounded-2xl bg-white/[0.04] p-3 sm:gap-4 sm:p-4">
+            <span className="relative grid size-12 shrink-0 place-items-center rounded-full bg-accent text-lg font-semibold text-white sm:size-14">
               {company.manager.slice(0, 1)}
             </span>
             <div className="min-w-0">
@@ -196,11 +205,11 @@ export function AskManager() {
             </div>
           </div>
 
-          <div ref={box} aria-live="polite" className="no-scrollbar h-[380px] space-y-3 overflow-y-auto overscroll-contain px-5 py-5 sm:h-[420px] sm:px-6">
+          <div ref={box} aria-live="polite" className="no-scrollbar h-[56svh] max-h-[420px] min-h-[300px] space-y-2.5 overflow-y-auto overscroll-contain px-4 py-4 sm:space-y-3 sm:px-6 sm:py-5">
             {msgs.map((m) => (
               <div key={m.id} className={cn("flex", m.from === "client" ? "justify-end" : "justify-start")}>
                 <div className={cn(
-                  "max-w-[85%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed whitespace-pre-line",
+                  "max-w-[85%] rounded-[1.1rem] px-3.5 py-2.5 text-[15px] leading-[1.4] whitespace-pre-line",
                   m.from === "client" ? "rounded-br-md bg-accent text-white" : m.from === "manager" ? "rounded-bl-md border border-accent/30 bg-accent/10" : "rounded-bl-md bg-white/[0.06]",
                 )}>
                   {m.from === "manager" && <p className="mb-1 text-xs font-semibold text-accent">{m.author || company.manager} · менеджер</p>}
@@ -212,7 +221,7 @@ export function AskManager() {
               <form onSubmit={saveContact} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                 <p className="text-sm text-foreground/85">Оставьте телефон или @username — чтобы ответить, даже если закроете страницу:</p>
                 <div className="mt-3 flex gap-2">
-                  <input value={contact} onChange={(e) => setContact(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="+7 900 000-00-00 или @username" className="h-11 min-w-0 flex-1 rounded-full border border-border bg-background/60 px-4 text-[15px] outline-none focus:border-accent/70" />
+                  <input aria-label="Телефон или username в Telegram" value={contact} onChange={(e) => setContact(e.target.value)} inputMode="tel" autoComplete="tel" placeholder="+7 900 000-00-00 или @username" className="h-11 min-w-0 flex-1 rounded-full border border-border bg-background/60 px-4 text-[15px] outline-none focus:border-accent/70" />
                   <button className="grid size-11 shrink-0 place-items-center rounded-full bg-white text-black" aria-label="Сохранить контакт"><Check className="size-4" /></button>
                 </div>
               </form>
@@ -220,9 +229,9 @@ export function AskManager() {
           </div>
 
           {!token && (
-            <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 pb-3 sm:px-6">
+            <div className="no-scrollbar flex snap-x gap-2 overflow-x-auto overscroll-x-contain px-4 pb-3 sm:px-6">
               {QUICK.map((item) => (
-                <button key={item.q} type="button" onClick={() => quick(item)} className="shrink-0 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-2 text-[13px] text-foreground/80 transition hover:border-accent/50 hover:text-foreground">
+                <button key={item.q} type="button" onClick={() => quick(item)} className="press h-11 shrink-0 snap-start rounded-full border border-white/10 bg-white/[0.04] px-3.5 text-[13px] text-foreground/85 transition hover:border-accent/50 hover:text-foreground">
                   {item.q}
                 </button>
               ))}
@@ -240,14 +249,15 @@ export function AskManager() {
                 onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(); } }}
                 rows={1}
                 maxLength={2000}
-                placeholder="Например: сколько будет стоить Audi A3 2022 до Краснодара?"
-                className="max-h-32 min-h-11 flex-1 resize-none bg-transparent py-3 text-[15px] outline-none placeholder:text-muted-foreground/70"
+                placeholder="Ваш вопрос менеджеру"
+                enterKeyHint="send" className="max-h-32 min-h-11 flex-1 resize-none bg-transparent py-3 text-base outline-none placeholder:text-muted-foreground/70"
               />
               <button type="submit" disabled={sending || text.trim().length < 2} aria-label="Отправить" className="btn-accent grid size-11 shrink-0 place-items-center rounded-full disabled:opacity-40">
                 {sending ? <Loader2 className="size-4 animate-spin" /> : <ArrowUp className="size-4" />}
               </button>
             </div>
-            {error ? <p className="mt-2 px-2 text-sm text-red-300">{error}</p> : <p className="mt-2 px-2 text-[11px] text-muted-foreground">Отправляя сообщение, вы соглашаетесь на <a href="/privacy/" className="underline underline-offset-2">обработку данных</a>.</p>}
+            {error && <p role="alert" className="mt-2 px-2 text-sm text-red-300">{error}</p>}
+            <p className="mt-2 px-2 text-[12px] text-muted-foreground">Отправляя сообщение, вы соглашаетесь на <Link href="/privacy" className="underline underline-offset-2">обработку данных</Link>.</p>
           </form>
         </div>
       </div>

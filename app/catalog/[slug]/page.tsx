@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <span className="text-foreground/80">{name}</span>
       </nav>
 
-      <div className="grid gap-6 lg:grid-cols-12 lg:gap-10">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-10">
         <div className="-mx-4 sm:mx-0 lg:col-span-7">
           <div className="relative">
             <Gallery images={photos(car)} title={name} />
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <ChevronLeft className="size-5" />
             </Link>
           </div>
-          <p className="mt-3 px-4 text-xs text-muted-foreground sm:px-0">Фото — иллюстрация модели. Фото конкретного лота и отчёт осмотра менеджер пришлёт после запроса.</p>
+          <p className="mt-3 px-4 text-xs text-muted-foreground sm:px-0">{car.priceFrom ? "Фото с площадки продавца. Свежие фото и отчёт осмотра конкретного лота пришлём перед выкупом." : "Фото — иллюстрация модели. Фото конкретного лота и отчёт осмотра менеджер пришлёт после запроса."}</p>
         </div>
 
         <div className="lg:col-span-5">
@@ -132,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
       </div>
 
-      <div className="mt-12 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:gap-6">
+      <div className="mt-12 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-3 lg:gap-6">
         <Reveal className="card p-5 sm:p-8">
           <h2 className="text-2xl font-semibold tracking-tight">Характеристики</h2>
           <dl className="mt-5 divide-y divide-white/[0.06]">
@@ -188,7 +188,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="mt-16 sm:mt-20">
           <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
             <h2 className="text-headline">Похожие варианты</h2>
-            <Link href={`/catalog?country=${car.country}`} className="shrink-0 text-sm font-semibold text-foreground/70 hover:text-accent">Все →</Link>
+            <Link href={`/catalog?country=${car.country}`} className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold text-foreground/70 hover:text-accent">Все →</Link>
           </div>
           <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 xl:grid-cols-4">
             {similar.map((c) => (
