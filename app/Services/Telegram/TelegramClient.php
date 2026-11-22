@@ -28,7 +28,12 @@ class TelegramClient
             throw new RuntimeException('Токен бота не задан в настройках');
         }
 
-        $response = Http::timeout(15)->asJson()->post("https://api.telegram.org/bot{$token}/{$method}", $params);
+        try {
+            $response = Http::connectTimeout(3)->timeout(6)->asJson()->post("https://api.telegram.org/bot{$token}/{$method}", $params);
+        } catch (\Throwable $e) {
+            // Текст сетевой ошибки содержит URL с токеном — маскируем, чтобы токен не попал в БД, логи и админку.
+            throw new TelegramException(self::mask($e->getMessage()), 0);
+        }
         $json = $response->json() ?? [];
 
         if (! ($json['ok'] ?? false)) {
@@ -37,6 +42,11 @@ class TelegramClient
         }
 
         return is_array($json['result'] ?? null) ? $json['result'] : ['value' => $json['result'] ?? null];
+    }
+
+    public static function mask(string $text): string
+    {
+        return (string) preg_replace('~bot\d+:[A-Za-z0-9_-]+~', 'bot***', $text);
     }
 
     public function sendMessage(int|string $chatId, string $text, array $extra = []): array

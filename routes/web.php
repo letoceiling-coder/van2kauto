@@ -21,8 +21,9 @@ Route::redirect('/', '/che168');
 
 Route::get('/api/docs', [DocsController::class, 'show'])->name('api.docs');
 
+// Безопасность: страница капчи только для вошедших в админку (раньше была публичной и раскрывала секрет записи в .env).
+Route::get('/che168/captcha', [Che168GateController::class, 'showPublic'])->middleware('auth')->name('che168.gate.public');
 Route::controller(Che168GateController::class)->group(function () {
-    Route::get('/che168/captcha', 'showPublic')->name('che168.gate.public');
     Route::get('/che168/gate', 'show')->name('che168.gate.show');
     Route::get('/che168/gate/proxy', 'proxy')->name('che168.gate.proxy');
     Route::post('/che168/gate/store', 'store')->name('che168.gate.store');

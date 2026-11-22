@@ -30,7 +30,7 @@
         <div><label>Правило пересборки</label><select name="site_rebuild_mode">@foreach($modes as $k=>$l)<option value="{{ $k }}" @selected($s('site_rebuild_mode')===$k)>{{ $l }}</option>@endforeach</select></div>
         <div><label>Пауза после последнего изменения, мин</label><input name="site_rebuild_debounce_minutes" type="number" value="{{ $s('site_rebuild_debounce_minutes') }}"></div>
         <div><label>Час ежедневной сборки (0–23)</label><input name="site_rebuild_daily_hour" type="number" value="{{ $s('site_rebuild_daily_hour') }}"></div>
-        <div class="wide"><label>Команда сборки на сервере</label><input name="site_rebuild_command" value="{{ $s('site_rebuild_command') }}" placeholder="/opt/van2kauto/deploy/rebuild.sh"></div>
+        <div class="wide"><label>Команда сборки (задаётся на сервере в .env → SITE_REBUILD_COMMAND)</label><input value="{{ $rebuildCommand ?: 'не задана' }}" readonly disabled></div>
     </div>
     <p class="muted">Сборку запускает планировщик раз в минуту. «Автоматически» — через N минут тишины после последней правки, чтобы пачка изменений дала одну сборку. Данные витрины API отдаёт с ETag и кэшем, поэтому сборка их тянет быстро.</p>
 </div>

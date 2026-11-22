@@ -18,6 +18,11 @@ class SiteRebuilder
 {
     public const MODES = ['manual' => 'Только вручную', 'on_change' => 'Автоматически после изменений', 'daily' => 'Раз в сутки, если были изменения'];
 
+    public static function command(): string
+    {
+        return trim((string) config('services.site.rebuild_command', ''));
+    }
+
     public function requestManual(): void
     {
         Settings::set('site_rebuild_requested_at', now()->toIso8601String());
@@ -55,6 +60,11 @@ class SiteRebuilder
         if (! $this->hasPendingChanges()) {
             return null;
         }
+        // Упавшая сборка не перезапускается каждую минуту: ждём 15 минут или новых изменений.
+        $lastFailed = SiteBuild::query()->where('status', 'failed')->latest('id')->first();
+        if ($lastFailed && $lastFailed->started_at->gt($now->copy()->subMinutes(15)) && $this->dirtyAt()->lte($lastFailed->started_at)) {
+            return null;
+        }
 
         return match (Settings::get('site_rebuild_mode', 'on_change')) {
             'on_change' => $this->dirtyAt()->lte($now->copy()->subMinutes(max(0, Settings::int('site_rebuild_debounce_minutes', 5)))) ? 'auto' : null,
@@ -68,9 +78,9 @@ class SiteRebuilder
         Settings::set('site_rebuild_requested_at', '');
         $build = SiteBuild::query()->create(['trigger' => $trigger, 'status' => 'running', 'started_at' => now()]);
 
-        $command = trim((string) Settings::get('site_rebuild_command', ''));
+        $command = self::command();
         if ($command === '') {
-            $build->update(['status' => 'failed', 'output' => 'Команда сборки не задана в настройках', 'finished_at' => now()]);
+            $build->update(['status' => 'failed', 'output' => 'Команда сборки не задана (SITE_REBUILD_COMMAND в .env)', 'finished_at' => now()]);
 
             return $build;
         }

@@ -32,7 +32,7 @@ class ChatService
             'chat_token' => Str::random(40),
             'last_client_message_at' => now(),
         ]);
-        $lead->messages()->create(['sender' => 'client', 'text' => $text]);
+        $lead->messages()->create(['sender' => 'client', 'text' => $text, 'forwarded_at' => $lead->notified_at]);
 
         return $lead;
     }
@@ -40,8 +40,13 @@ class ChatService
     public function clientMessage(Lead $lead, string $text): LeadMessage
     {
         $msg = $lead->messages()->create(['sender' => 'client', 'text' => $text]);
+        if ($lead->status === 'spam') {
+            return $msg; // спам не беспокоит менеджеров
+        }
         $lead->update(['last_client_message_at' => now(), 'status' => $lead->status === 'done' ? 'new' : $lead->status]);
-        $this->notifier->forwardClientMessage($lead, $text);
+        if ($this->notifier->forwardClientMessage($lead, $text)) {
+            $msg->update(['forwarded_at' => now()]);
+        }
 
         return $msg;
     }

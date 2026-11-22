@@ -27,9 +27,8 @@ class Che168GateController extends Controller
             return $this->successPage();
         }
 
-        return $this->proxy(Request::create('/che168/gate/proxy', 'GET', [
-            'secret' => $this->gateSecret(),
-        ]));
+        // Пользователь админки уже авторизован — секрет в страницу не вшиваем.
+        return $this->proxy($request);
     }
 
     public function show(Request $request): Response
@@ -73,7 +72,9 @@ class Che168GateController extends Controller
             $html = $this->fetchWithJar();
         }
 
-        $storeUrl = route('che168.gate.store', ['secret' => $request->query('secret')]);
+        $storeUrl = auth()->check()
+            ? route('che168.gate.store')
+            : route('che168.gate.store', ['secret' => $request->query('secret')]);
         $csrf = csrf_token();
 
         $banner = '<div style="background:#1e293b;color:#e2e8f0;padding:10px 16px;font:14px system-ui,sans-serif">'
@@ -147,8 +148,9 @@ JS;
         }
 
         $token = rtrim(trim((string) $request->input('token', '')), '*');
-        if (! filled($token)) {
-            return response()->json(['ok' => false, 'message' => 'token missing'], 422);
+        // Только символы токена: без переводов строк и спецсимволов — иначе можно дописать произвольные строки в .env.
+        if (! preg_match('/^[A-Za-z0-9._~+\/=\-]{8,4096}$/', $token)) {
+            return response()->json(['ok' => false, 'message' => 'token missing or invalid'], 422);
         }
 
         $this->writeEnvLine('CHE168_EDGEONE_CAPTCHA_TOKEN', $token);
@@ -189,6 +191,9 @@ JS;
 
     private function authorized(Request $request): bool
     {
+        if (auth()->check()) {
+            return true;
+        }
         $secret = config('che168.gate_secret');
         if (! filled($secret)) {
             return false;
@@ -224,12 +229,16 @@ JS;
             return;
         }
 
+        if (preg_match('/[\r\n\0]/', $value)) {
+            throw new \InvalidArgumentException("Недопустимое значение для {$key}");
+        }
         $text = file_get_contents($path);
         $pattern = '/^'.preg_quote($key, '/').'=.*$/m';
         $line = $key.'='.$value;
 
+        // preg_replace_callback: «$1» и «\1» в значении не превращаются в обратные ссылки.
         $text = preg_match($pattern, $text)
-            ? (string) preg_replace($pattern, $line, $text)
+            ? (string) preg_replace_callback($pattern, fn () => $line, $text)
             : $text.PHP_EOL.$line.PHP_EOL;
 
         file_put_contents($path, $text);

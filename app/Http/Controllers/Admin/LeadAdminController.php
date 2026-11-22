@@ -19,7 +19,11 @@ class LeadAdminController extends Controller
             ->with('car')
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->input('status')))
             ->when($request->filled('source'), fn ($q) => $q->where('source', $request->input('source')))
-            ->when($request->filled('q'), fn ($q) => $q->where(fn ($w) => $w->where('contact', 'like', '%'.$request->input('q').'%')->orWhere('name', 'like', '%'.$request->input('q').'%')->orWhere('car_title', 'like', '%'.$request->input('q').'%')))
+            ->when($request->filled('q'), function ($q) use ($request) {
+                $op = \Illuminate\Support\Facades\DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+                $like = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], (string) $request->input('q')).'%';
+                $q->where(fn ($w) => $w->where('contact', $op, $like)->orWhere('name', $op, $like)->orWhere('car_title', $op, $like));
+            })
             ->latest('id')
             ->paginate(30)
             ->withQueryString();

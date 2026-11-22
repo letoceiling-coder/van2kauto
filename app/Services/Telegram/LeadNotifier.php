@@ -54,21 +54,26 @@ class LeadNotifier
         }
     }
 
-    /** Новое сообщение клиента в чате — реплаем на исходную заявку в каждом чате менеджеров. */
-    public function forwardClientMessage(Lead $lead, string $text): void
+    /** Новое сообщение клиента в чате — реплаем на исходную заявку в каждом чате менеджеров. true — ушло хотя бы в один чат. */
+    public function forwardClientMessage(Lead $lead, string $text): bool
     {
-        if (! $this->telegram->configured()) {
-            return;
+        if (! $this->telegram->configured() || Settings::managerChatIds() === []) {
+            return false;
         }
+        $sent = false;
         $e = fn (?string $v) => htmlspecialchars((string) $v, ENT_QUOTES);
         foreach (Settings::managerChatIds() as $chatId) {
             $root = (int) (($lead->tg_messages ?? [])[(string) $chatId] ?? 0);
             try {
                 $res = $this->telegram->sendMessage($chatId, "💬 <b>#{$lead->id}</b> {$e($lead->name ?: $lead->contact)}:\n{$e($text)}\n\n<i>Ответьте реплаем — ответ уйдёт клиенту</i>", $root ? ['reply_to_message_id' => $root, 'allow_sending_without_reply' => true] : []);
                 $this->remember($lead, $chatId, (int) ($res['message_id'] ?? 0));
+                $sent = true;
             } catch (\Throwable) {
+                // не дошло — LeadMessage останется без forwarded_at, его дошлёт leads:renotify
             }
         }
+
+        return $sent;
     }
 
     /** Обновить сообщения у всех менеджеров после смены статуса. */

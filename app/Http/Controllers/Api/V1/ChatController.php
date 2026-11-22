@@ -25,7 +25,12 @@ class ChatController extends Controller
         $data = $request->validate([
             'message' => ['required', 'string', 'min:2', 'max:2000'],
             'name' => ['nullable', 'string', 'max:120'],
-            'contact' => ['nullable', 'string', 'max:120'],
+            'contact' => ['nullable', 'string', 'max:120', function ($attr, $value, $fail) {
+                $v = trim((string) $value);
+                if ($v !== '' && ! str_starts_with($v, '@') && strlen(preg_replace('/\D/', '', $v)) < 10) {
+                    $fail('Укажите телефон или @username в Telegram');
+                }
+            }],
             'car_slug' => ['nullable', 'string', 'max:255'],
             'page' => ['nullable', 'string', 'max:1024'],
             'utm' => ['nullable', 'array'],
@@ -70,7 +75,6 @@ class ChatController extends Controller
         return response()->json([
             'messages' => $this->messages($lead, (int) $request->input('after', 0)),
             'has_contact' => $lead->contact !== 'чат на сайте',
-            'status' => $lead->status,
         ], 200, ['Cache-Control' => 'no-store']);
     }
 

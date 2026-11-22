@@ -119,9 +119,14 @@ class Settings
         )));
     }
 
+    /** Атомарно: параллельные сохранения (парсер, топ-10, админка) не получают одну и ту же версию. */
     public static function bumpShowcaseVersion(): void
     {
-        self::set('showcase_version', (string) (self::int('showcase_version', 1) + 1));
-        self::set('site_dirty_at', now()->toIso8601String());
+        $updated = Setting::query()->where('key', 'showcase_version')->update(['value' => \Illuminate\Support\Facades\DB::raw('CAST(CAST(value AS INTEGER) + 1 AS TEXT)'), 'updated_at' => now()]);
+        if (! $updated) {
+            Setting::query()->insertOrIgnore(['key' => 'showcase_version', 'value' => '2', 'created_at' => now(), 'updated_at' => now()]);
+        }
+        Setting::query()->updateOrCreate(['key' => 'site_dirty_at'], ['value' => now()->toIso8601String()]);
+        Cache::forget('settings:all');
     }
 }

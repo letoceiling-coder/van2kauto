@@ -24,6 +24,23 @@ class LeadsRenotifyCommand extends Command
             ->get()
             ->each(fn (Lead $lead) => $notifier->notify($lead));
 
+        // Сообщения клиентов из чата, которые не дошли до Telegram (сбой сети) — дослать.
+        \App\Models\LeadMessage::query()
+            ->where('sender', 'client')
+            ->whereNull('forwarded_at')
+            ->where('created_at', '>=', now()->subDays(2))
+            ->where('created_at', '<=', now()->subMinute())
+            ->orderBy('id')->limit(50)->get()
+            ->each(function (\App\Models\LeadMessage $m) use ($notifier) {
+                $lead = Lead::query()->find($m->lead_id);
+                if (! $lead || $lead->status === 'spam' || ! $lead->notified_at) {
+                    return;
+                }
+                if ($notifier->forwardClientMessage($lead, $m->text)) {
+                    $m->update(['forwarded_at' => now()]);
+                }
+            });
+
         return self::SUCCESS;
     }
 }

@@ -18,7 +18,8 @@ class SiteRebuildTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Settings::setMany(['site_rebuild_command' => '/opt/van2kauto/deploy/rebuild.sh', 'site_rebuild_debounce_minutes' => '5']);
+        config(['services.site.rebuild_command' => '/opt/van2kauto/deploy/rebuild.sh']);
+        Settings::setMany(['site_rebuild_debounce_minutes' => '5']);
     }
 
     private function change(): void
@@ -83,7 +84,7 @@ class SiteRebuildTest extends TestCase
 
     public function test_missing_command_fails_cleanly(): void
     {
-        Settings::set('site_rebuild_command', '');
+        config(['services.site.rebuild_command' => '']);
         $build = app(SiteRebuilder::class)->run('manual');
         $this->assertSame('failed', $build->status);
         $this->assertStringContainsString('не задана', $build->output);

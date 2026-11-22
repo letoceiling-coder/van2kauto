@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class LeadMessage extends Model
 {
-    protected $fillable = ['lead_id', 'sender', 'author', 'text'];
+    protected $fillable = ['lead_id', 'sender', 'author', 'text', 'forwarded_at'];
+
+    protected function casts(): array
+    {
+        return ['forwarded_at' => 'datetime'];
+    }
 
     /** @return array<string, mixed> */
     public function toChat(): array

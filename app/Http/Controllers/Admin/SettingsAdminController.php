@@ -39,6 +39,7 @@ class SettingsAdminController extends Controller
             'textKeys' => self::TEXT_KEYS,
             'priceExample' => \App\Services\Showcase\PriceEstimator::example(),
             'lastRun' => \App\Models\ScrapeRun::query()->latest('id')->first(),
+            'rebuildCommand' => SiteRebuilder::command(),
         ]);
     }
 
@@ -57,7 +58,6 @@ class SettingsAdminController extends Controller
             'site_rebuild_mode' => ['nullable', Rule::in(array_keys(SiteRebuilder::MODES))],
             'site_rebuild_debounce_minutes' => ['nullable', 'integer', 'min:0', 'max:1440'],
             'site_rebuild_daily_hour' => ['nullable', 'integer', 'min:0', 'max:23'],
-            'site_rebuild_command' => ['nullable', 'string', 'max:500'],
             'utilization_max_hp' => ['nullable', 'integer', 'min:1', 'max:1000'],
             'price_usd_rate' => ['nullable', 'numeric', 'min:1', 'max:1000'],
             'price_rate_auto' => ['nullable', 'in:0,1'],

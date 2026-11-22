@@ -135,8 +135,11 @@ class BotUpdateHandler
             ->first();
 
         if ($recent) {
-            $recent->update(['comment' => trim($recent->comment."\n".$text)]);
-            app(LeadNotifier::class)->refresh($recent);
+            $recent->update(['comment' => mb_substr(trim($recent->comment."\n".$text), 0, 3000)]);
+            $msg = $recent->messages()->create(['sender' => 'client', 'text' => $text]);
+            if (app(LeadNotifier::class)->forwardClientMessage($recent, $text)) {
+                $msg->update(['forwarded_at' => now()]);
+            }
         } else {
             $this->createLead($subscriber, $subscriber->phone ?: ($subscriber->username ? '@'.$subscriber->username : 'tg:'.$subscriber->chat_id), $text);
         }
