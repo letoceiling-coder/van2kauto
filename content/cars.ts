@@ -595,6 +595,12 @@ const liveCars = (showcase as unknown as { cars?: Car[] }).cars ?? [];
 export const isLiveCatalog = liveCars.length > 0;
 export const cars: Car[] = isLiveCatalog ? liveCars : demoCars;
 
+/** Коротко: «850 тыс. ₽», «1,48 млн ₽». */
+export function shortPrice(n: number) {
+  if (!n) return "—";
+  return n < 1_000_000 ? `${Math.round(n / 1000)} тыс. ₽` : `${(Math.floor(n / 10_000) / 100).toLocaleString("ru-RU", { maximumFractionDigits: 2 })} млн ₽`;
+}
+
 export function priceText(c: Pick<Car, "price" | "priceFrom">) {
   return `${c.priceFrom ? "от " : ""}${formatPrice(c.price)}`;
 }

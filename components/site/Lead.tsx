@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Check, Loader2, Send, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type LeadCtx = { context?: string; title?: string };
+type LeadCtx = { context?: string; title?: string; car?: string };
 const Ctx = createContext<(c?: LeadCtx) => void>(() => {});
 export const useLead = () => useContext(Ctx);
 
@@ -21,10 +21,10 @@ export function LeadProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function LeadButton({ children, className, context, title }: { children: React.ReactNode; className?: string } & LeadCtx) {
+export function LeadButton({ children, className, context, title, car }: { children: React.ReactNode; className?: string } & LeadCtx) {
   const open = useLead();
   return (
-    <button type="button" className={className} onClick={() => open({ context, title })}>
+    <button type="button" className={className} onClick={() => open({ context, title, car })}>
       {children}
     </button>
   );
@@ -32,7 +32,7 @@ export function LeadButton({ children, className, context, title }: { children: 
 
 const CHANNELS = ["Telegram", "WhatsApp", "Звонок"] as const;
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "https://vanauto-api.neeklo.ru").replace(/\/$/, "");
+export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "https://vanauto-api.neeklo.ru").replace(/\/$/, "");
 const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"] as const;
 
 /** UTM и реферер первого захода — сохраняем на сессию, чтобы не потерять при переходах по сайту. */
@@ -47,11 +47,11 @@ export function rememberUtm() {
   } catch {}
 }
 
-function readUtm(): Record<string, string> {
+export function readUtm(): Record<string, string> {
   try { return JSON.parse(sessionStorage.getItem("v2k_utm") || "{}"); } catch { return {}; }
 }
 
-function ymClientId(): string | undefined {
+export function ymClientId(): string | undefined {
   try {
     const m = document.cookie.match(/(?:^|; )_ym_uid=(\d+)/);
     return m?.[1];
@@ -59,7 +59,7 @@ function ymClientId(): string | undefined {
 }
 
 /** Отправка заявки в админку → Telegram менеджерам. Машина определяется по адресу /catalog/<slug>. */
-export async function sendLead(payload: { name?: string; contact: string; channel?: string; comment?: string; website?: string; context?: Record<string, string> }) {
+export async function sendLead(payload: { name?: string; contact: string; channel?: string; comment?: string; website?: string; context?: Record<string, string>; car_slug?: string }) {
   rememberUtm();
   const m = location.pathname.match(/\/catalog\/([^/]+)/);
   const res = await fetch(`${API_URL}/api/v1/leads`, {
@@ -68,7 +68,7 @@ export async function sendLead(payload: { name?: string; contact: string; channe
     body: JSON.stringify({
       ...payload,
       consent: true,
-      car_slug: m ? decodeURIComponent(m[1]) : undefined,
+      car_slug: payload.car_slug ?? (m ? decodeURIComponent(m[1]) : undefined),
       page: location.pathname + location.search,
       utm: readUtm(),
       ym_client_id: ymClientId(),
@@ -85,7 +85,7 @@ export async function sendLead(payload: { name?: string; contact: string; channe
   return res.json();
 }
 
-export function LeadForm({ context, onDone, compact }: { context?: string; onDone?: () => void; compact?: boolean }) {
+export function LeadForm({ context, onDone, compact, car }: { context?: string; onDone?: () => void; compact?: boolean; car?: string }) {
   const id = useId();
   const [channel, setChannel] = useState<(typeof CHANNELS)[number]>("Telegram");
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
@@ -109,6 +109,7 @@ export function LeadForm({ context, onDone, compact }: { context?: string; onDon
         comment: String(data.get("message") ?? "").trim() || undefined,
         website: String(data.get("website") ?? ""),
         context: context ? { "Запрос": context } : undefined,
+        car_slug: car,
       });
       setStatus("done");
       onDone?.();
@@ -218,7 +219,7 @@ function LeadModal({ ctx, onClose }: { ctx: LeadCtx; onClose: () => void }) {
         <p className="text-xs font-medium tracking-[0.18em] text-accent uppercase">Ответ за 15 минут</p>
         <h2 id="lead-title" className="mt-2 pr-10 text-2xl sm:text-3xl">{ctx.title ?? "Подберём и посчитаем авто под ключ"}</h2>
         <p className="mt-2 mb-6 text-muted-foreground">Руслан уточнит наличие, состояние и пришлёт смету до вашего города.</p>
-        <LeadForm context={ctx.context} />
+        <LeadForm context={ctx.context} car={ctx.car} />
       </motion.div>
     </motion.div>
   );

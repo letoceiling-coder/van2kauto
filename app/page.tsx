@@ -1,30 +1,29 @@
 import { Hero } from "@/components/home/Hero";
 import { Brands } from "@/components/home/Brands";
+import { WhyUs } from "@/components/home/WhyUs";
+import { TopTen } from "@/components/home/TopTen";
+import { HowWeWork } from "@/components/home/HowWeWork";
 import { Countries } from "@/components/home/Countries";
-import { Hits } from "@/components/home/Hits";
-import { PriceBreakdown } from "@/components/home/PriceBreakdown";
-import { Process } from "@/components/home/Process";
-import { QuizBand } from "@/components/home/QuizBand";
 import { Cases } from "@/components/home/Cases";
-import { Trust } from "@/components/home/Trust";
 import { Faq } from "@/components/home/Faq";
-import { Office } from "@/components/home/Office";
+import { AskManager } from "@/components/home/AskManager";
+import { FinalCta } from "@/components/home/FinalCta";
 import { cars } from "@/content/cars";
 
+/** Структура по референсу: первый экран → почему мы → топ-10 → как работаем → страны → выдачи → вопросы → чат с менеджером → финальный экран. */
 export default function Page() {
   return (
     <>
       <Hero count={cars.length} />
       <Brands />
-      <Hits />
+      <WhyUs />
+      <TopTen />
+      <HowWeWork />
       <Countries />
-      <PriceBreakdown />
-      <Trust />
-      <Process />
-      <QuizBand />
       <Cases />
       <Faq />
-      <Office />
+      <AskManager />
+      <FinalCta />
     </>
   );
 }

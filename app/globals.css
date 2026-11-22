@@ -206,3 +206,19 @@ html.catalog-pending [data-catalog-results] { visibility: hidden; }
 
 /* Скроллбар не исчезает при открытии меню/модалки — страница не сдвигается вбок */
 html { scrollbar-gutter: stable; }
+
+/* ── «Как мы работаем»: закреплённый экран + горизонтальный ход карточек по прокрутке (десктоп) ── */
+@supports (animation-timeline: view()) {
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .how-pin { height: 320vh; view-timeline-name: --how; view-timeline-axis: block; }
+    .how-stage { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+    .how-stage > div:first-of-type { height: auto; padding-top: 5.5rem; padding-bottom: 2.5rem; }
+    .how-track {
+      overflow: visible; scroll-snap-type: none; width: max-content; padding-bottom: 2.5rem;
+      animation: how-slide linear both; animation-timeline: --how; animation-range: contain 0% contain 100%;
+    }
+    .how-title { animation: how-title linear both; animation-timeline: --how; animation-range: contain 0% contain 100%; }
+  }
+}
+@keyframes how-slide { from { transform: translate3d(55vw, 0, 0); } to { transform: translate3d(calc(-100% + 92vw), 0, 0); } }
+@keyframes how-title { from { transform: translate3d(4%, 0, 0); opacity: 0.55; } 30% { opacity: 1; } to { transform: translate3d(-18%, 0, 0); opacity: 0.35; } }
