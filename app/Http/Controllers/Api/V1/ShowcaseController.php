@@ -43,6 +43,7 @@ class ShowcaseController extends Controller
                     'min_age' => Settings::int('utilization_min_age', 3),
                     'max_age' => Settings::int('utilization_max_age', 5),
                 ],
+                'company' => Settings::company(),
             ]];
         });
 

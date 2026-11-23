@@ -68,7 +68,27 @@ class SettingsAdminController extends Controller
             'parser_daily_hour' => ['nullable', 'integer', 'min:0', 'max:23'],
             'utilization_min_age' => ['nullable', 'integer', 'min:0', 'max:30'],
             'utilization_max_age' => ['nullable', 'integer', 'min:0', 'max:30'],
-        ], ['tg_bot_token.regex' => 'Токен выглядит как 123456789:AA... — скопируйте его из @BotFather']);
+            'company_legal' => ['nullable', 'string', 'max:255'],
+            'company_inn' => ['nullable', 'regex:/^(\d{10}|\d{12})$/'],
+            'company_ogrn' => ['nullable', 'regex:/^(\d{13}|\d{15})$/'],
+            'company_address' => ['nullable', 'string', 'max:255'],
+            'company_hours' => ['nullable', 'string', 'max:120'],
+            'company_manager' => ['nullable', 'string', 'max:60'],
+            'company_phone' => ['nullable', 'string', 'max:30', 'regex:/^\+?[\d\s()\-]{10,20}$/'],
+            'company_email' => ['nullable', 'email', 'max:120'],
+            'company_telegram' => ['nullable', 'string', 'max:64', 'regex:/^@?[A-Za-z0-9_]{4,32}$/'],
+            'company_whatsapp' => ['nullable', 'string', 'max:30', 'regex:/^\+?[\d\s()\-]{10,20}$/'],
+        ], [
+            'tg_bot_token.regex' => 'Токен выглядит как 123456789:AA... — скопируйте его из @BotFather',
+            'company_inn.regex' => 'ИНН — 10 цифр (ООО) или 12 цифр (ИП)',
+            'company_ogrn.regex' => 'ОГРН — 13 цифр (ООО) или ОГРНИП — 15 цифр',
+            'company_phone.regex' => 'Телефон в формате +7 900 000-00-00',
+            'company_whatsapp.regex' => 'Номер WhatsApp в формате +7 900 000-00-00',
+            'company_telegram.regex' => 'Имя в Telegram без ссылки, например @van23auto',
+        ]);
+        if (isset($data['company_telegram'])) {
+            $data['company_telegram'] = ltrim($data['company_telegram'], '@');
+        }
 
         // Пустое поле токена = «не менять» (токен в форму не выводим).
         if (empty($data['tg_bot_token'])) {
@@ -76,7 +96,15 @@ class SettingsAdminController extends Controller
         } else {
             Settings::set('tg_bot_username', '');
         }
+        $before = array_map(fn ($k) => (string) Settings::get($k, ''), array_combine(Settings::SITE_KEYS, Settings::SITE_KEYS));
         Settings::setMany(array_map(fn ($v) => $v === null ? '' : (string) $v, $data));
+        // Контакты, реквизиты и правило «проходной» видны на сайте — после их смены сайт пересоберётся по правилу.
+        foreach (Settings::SITE_KEYS as $k) {
+            if (array_key_exists($k, $data) && (string) Settings::get($k, '') !== $before[$k]) {
+                Settings::bumpShowcaseVersion();
+                break;
+            }
+        }
 
         return back()->with('ok', 'Настройки сохранены');
     }

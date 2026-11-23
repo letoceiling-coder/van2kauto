@@ -48,7 +48,32 @@ class Settings
         'utilization_max_hp' => '160',
         'utilization_min_age' => '3',
         'utilization_max_age' => '5',
+        // Компания и контакты — выводятся на сайте (подвал, «Контакты», политика ПДн, чат).
+        'company_legal' => 'One Auto / «Ван Авто»',
+        'company_inn' => '',
+        'company_ogrn' => '',
+        'company_address' => 'Анапа, Краснодарский край — офис и выдача',
+        'company_hours' => 'Пн–Сб 9:00–19:00, Вс по записи',
+        'company_manager' => 'Руслан',
+        'company_phone' => '',
+        'company_email' => '',
+        'company_telegram' => '',
+        'company_whatsapp' => '',
     ];
+
+    /** Ключи, которые попадают на сайт: их изменение требует пересборки. */
+    public const SITE_KEYS = ['utilization_max_hp', 'utilization_min_age', 'utilization_max_age', 'company_legal', 'company_inn', 'company_ogrn', 'company_address', 'company_hours', 'company_manager', 'company_phone', 'company_email', 'company_telegram', 'company_whatsapp'];
+
+    /** Контакты и реквизиты для сайта. */
+    public static function company(): array
+    {
+        $out = [];
+        foreach (['legal', 'inn', 'ogrn', 'address', 'hours', 'manager', 'phone', 'email', 'telegram', 'whatsapp'] as $k) {
+            $out[$k] = (string) self::get('company_'.$k, '');
+        }
+
+        return $out;
+    }
 
     public static function get(string $key, ?string $default = null): ?string
     {

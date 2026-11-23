@@ -6,6 +6,23 @@
 <form method="post" action="{{ route('admin.settings.update') }}">
 @csrf @method('PUT')
 <div class="card">
+    <h3 style="margin-top:0">Компания и контакты (видно на сайте)</h3>
+    <p class="muted">Подвал, страница «Контакты», политика обработки ПДн и чат на главной. Пустое поле — на сайте не показывается. После сохранения сайт пересоберётся сам.</p>
+    <div class="form-grid">
+        <div class="wide"><label>Оператор ПДн: ИП ФИО или ООО «Название»</label><input name="company_legal" value="{{ $s('company_legal') }}" placeholder="ИП Иванов Иван Иванович"></div>
+        <div><label>ИНН</label><input name="company_inn" value="{{ $s('company_inn') }}" inputmode="numeric" placeholder="10 или 12 цифр"></div>
+        <div><label>ОГРН / ОГРНИП</label><input name="company_ogrn" value="{{ $s('company_ogrn') }}" inputmode="numeric" placeholder="13 или 15 цифр"></div>
+        <div class="wide"><label>Адрес офиса</label><input name="company_address" value="{{ $s('company_address') }}"></div>
+        <div><label>Часы работы</label><input name="company_hours" value="{{ $s('company_hours') }}"></div>
+        <div><label>Имя менеджера в чате</label><input name="company_manager" value="{{ $s('company_manager') }}"></div>
+        <div><label>Телефон</label><input name="company_phone" value="{{ $s('company_phone') }}" inputmode="tel" placeholder="+7 900 000-00-00"></div>
+        <div><label>WhatsApp</label><input name="company_whatsapp" value="{{ $s('company_whatsapp') }}" inputmode="tel" placeholder="+7 900 000-00-00"></div>
+        <div><label>Telegram менеджера или канала</label><input name="company_telegram" value="{{ $s('company_telegram') }}" placeholder="@van23auto"></div>
+        <div><label>E-mail</label><input name="company_email" value="{{ $s('company_email') }}" inputmode="email"></div>
+    </div>
+</div>
+
+<div class="card" style="margin-top:1rem">
     <h3 style="margin-top:0">Telegram-бот</h3>
     <div class="form-grid">
         <div class="wide">
