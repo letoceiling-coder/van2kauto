@@ -76,8 +76,10 @@ class AutomarketHtmlParserTest extends TestCase
         $html = <<<'HTML'
         <img load_src="https://i.aleado.ru/pic/?system=auto&amp;date=2026-11-20&amp;auct=246&amp;bid=70018&amp;number=1&amp;h=96">
         <img load_src="https://i.aleado.ru/pic/?system=auto&amp;date=2026-11-20&amp;auct=246&amp;bid=70018&amp;number=2&amp;h=96">
-        <div>Fuel</div><div>Gasoline</div>
-        <div>Chassis number</div><div>ACA38-123</div>
+        <table>
+        <tr><td class="ColorCell_1">Fuel</td><td class="ColorCell_2">Gasoline</td></tr>
+        <tr><td class="ColorCell_1">Chassis number</td><td class="ColorCell_2">ACA38-123</td></tr>
+        </table>
         HTML;
 
         $detail = (new HtmlParser)->detail($html);
