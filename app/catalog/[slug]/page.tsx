@@ -188,7 +188,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="mt-16 sm:mt-20">
           <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
             <h2 className="text-headline">Похожие варианты</h2>
-            <Link href={`/catalog?country=${car.country}`} className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold text-foreground/70 hover:text-accent">Все →</Link>
+            <Link href={`/catalog?country=${car.country}`} className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-end text-sm font-semibold text-foreground/70 hover:text-accent">Все →</Link>
           </div>
           <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 xl:grid-cols-4">
             {similar.map((c) => (

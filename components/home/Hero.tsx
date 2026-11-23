@@ -10,8 +10,10 @@ import { useLead } from "@/components/site/Lead";
 import { asset } from "@/lib/utils";
 import { useMedia } from "@/lib/useMedia";
 import { Counter } from "@/components/motion/Counter";
+import { cars } from "@/content/cars";
 
-const POPULAR = ["Changan Q05", "Tayron", "Jimny", "BYD Seagull", "Freed", "BMW 3"];
+/** Популярные запросы — из реального топа витрины (не демо): модели, которые есть в каталоге. */
+const POPULAR = Array.from(new Set((cars.some((c) => c.hit) ? cars.filter((c) => c.hit) : cars).map((c) => c.model))).slice(0, 6);
 
 export function Hero({ count }: { count: number }) {
   const ref = useRef<HTMLElement>(null);

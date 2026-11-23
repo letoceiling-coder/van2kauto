@@ -7,6 +7,8 @@ DIST="${DIST:-/var/www/vanauto.neeklo.ru}"
 export SHOWCASE_API_URL="${SHOWCASE_API_URL:-https://vanauto-api.neeklo.ru/api/v1/showcase}"
 # Строго: если API недоступен или витрина пуста — сборка падает, а сайт остаётся прежним (админка покажет ошибку).
 export SHOWCASE_STRICT=1
+# Версия сборки — для кэша сервис-воркера (старые кэши удаляются при активации).
+export NEXT_PUBLIC_BUILD_ID="$(date +%Y%m%d%H%M%S)"
 export STATIC_EXPORT=1 NEXT_TELEMETRY_DISABLED=1
 # Планировщик запускает от www-data: кэши npm/pnpm держим внутри SRC.
 export HOME="$SRC/.home"; mkdir -p "$HOME"

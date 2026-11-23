@@ -134,7 +134,7 @@ export function Quiz() {
         <div className="lg:sticky lg:top-24">
           <p className="text-sm text-muted-foreground">Подходит под ваши ответы</p>
           <p className="mt-1 text-2xl font-semibold tracking-tight">{matches.length ? "Предварительные варианты" : "Подберём на площадках"}</p>
-          <div className="mt-5 grid gap-4">
+          <div className="mt-5 grid grid-cols-1 gap-4">
             <AnimatePresence mode="popLayout">
               {matches.map((c) => (
                 <motion.div key={c.slug} layout className="min-w-0" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
