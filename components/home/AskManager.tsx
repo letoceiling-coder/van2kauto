@@ -131,7 +131,7 @@ export function AskManager() {
         merge(j.messages ?? []);
         setText("");
         setTimeout(() => {
-          push({ id: nextId("h"), from: "assistant", text: `Передал вопрос менеджеру. ${company.manager} ответит здесь — обычно в течение 15 минут в рабочее время.` });
+          push({ id: nextId("h"), from: "assistant", text: `Передал вопрос менеджеру. ${company.manager} ответит здесь в рабочее время.` });
           if (!contactDone) setAskContact(true);
         }, 400);
       } else {
