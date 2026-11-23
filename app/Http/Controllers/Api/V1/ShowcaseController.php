@@ -33,7 +33,17 @@ class ShowcaseController extends Controller
                 ->values()
                 ->all();
 
-            return ['data' => $cars, 'meta' => ['total' => count($cars), 'version' => $version, 'generated_at' => now()->toIso8601String()]];
+            return ['data' => $cars, 'meta' => [
+                'total' => count($cars),
+                'version' => $version,
+                'generated_at' => now()->toIso8601String(),
+                // Правило «проходной» из настроек — сайт показывает те же цифры, что и в админке.
+                'utilization' => [
+                    'max_hp' => Settings::int('utilization_max_hp', 160),
+                    'min_age' => Settings::int('utilization_min_age', 3),
+                    'max_age' => Settings::int('utilization_max_age', 5),
+                ],
+            ]];
         });
 
         return $this->cached($request, $payload, "list-{$version}");

@@ -12,8 +12,9 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
+        // Корень ведёт в админку, а гостя — на вход.
+        $this->get('/')->assertRedirect('/che168');
+        $this->get('/che168/login')->assertOk();
+        $this->get('/up')->assertOk();
     }
 }

@@ -84,4 +84,16 @@ class SecurityHardeningTest extends TestCase
         Settings::bumpShowcaseVersion();
         $this->assertSame($v + 2, Settings::int('showcase_version'));
     }
+
+    public function test_webhook_update_is_processed_once_and_showcase_exposes_rules(): void
+    {
+        Settings::setMany(['tg_webhook_secret' => 'sekret', 'tg_bot_token' => '123456:ABCDEFGHIJKLMNOPQRSTUVWXYZ_abc', 'utilization_max_hp' => '150']);
+        Http::fake(['api.telegram.org/*' => Http::response(['ok' => true, 'result' => ['message_id' => 1]])]);
+        $upd = ['update_id' => 777001, 'message' => ['message_id' => 1, 'text' => 'Хочу Камри', 'chat' => ['id' => 55, 'type' => 'private'], 'from' => ['id' => 55]]];
+        $this->postJson('/api/telegram/webhook', $upd, ['X-Telegram-Bot-Api-Secret-Token' => 'sekret'])->assertOk();
+        $this->postJson('/api/telegram/webhook', $upd, ['X-Telegram-Bot-Api-Secret-Token' => 'sekret'])->assertOk()->assertJsonPath('duplicate', true);
+        $this->assertSame(1, Lead::query()->count());
+
+        $this->getJson('/api/v1/showcase')->assertOk()->assertJsonPath('meta.utilization.max_hp', 150);
+    }
 }
