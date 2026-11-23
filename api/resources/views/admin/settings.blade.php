@@ -1,0 +1,123 @@
+@extends('che168.layouts.app')
+@section('title', 'Настройки')
+@section('content')
+<h1 style="margin-top:0">Настройки</h1>
+@php($labels = ['tg_text_welcome' => 'Приветствие (/start)', 'tg_text_welcome_car' => 'Приветствие при переходе с карточки ({car} — название)', 'tg_text_contact_button' => 'Кнопка «отправить номер»', 'tg_text_thanks' => 'Ответ после номера', 'tg_text_message_received' => 'Ответ на сообщение'])
+<form method="post" action="{{ route('admin.settings.update') }}">
+@csrf @method('PUT')
+<div class="card">
+    <h3 style="margin-top:0">Компания и контакты (видно на сайте)</h3>
+    <p class="muted">Подвал, страница «Контакты», политика обработки ПДн и чат на главной. Пустое поле — на сайте не показывается. После сохранения сайт пересоберётся сам.</p>
+    <div class="form-grid">
+        <div class="wide"><label>Оператор ПДн: ИП ФИО или ООО «Название»</label><input name="company_legal" value="{{ $s('company_legal') }}" placeholder="ИП Иванов Иван Иванович"></div>
+        <div><label>ИНН</label><input name="company_inn" value="{{ $s('company_inn') }}" inputmode="numeric" placeholder="10 или 12 цифр"></div>
+        <div><label>ОГРН / ОГРНИП</label><input name="company_ogrn" value="{{ $s('company_ogrn') }}" inputmode="numeric" placeholder="13 или 15 цифр"></div>
+        <div class="wide"><label>Адрес офиса</label><input name="company_address" value="{{ $s('company_address') }}"></div>
+        <div><label>Часы работы</label><input name="company_hours" value="{{ $s('company_hours') }}"></div>
+        <div><label>Имя менеджера в чате</label><input name="company_manager" value="{{ $s('company_manager') }}"></div>
+        <div><label>Телефон</label><input name="company_phone" value="{{ $s('company_phone') }}" inputmode="tel" placeholder="+7 900 000-00-00"></div>
+        <div><label>WhatsApp</label><input name="company_whatsapp" value="{{ $s('company_whatsapp') }}" inputmode="tel" placeholder="+7 900 000-00-00"></div>
+        <div><label>Telegram менеджера или канала</label><input name="company_telegram" value="{{ $s('company_telegram') }}" placeholder="@van23auto"></div>
+        <div><label>E-mail</label><input name="company_email" value="{{ $s('company_email') }}" inputmode="email"></div>
+    </div>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Telegram-бот</h3>
+    <div class="form-grid">
+        <div class="wide">
+            <label>Токен бота от @BotFather {{ $hasToken ? '(задан — оставьте пустым, чтобы не менять)' : '' }}</label>
+            <input name="tg_bot_token" type="password" autocomplete="off" placeholder="{{ $hasToken ? '••••••••••' : '123456789:AA...' }}">
+        </div>
+        <div class="wide">
+            <label>Чаты для заявок (chat_id через запятую). Добавьте бота в группу менеджеров и напишите в ней /id — бот ответит номером.</label>
+            <input name="tg_manager_chat_ids" value="{{ $s('tg_manager_chat_ids') }}" placeholder="-1001234567890, 123456789">
+        </div>
+        @foreach($textKeys as $key)
+            <div class="wide"><label>{{ $labels[$key] ?? $key }}</label><textarea name="{{ $key }}" rows="{{ $key === 'tg_text_contact_button' ? 1 : 3 }}">{{ $s($key) }}</textarea></div>
+        @endforeach
+    </div>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Сайт и пересборка</h3>
+    <div class="form-grid">
+        <div><label>Адрес сайта</label><input name="site_url" value="{{ $s('site_url') }}"></div>
+        <div><label>Откуда принимать заявки (Origin через запятую, * — откуда угодно)</label><input name="leads_allowed_origins" value="{{ $s('leads_allowed_origins') }}"></div>
+        <div><label>Правило пересборки</label><select name="site_rebuild_mode">@foreach($modes as $k=>$l)<option value="{{ $k }}" @selected($s('site_rebuild_mode')===$k)>{{ $l }}</option>@endforeach</select></div>
+        <div><label>Пауза после последнего изменения, мин</label><input name="site_rebuild_debounce_minutes" type="number" value="{{ $s('site_rebuild_debounce_minutes') }}"></div>
+        <div><label>Час ежедневной сборки (0–23)</label><input name="site_rebuild_daily_hour" type="number" value="{{ $s('site_rebuild_daily_hour') }}"></div>
+        <div class="wide"><label>Команда сборки (задаётся на сервере в .env → SITE_REBUILD_COMMAND)</label><input value="{{ $rebuildCommand ?: 'не задана' }}" readonly disabled></div>
+    </div>
+    <p class="muted">Сборку запускает планировщик раз в минуту. «Автоматически» — через N минут тишины после последней правки, чтобы пачка изменений дала одну сборку. Данные витрины API отдаёт с ETag и кэшем, поэтому сборка их тянет быстро.</p>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Цена «от» по формуле</h3>
+    <p class="muted">(цена у продавца + экспорт + порт, $) × курс × коэффициент + фикс, округление вниз. Применяется при «В витрину» и «Топ-10 из фида»; в карточке — кнопка «По формуле». Ручная цена в карточке всегда главнее.</p>
+    <div class="form-grid">
+        <div><label>Курс $, ₽</label><input name="price_usd_rate" value="{{ $s('price_usd_rate') }}"></div>
+        <div><label>Курс</label><select name="price_rate_auto"><option value="1" @selected($s('price_rate_auto')==='1')>Автоматически по ЦБ (ежедневно)</option><option value="0" @selected($s('price_rate_auto')==='0')>Вручную</option></select></div>
+        <div><label>Коэффициент «под ключ»</label><input name="price_multiplier" value="{{ $s('price_multiplier') }}"></div>
+        <div><label>Фикс. добавка, ₽ (логистика, брокер, комиссия)</label><input name="price_fixed_rub" type="number" value="{{ $s('price_fixed_rub') }}"></div>
+        <div><label>Округление вниз до, ₽</label><input name="price_round_rub" type="number" value="{{ $s('price_round_rub') }}"></div>
+    </div>
+    <p class="muted">Пример: авто за ${{ number_format($priceExample['usd'], 0, '.', ' ') }} + сборы $900 → от {{ number_format((int) $priceExample['rub'], 0, '.', ' ') }} ₽@if($s('price_rate_updated_at')) · курс обновлён {{ \Illuminate\Support\Carbon::parse($s('price_rate_updated_at'))->format('d.m H:i') }}@endif. <b>Стартовые значения ориентировочные — проверьте на 2–3 реальных сделках.</b></p>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Парсер che168</h3>
+    <div class="form-grid">
+        <div><label>Автозапуск</label><select name="parser_auto"><option value="1" @selected($s('parser_auto')==='1')>Включён: новые — ежедневно, полный обход — по воскресеньям</option><option value="0" @selected($s('parser_auto')==='0')>Выключен (только вручную)</option></select></div>
+        <div><label>Час ежедневного запуска (время сервера, UTC)</label><input name="parser_daily_hour" type="number" value="{{ $s('parser_daily_hour') }}"></div>
+    </div>
+    <p class="muted">@if($lastRun)Последний запуск #{{ $lastRun->id }}: {{ $lastRun->status }}, {{ $lastRun->created_at->format('d.m H:i') }}, сохранено {{ $lastRun->items_saved }}.@else Запусков ещё не было.@endif Если che168 попросит капчу — менеджерам придёт сообщение в Telegram; пройдите её в «Парсер → Captcha».</p>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Правило «проходной по утильсбору»</h3>
+    <div class="form-grid">
+        <div><label>Мощность до, л.с.</label><input name="utilization_max_hp" type="number" value="{{ $s('utilization_max_hp') }}"></div>
+        <div><label>Возраст от, лет</label><input name="utilization_min_age" type="number" value="{{ $s('utilization_min_age') }}"></div>
+        <div><label>Возраст до, лет</label><input name="utilization_max_age" type="number" value="{{ $s('utilization_max_age') }}"></div>
+    </div>
+</div>
+<button class="btn btn-accent" style="margin-top:1rem">Сохранить настройки</button>
+</form>
+
+<div class="card" style="margin-top:1rem">
+    <h3 style="margin-top:0">Подключение бота</h3>
+    <p class="muted">Бот: {{ $s('tg_bot_username') ? '@'.$s('tg_bot_username') : 'не проверен' }} · Вебхук: <code>{{ $webhookUrl }}</code></p>
+    @if($webhook)
+        @if(isset($webhook['error']))<p class="muted">Ошибка: {{ $webhook['error'] }}</p>
+        @else<p class="muted">Telegram: {{ ($webhook['url'] ?? '') ?: 'вебхук не установлен' }} · в очереди: {{ $webhook['pending_update_count'] ?? 0 }} @if(!empty($webhook['last_error_message'])) · последняя ошибка: {{ $webhook['last_error_message'] }} @endif</p>@endif
+    @endif
+    <div class="row">
+        <form method="post" action="{{ route('admin.settings.bot-test') }}">@csrf<button class="btn btn-ghost" @disabled(!$hasToken)>Проверить бота и чаты</button></form>
+        <form method="post" action="{{ route('admin.settings.webhook') }}">@csrf<button class="btn btn-ghost" @disabled(!$hasToken)>Установить вебхук</button></form>
+        <form method="post" action="{{ route('admin.settings.webhook.delete') }}">@csrf @method('DELETE')<button class="btn btn-ghost" @disabled(!$hasToken)>Снять вебхук</button></form>
+    </div>
+</div>
+
+<div class="card" style="margin-top:1rem">
+    <div class="row" style="justify-content:space-between">
+        <h3 style="margin:0">Сборки сайта</h3>
+        <form method="post" action="{{ route('admin.settings.rebuild') }}">@csrf<button class="btn btn-ghost btn-sm">Пересобрать сейчас</button></form>
+    </div>
+    <p class="muted">{{ $pending ? 'Есть изменения витрины, которых нет на сайте.' : 'Сайт соответствует витрине.' }}</p>
+    <table>
+        <thead><tr><th>#</th><th>Запуск</th><th>Причина</th><th>Статус</th><th>Длительность</th></tr></thead>
+        <tbody>
+        @forelse($builds as $b)
+            <tr>
+                <td>{{ $b->id }}</td><td>{{ $b->started_at?->format('d.m H:i') }}</td><td>{{ $b->trigger }}</td><td>{{ $b->status }}</td>
+                <td>{{ $b->finished_at ? $b->started_at->diffInSeconds($b->finished_at, true).' с' : '…' }}</td>
+            </tr>
+            @if($b->output && $loop->first)<tr><td colspan="5"><pre class="out">{{ $b->output }}</pre></td></tr>@endif
+        @empty
+            <tr><td colspan="5">Сборок ещё не было.</td></tr>
+        @endforelse
+        </tbody>
+    </table>
+</div>
+@endsection

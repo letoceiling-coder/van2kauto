@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Support;
+
+use App\Models\Setting;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
+
+/**
+ * Настройки админки (ключ → значение) с кэшем. Секреты (токен бота) хранятся зашифрованными.
+ */
+class Settings
+{
+    public const SECRET_KEYS = ['tg_bot_token'];
+
+    /** Значения по умолчанию: всё, что можно поменять в админке без кода. */
+    public const DEFAULTS = [
+        'tg_bot_token' => '',
+        'tg_bot_username' => '',
+        'tg_webhook_secret' => '',
+        'tg_manager_chat_ids' => '',
+        'tg_text_welcome' => "Здравствуйте! Это ВАН23АВТО — привозим авто из Китая, Кореи и Японии под ключ.\n\nОставьте номер телефона — менеджер подберёт варианты и посчитает цену под ключ.",
+        'tg_text_welcome_car' => "Здравствуйте! Вас интересует {car}.\n\nОставьте номер телефона — менеджер пришлёт актуальные варианты и точную цену под ключ.",
+        'tg_text_contact_button' => '📱 Отправить номер',
+        'tg_text_thanks' => 'Спасибо! Заявка принята, менеджер свяжется с вами в ближайшее время.',
+        'tg_text_message_received' => 'Сообщение получили, менеджер скоро ответит.',
+        'tg_text_lead_site' => 'Заявка с сайта',
+        'site_url' => 'https://vanauto.neeklo.ru',
+        'site_rebuild_mode' => 'on_change',
+        'site_rebuild_debounce_minutes' => '5',
+        'site_rebuild_command' => '',
+        'site_rebuild_daily_hour' => '4',
+        'site_dirty_at' => '',
+        'site_rebuild_requested_at' => '',
+        'showcase_version' => '1',
+        'leads_allowed_origins' => 'https://vanauto.neeklo.ru',
+        // Цена «от» по формуле: (цена у продавца + экспорт + порт) × курс $ × коэффициент + фикс, округление вниз.
+        // Стартовые значения ориентировочные — их проверяет и правит менеджер в «Настройках».
+        'price_usd_rate' => '95',
+        'price_rate_auto' => '1',
+        'price_rate_updated_at' => '',
+        'price_multiplier' => '1.35',
+        'price_fixed_rub' => '250000',
+        'price_round_rub' => '10000',
+        // Парсер che168: автозапуск (новые — каждый день, полный обход — по воскресеньям).
+        'parser_auto' => '1',
+        'parser_daily_hour' => '5',
+        'utilization_max_hp' => '160',
+        'utilization_min_age' => '3',
+        'utilization_max_age' => '5',
+        // Компания и контакты — выводятся на сайте (подвал, «Контакты», политика ПДн, чат).
+        'company_legal' => 'One Auto / «Ван Авто»',
+        'company_inn' => '',
+        'company_ogrn' => '',
+        'company_address' => 'Анапа, Краснодарский край — офис и выдача',
+        'company_hours' => 'Пн–Сб 9:00–19:00, Вс по записи',
+        'company_manager' => 'Руслан',
+        'company_phone' => '',
+        'company_email' => '',
+        'company_telegram' => '',
+        'company_whatsapp' => '',
+    ];
+
+    /** Ключи, которые попадают на сайт: их изменение требует пересборки. */
+    public const SITE_KEYS = ['utilization_max_hp', 'utilization_min_age', 'utilization_max_age', 'company_legal', 'company_inn', 'company_ogrn', 'company_address', 'company_hours', 'company_manager', 'company_phone', 'company_email', 'company_telegram', 'company_whatsapp'];
+
+    /** Контакты и реквизиты для сайта. */
+    public static function company(): array
+    {
+        $out = [];
+        foreach (['legal', 'inn', 'ogrn', 'address', 'hours', 'manager', 'phone', 'email', 'telegram', 'whatsapp'] as $k) {
+            $out[$k] = (string) self::get('company_'.$k, '');
+        }
+
+        return $out;
+    }
+
+    public static function get(string $key, ?string $default = null): ?string
+    {
+        $all = self::all();
+        $value = $all[$key] ?? null;
+
+        if ($value === null || $value === '') {
+            // Значение из админки пустое → берём заводское значение, и только если его нет — $default.
+            $fallback = self::DEFAULTS[$key] ?? null;
+
+            return ($fallback !== null && $fallback !== '') ? $fallback : $default;
+        }
+
+        return $value;
+    }
+
+    public static function int(string $key, int $default = 0): int
+    {
+        $v = self::get($key);
+
+        return is_numeric($v) ? (int) $v : $default;
+    }
+
+    public static function set(string $key, ?string $value): void
+    {
+        if (in_array($key, self::SECRET_KEYS, true) && $value !== null && $value !== '') {
+            $value = Crypt::encryptString($value);
+        }
+        Setting::query()->updateOrCreate(['key' => $key], ['value' => $value]);
+        Cache::forget('settings:all');
+    }
+
+    /** @param  array<string, string|null>  $values */
+    public static function setMany(array $values): void
+    {
+        foreach ($values as $key => $value) {
+            self::set($key, $value);
+        }
+    }
+
+    /** @return array<string, string|null> */
+    public static function all(): array
+    {
+        return Cache::remember('settings:all', 300, function () {
+            $rows = Setting::query()->pluck('value', 'key')->all();
+            foreach (self::SECRET_KEYS as $key) {
+                if (! empty($rows[$key])) {
+                    try {
+                        $rows[$key] = Crypt::decryptString($rows[$key]);
+                    } catch (\Throwable) {
+                        $rows[$key] = null;
+                    }
+                }
+            }
+
+            return $rows;
+        });
+    }
+
+    /** @return list<int> */
+    public static function managerChatIds(): array
+    {
+        $raw = (string) self::get('tg_manager_chat_ids', '');
+
+        return array_values(array_filter(array_map(
+            fn ($v) => (int) trim($v),
+            preg_split('/[\s,;]+/u', $raw) ?: []
+        )));
+    }
+
+    /** Атомарно: параллельные сохранения (парсер, топ-10, админка) не получают одну и ту же версию. */
+    public static function bumpShowcaseVersion(): void
+    {
+        $updated = Setting::query()->where('key', 'showcase_version')->update(['value' => \Illuminate\Support\Facades\DB::raw('CAST(CAST(value AS INTEGER) + 1 AS TEXT)'), 'updated_at' => now()]);
+        if (! $updated) {
+            Setting::query()->insertOrIgnore(['key' => 'showcase_version', 'value' => '2', 'created_at' => now(), 'updated_at' => now()]);
+        }
+        Setting::query()->updateOrCreate(['key' => 'site_dirty_at'], ['value' => now()->toIso8601String()]);
+        Cache::forget('settings:all');
+    }
+}
