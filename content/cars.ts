@@ -68,6 +68,12 @@ const img = (slug: string, n: number, alt: string, kind: CarImage["kind"] = "mod
   kind,
 });
 
+/** Правило «проходной по утильсбору» — из настроек админки (через API витрины). */
+export const UTIL: { max_hp: number; min_age: number; max_age: number } = {
+  max_hp: 160, min_age: 3, max_age: 5,
+  ...((showcase as unknown as { utilization?: { max_hp: number; min_age: number; max_age: number } | null }).utilization ?? {}),
+};
+
 /** Дата актуальности цен: для живой витрины — дата выгрузки из админки. */
 export const PRICE_DATE = (() => {
   const g = (showcase as unknown as { generatedAt?: string | null }).generatedAt;

@@ -45,7 +45,7 @@ export function Gallery({ images, title }: { images: CarImage[]; title: string }
         style={{ touchAction: "pan-y" }}
         className="absolute inset-0 cursor-grab active:cursor-grabbing"
       >
-        <Image src={asset(img.src)} alt={img.alt} fill priority={i === 0} sizes={big ? "100vw" : "(min-width:1024px) 60vw, 100vw"} className={big ? "object-contain" : "object-cover"} draggable={false} />
+        <Image src={asset(img.src)} alt={img.alt} fill priority={i === 0} sizes={big ? "100vw" : "(min-width:1024px) 60vw, 100vw"} className={big ? "object-contain" : `${img.kind === "listing" ? "donor-crop " : ""}object-cover`} draggable={false} />
       </motion.div>
     </AnimatePresence>
   );
@@ -72,7 +72,7 @@ export function Gallery({ images, title }: { images: CarImage[]; title: string }
         <div className="no-scrollbar mt-3 hidden gap-2 overflow-x-auto sm:flex">
           {images.map((m, k) => (
             <button key={m.src} onClick={() => { setDir(k > i ? 1 : -1); setI(k); }} aria-label={`Фото ${k + 1}`} aria-current={k === i} className={cn("relative aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-xl border-2 transition sm:w-28", k === i ? "border-accent" : "border-transparent opacity-60 hover:opacity-100")}>
-              <Image src={asset(small(m.src))} alt="" fill sizes="112px" className="object-cover" />
+              <Image src={asset(small(m.src))} alt="" fill sizes="112px" className={m.kind === "listing" ? "donor-crop object-cover" : "object-cover"} />
             </button>
           ))}
         </div>

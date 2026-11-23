@@ -25,9 +25,9 @@ export function CarCard({ car, priority, className }: { car: Car; priority?: boo
       )}
     >
       <div className="relative aspect-[4/3] overflow-hidden rounded-[1.1rem] bg-surface-2">
-        <Image src={asset(small(main.src))} alt={main.alt} fill priority={priority} sizes="(min-width:1280px) 25vw, (min-width:768px) 45vw, 92vw" className="object-cover transition duration-700 ease-out group-hover:scale-[1.06]" />
+        <Image src={asset(small(main.src))} alt={main.alt} fill priority={priority} sizes="(min-width:1280px) 25vw, (min-width:768px) 45vw, 92vw" className={`${main.kind === "listing" ? "donor-crop " : ""}object-cover transition duration-700 ease-out group-hover:scale-[1.06]`} />
         {second && (
-          <Image src={asset(small(second.src))} alt="" aria-hidden="true" fill sizes="(min-width:1280px) 25vw, (min-width:768px) 45vw, 92vw" className="object-cover opacity-0 transition duration-700 group-hover:opacity-100 max-md:hidden" />
+          <Image src={asset(small(second.src))} alt="" aria-hidden="true" fill sizes="(min-width:1280px) 25vw, (min-width:768px) 45vw, 92vw" className={`${second.kind === "listing" ? "donor-crop " : ""}object-cover opacity-0 transition duration-700 group-hover:opacity-100 max-md:hidden`} />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">

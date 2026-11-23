@@ -36,7 +36,7 @@ export function TopTen() {
               {/* Телефон: строка списка */}
               <Link href={`/catalog/${c.slug}`} className="press-soft flex items-center gap-3 rounded-[1.25rem] bg-white/[0.04] p-2 pr-3 sm:hidden">
                 <span className="relative h-[84px] w-[112px] shrink-0 overflow-hidden rounded-[0.9rem] bg-surface-2">
-                  <Image src={asset(small(img.src))} alt={img.alt} fill sizes="112px" className="object-cover" />
+                  <Image src={asset(small(img.src))} alt={img.alt} fill sizes="112px" className={img.kind === "listing" ? "donor-crop object-cover" : "object-cover"} />
                   <span className="absolute top-1.5 left-1.5 rounded-full bg-black/70 px-1.5 py-0.5 text-[11px] font-semibold tnum text-white">{n}</span>
                 </span>
                 <span className="min-w-0 flex-1">
@@ -55,7 +55,7 @@ export function TopTen() {
               {/* Планшет и десктоп: карточка */}
               <div className="group card relative hidden grid-cols-[220px_minmax(0,1fr)] gap-5 overflow-hidden p-2.5 transition duration-300 hover:border-white/15 sm:grid">
                 <Link href={`/catalog/${c.slug}`} className="relative aspect-[4/3] overflow-hidden rounded-[1rem] bg-surface-2" aria-label={`${carName(c)} ${c.year}`}>
-                  <Image src={asset(small(img.src))} alt={img.alt} fill sizes="220px" className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]" />
+                  <Image src={asset(small(img.src))} alt={img.alt} fill sizes="220px" className={`${img.kind === "listing" ? "donor-crop " : ""}object-cover transition duration-700 ease-out group-hover:scale-[1.05]`} />
                   <span className="absolute top-2 left-2 grid h-8 min-w-8 place-items-center rounded-full bg-black/70 px-2 text-xs font-semibold tnum text-white">{n}</span>
                   {c.utilizationOk && <span className="absolute bottom-2 left-2 rounded-full bg-black/75 px-2 py-0.5 text-[11px] font-medium text-accent">проходной</span>}
                 </Link>

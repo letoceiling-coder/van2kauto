@@ -60,7 +60,7 @@ async function main() {
     const cars = (json.data || []).filter((x) => x.slug && x.price_from_rub && (x.images || []).length > 0).map(toCar);
     // Пустая витрина на проде = на сайте оказался бы демо-каталог под видом реального. Не допускаем.
     if (cars.length === 0 && strict) throw new Error("витрина пуста — демо-каталог на проде не публикуем");
-    const data = { generatedAt: new Date().toISOString(), version: json.meta?.version ?? null, cars };
+    const data = { generatedAt: new Date().toISOString(), version: json.meta?.version ?? null, utilization: json.meta?.utilization ?? null, cars };
     await writeFile(out, JSON.stringify(data, null, 2) + "\n");
     console.log(`showcase: ${cars.length} карточек (версия ${data.version}) → content/showcase.json`);
   } catch (e) {
