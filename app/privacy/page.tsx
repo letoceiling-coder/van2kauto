@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { company } from "@/content/nav";
+import { company, requisites } from "@/content/nav";
 
 export const metadata: Metadata = { title: "Политика обработки персональных данных", robots: { index: false } };
 
@@ -16,7 +16,7 @@ export default function Page() {
     <section className="mx-auto max-w-site px-4 pt-28 pb-16 sm:px-6 sm:pt-36 lg:px-8">
       <h1 className="text-headline">Политика обработки персональных данных</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        Оператор: {company.legal}, {company.address}. Отправляя заявку на сайте, вы даёте согласие на обработку данных на условиях ниже (152-ФЗ «О персональных данных»).
+        Оператор: {company.legal}{requisites && ` (${requisites})`}, {company.address}{company.email && `, ${company.email}`}. Отправляя заявку на сайте, вы даёте согласие на обработку данных на условиях ниже (152-ФЗ «О персональных данных»).
       </p>
       <dl className="mt-8 grid max-w-3xl gap-6">
         {sections.map(([t, d]) => (

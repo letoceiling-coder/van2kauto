@@ -5,7 +5,7 @@ import { Office } from "@/components/home/Office";
 import { OpenNow } from "@/components/site/OpenNow";
 import { LeadButton } from "@/components/site/Lead";
 import { Reveal } from "@/components/motion/Reveal";
-import { company } from "@/content/nav";
+import { company, requisites } from "@/content/nav";
 
 export const metadata: Metadata = { title: "Контакты — офис в Анапе", description: "Офис ВАН23АВТО в Анапе: выдача автомобилей, консультации и расчёт стоимости. Доставка в Новороссийск, Краснодар и по России." };
 
@@ -31,6 +31,17 @@ export default function Page() {
           <span className="inline-flex h-7 items-center gap-2 rounded-full bg-white/[0.06] px-3 text-xs text-foreground/80"><Clock className="size-3.5 text-accent" />{company.hours}</span>
         </div>
       </PageHero>
+
+      {(company.phone || company.telegram || company.whatsapp || company.email) && (
+        <section data-component-id="contact-direct" className="mx-auto max-w-site px-4 pb-3 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap gap-2">
+            {company.phone && <a href={company.phoneHref} className="press inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 text-[15px] font-semibold text-accent-foreground"><PhoneCall className="size-4" />{company.phone}</a>}
+            {company.telegram && <a href={company.telegram} target="_blank" rel="noopener" className="press inline-flex h-11 items-center gap-2 rounded-full bg-white/[0.08] px-5 text-[15px] font-medium"><MessageCircle className="size-4" />Telegram</a>}
+            {company.whatsapp && <a href={company.whatsapp} target="_blank" rel="noopener" className="press inline-flex h-11 items-center gap-2 rounded-full bg-white/[0.08] px-5 text-[15px] font-medium"><MessageCircle className="size-4" />WhatsApp</a>}
+            {company.email && <a href={`mailto:${company.email}`} className="press inline-flex h-11 items-center rounded-full bg-white/[0.08] px-5 text-[15px] font-medium">{company.email}</a>}
+          </div>
+        </section>
+      )}
 
       <section data-component-id="contact-actions" className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
@@ -71,7 +82,7 @@ export default function Page() {
       <section className="mx-auto max-w-site px-4 sm:px-6 lg:px-8">
         <div className="card grid grid-cols-1 gap-6 p-6 text-sm sm:grid-cols-3 sm:p-8">
           <div className="flex gap-3"><FileCheck2 className="mt-0.5 size-5 shrink-0 text-accent" /><div><p className="text-muted-foreground">Сторона договора</p><p className="mt-1 text-base font-medium">{company.legal}</p></div></div>
-          <div><p className="text-muted-foreground">Реквизиты</p><p className="mt-1 text-base font-medium">Публикуются после заполнения по документам компании</p></div>
+          <div><p className="text-muted-foreground">Реквизиты</p><p className="mt-1 text-base font-medium">{requisites || "Публикуются после заполнения по документам компании"}</p></div>
           <div><p className="text-muted-foreground">Города выдачи</p><p className="mt-1 text-base font-medium">{company.cities.join(" · ")}</p></div>
         </div>
       </section>

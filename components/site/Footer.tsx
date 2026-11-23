@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { LeadButton } from "./Lead";
-import { company, nav } from "@/content/nav";
+import { company, nav, requisites } from "@/content/nav";
 import { cars } from "@/content/cars";
 
 export function Footer() {
@@ -43,10 +43,18 @@ export function Footer() {
             <p className="mt-4 text-foreground/80">{company.address}</p>
             <p className="mt-2 text-foreground/80">{company.hours}</p>
             <p className="mt-2 text-muted-foreground">Доставка: {company.cities.join(", ")}</p>
+            {(company.phone || company.telegram || company.whatsapp || company.email) && (
+              <ul className="mt-3 space-y-0">
+                {company.phone && <li><a className="inline-flex min-h-11 items-center font-semibold text-foreground transition hover:text-accent" href={company.phoneHref}>{company.phone}</a></li>}
+                {company.telegram && <li><a className="inline-flex min-h-11 items-center text-foreground/80 transition hover:text-accent" href={company.telegram} target="_blank" rel="noopener">Telegram {company.telegramLabel}</a></li>}
+                {company.whatsapp && <li><a className="inline-flex min-h-11 items-center text-foreground/80 transition hover:text-accent" href={company.whatsapp} target="_blank" rel="noopener">WhatsApp</a></li>}
+                {company.email && <li><a className="inline-flex min-h-11 items-center text-foreground/80 transition hover:text-accent" href={`mailto:${company.email}`}>{company.email}</a></li>}
+              </ul>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-muted-foreground sm:flex-row sm:justify-between lg:col-span-12">
-          <p>© 2026 ВАН23АВТО · {company.legal}</p>
+          <p>© 2026 ВАН23АВТО · {company.legal}{requisites && ` · ${requisites}`}</p>
           <p>Цены — предварительный ориентир, не публичная оферта. <Link href="/photo-credits" className="underline-offset-4 hover:text-accent hover:underline">Авторы фото</Link></p>
         </div>
       </div>
